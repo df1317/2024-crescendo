@@ -1,11 +1,11 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.FiringSubsystem;
 import frc.robot.Constants;
 
-public class FireNote extends CommandBase {
+public class FireNote extends Command {
     private double startTime;
     private double duration = Constants.SwerveConstants.Firing.Duration;
     private double speed;
