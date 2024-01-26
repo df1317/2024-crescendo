@@ -25,6 +25,7 @@ import frc.lib.SwerveModuleConstants;
 import frc.lib.CANSparkMaxUtil.Usage;
 import frc.robot.Constants;
 // import frc.robot.Robot;
+import frc.robot.Robot;
 
 /** Add your docs here. */
 public class SwerveModule {
@@ -138,8 +139,7 @@ public class SwerveModule {
     
     private void configAngleEncoder(){        
         angleEncoder.getConfigurator().apply(new CANcoderConfiguration());
-        // CANCoderUtil.setCANCoderBusUsage(angleEncoder, CCUsage.kMinimal);
-        // angleEncoder.configAllSettings(Robot.ctreConfigs.swerveCanCoderConfig);
+        angleEncoder.getConfigurator().apply(Robot.ctreConfigs.swerveCanCoderConfig);
     }
 
     private void configAngleMotor(){
