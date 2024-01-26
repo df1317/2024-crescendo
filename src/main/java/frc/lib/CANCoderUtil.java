@@ -1,7 +1,6 @@
 package frc.lib;
 
-import com.ctre.phoenix.sensors.CANCoder;
-import com.ctre.phoenix.sensors.CANCoderStatusFrame;
+import com.ctre.phoenix6.hardware.CANcoder;
 
 /** Sets status frames for the CTRE CANCoder. */
 public class CANCoderUtil {
@@ -23,19 +22,15 @@ public class CANCoderUtil {
    * @param usage The status frame feedback to enable. kAll is the default when a CANCoder
    *     isconstructed.
    */
-  public static void setCANCoderBusUsage(CANCoder cancoder, CCUsage usage) {
+  public static void setCANCoderBusUsage(CANcoder cancoder, CCUsage usage) {
     if (usage == CCUsage.kAll) {
-      cancoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10);
-      cancoder.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 10);
+      cancoder.getPosition().setUpdateFrequency(100);
     } else if (usage == CCUsage.kSensorDataOnly) {
-      cancoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10);
-      cancoder.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 100);
+      cancoder.getPosition().setUpdateFrequency(10);
     } else if (usage == CCUsage.kFaultsOnly) {
-      cancoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 100);
-      cancoder.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 10);
+      cancoder.getPosition().setUpdateFrequency(100);
     } else if (usage == CCUsage.kMinimal) {
-      cancoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 200);
-      cancoder.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 200);
+      cancoder.getPosition().setUpdateFrequency(5);
     }
   }
 }

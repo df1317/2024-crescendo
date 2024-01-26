@@ -1,7 +1,7 @@
 package frc.lib;
 
+import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 
 /** Sets motor usage for a Spark Max motor controller */
 public class CANSparkMaxUtil {
@@ -27,33 +27,41 @@ public class CANSparkMaxUtil {
    */
   public static void setCANSparkMaxBusUsage(
       CANSparkMax motor, Usage usage, boolean enableFollowing) {
-    if (enableFollowing) {
-      motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus0, 10);
-    } else {
-      motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus0, 500);
-    }
+        if (enableFollowing) {
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus0, 10);
+        } else {
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus0, 500);
+        }    
 
-    if (usage == Usage.kAll) {
-      //sets ussage to send all the frames of data yay
-      motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 20);
-      motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 20);
-      motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus3, 500);
-    } else if (usage == Usage.kPositionOnly) {
-      //only sends the position frames every 20 ms, saves on velocity and other status
-      motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 1000);
-      motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 20);
-      motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus3, 1000);
-    } else if (usage == Usage.kVelocityOnly) {
-      //only sends the velocity every 20 ms
-      motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 20);
-      motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 1000);
-      motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus3, 1000);
-    } else if (usage == Usage.kMinimal) {
-      //sends as little data as possible to save canbus ussage
-      motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 500);
-      motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 500);
-      motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus3, 500);
-    }
+        if (usage == Usage.kAll) {
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus1, 20);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus2, 20);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus3, 50);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus4, 20);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus5, 50);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus6, 50);
+        } else if (usage == Usage.kPositionOnly) {
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus1, 500);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus2, 20);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus3, 500);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus4, 20);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus5, 50);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus6, 500);
+        } else if (usage == Usage.kVelocityOnly) {
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus1, 20);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus2, 500);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus3, 500);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus4, 20);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus5, 500);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus6, 50);
+        } else if (usage == Usage.kMinimal) {
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus1, 500);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus2, 500);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus3, 500);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus4, 500);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus5, 500);
+          motor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus6, 500);
+        }
   }
 
   /**
