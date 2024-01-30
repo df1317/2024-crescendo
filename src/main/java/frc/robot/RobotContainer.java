@@ -30,7 +30,7 @@ public class RobotContainer {
   
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_XboxController = new CommandXboxController(0);
+  public final CommandXboxController m_XboxController = new CommandXboxController(0);
   //private final CommandJoystick m_JoystickL = new CommandJoystick(0);
   //private final CommandJoystick m_JoystickR = new CommandJoystick(1);
 
