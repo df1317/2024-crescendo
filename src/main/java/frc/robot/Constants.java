@@ -104,7 +104,7 @@ public final class Constants {
       public static final int driveMotorID = 11; 
       public static final int angleMotorID = 31; 
       public static final int canCoderID = 51;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(59.59);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(112.67+90);
     /* Angle Motor PID Values */
       public static final double angleKP = 0.01; //to tune
       public static final double angleKI = 0.0; //to tune
@@ -121,7 +121,7 @@ public final class Constants {
       public static final int driveMotorID = 12;
       public static final int angleMotorID = 32;
       public static final int canCoderID = 52;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(210.50);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-25.40+90);
       /* Angle Motor PID Values */
       public static final double angleKP = 0.01; //to tune
       public static final double angleKI = 0.0; //to tune
@@ -138,7 +138,7 @@ public final class Constants {
       public static final int driveMotorID = 21;
       public static final int angleMotorID = 41;
       public static final int canCoderID = 61;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(4.83);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-179.73+90);
       /* Angle Motor PID Values */
       public static final double angleKP = 0.01; //to tune
       public static final double angleKI = 0.0; //to tune
@@ -155,7 +155,7 @@ public final class Constants {
       public static final int driveMotorID = 22;
       public static final int angleMotorID = 42;
       public static final int canCoderID = 62;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(22.76);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(157.06+90);
         /* Angle Motor PID Values */
       public static final double angleKP = 0.01; //to tune
       public static final double angleKI = 0.0; //to tune
