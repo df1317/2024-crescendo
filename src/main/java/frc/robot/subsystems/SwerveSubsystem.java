@@ -47,6 +47,8 @@ public class SwerveSubsystem extends SubsystemBase {
     //puts out the field
     field = new Field2d();
     SmartDashboard.putData("Field", field);
+
+    setWheelsToX();
   }
 
   public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
