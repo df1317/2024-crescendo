@@ -19,6 +19,7 @@ import frc.lib.CTREConfigs;
 public class Robot extends TimedRobot {
   public static CTREConfigs ctreConfigs;
   private Command m_autonomousCommand;
+  private Command resetSwerveWheels;
 
   private RobotContainer m_robotContainer;
 
@@ -82,6 +83,12 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
+    }
+
+    resetSwerveWheels = m_robotContainer.resetSwerveWheels();
+    
+    if (resetSwerveWheels != null) {
+      resetSwerveWheels.schedule();
     }
   }
 
