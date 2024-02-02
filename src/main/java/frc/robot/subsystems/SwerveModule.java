@@ -195,7 +195,7 @@ public class SwerveModule {
     }
 
     private Rotation2d getAngle(){
-        return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
+        return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition()); // Must be degrees even though documentation says it should be rotations
     }
     
 
