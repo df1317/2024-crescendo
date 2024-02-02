@@ -98,6 +98,6 @@ public class RobotContainer {
   }
   
   public Command resetSwerveWheels() {
-    return new InstantCommand(() -> m_SwerveSubsystem.setWheelsToX());
+    return new InstantCommand(() -> m_SwerveSubsystem.setWheelsToZero());
   }
 }
