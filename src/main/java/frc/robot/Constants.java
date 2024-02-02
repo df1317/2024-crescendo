@@ -14,21 +14,25 @@ import edu.wpi.first.math.util.Units;
 import frc.lib.SwerveModuleConstants;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
+ * The Constants class provides a convenient place for teams to hold robot-wide
+ * numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants
+ * should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
+ * <p>
+ * It is advised to statically import this class (or one of its inner classes)
+ * wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static final class SwerveConstants{
+  public static final class SwerveConstants {
     public static final double inputDeadband = .1;
     public static final boolean invertGyro = true;
 
     /* Drivetrain Constants */
-    public static final double trackWidth = Units.inchesToMeters(23);//to find
-    public static final double wheelBase = Units.inchesToMeters(23);//to find
+    public static final double trackWidth = Units.inchesToMeters(23);// to find
+    public static final double wheelBase = Units.inchesToMeters(23);// to find
     public static final double wheelDiameter = Units.inchesToMeters(4.0);
     public static final double wheelCircumference = wheelDiameter * Math.PI;
 
@@ -36,43 +40,41 @@ public final class Constants {
     public static final double closedLoopRamp = 0.0;
 
     public static final double driveGearRatio = (6.12 / 1.0); // 6.75:1 L2 Mk4 Modules
-    //L1 is 8.14:1, L2 is 6.75:1, L3 is 6.12:1, L4 is 5.14:1
+    // L1 is 8.14:1, L2 is 6.75:1, L3 is 6.12:1, L4 is 5.14:1
     public static final double angleGearRatio = (12.8 / 1.0); // 12.8:1 MK4 SDS Modules
 
-    public static final SwerveDriveKinematics swerveKinematics =
-    new SwerveDriveKinematics(
-        new Translation2d(wheelBase / 2.0, trackWidth / 2.0), //translation 2d locates the swerve module in cords
+    public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
+        new Translation2d(wheelBase / 2.0, trackWidth / 2.0), // translation 2d locates the swerve module in cords
         new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
         new Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
         new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0));
-    //https://docs.wpilib.org/en/stable/docs/software/kinematics-and-odometry/swerve-drive-kinematics.html
-    //SwerveDrive Kinematics converts between a ChassisSpeeds object and several SwerveModuleState objects, 
-    //which contains velocities and angles for each swerve module of a swerve drive robot.
-        
+    // https://docs.wpilib.org/en/stable/docs/software/kinematics-and-odometry/swerve-drive-kinematics.html
+    // SwerveDrive Kinematics converts between a ChassisSpeeds object and several
+    // SwerveModuleState objects,
+    // which contains velocities and angles for each swerve module of a swerve drive
+    // robot.
+
     /* Swerve Voltage Compensation */
     public static final double voltageComp = 12.0;
-       
-    //Swerve Current Limiting for neos
-    public static final int angleContinuousCurrentLimit = 20; //limits current draw of turning motor
-    public static final int driveContinuousCurrentLimit = 80; //limits current draw of drive motor
-  
 
+    // Swerve Current Limiting for neos
+    public static final int angleContinuousCurrentLimit = 20; // limits current draw of turning motor
+    public static final int driveContinuousCurrentLimit = 80; // limits current draw of drive motor
 
     /* Drive Motor PID Values */
-    public static final double driveKP = 0.1; //to tune
-    public static final double driveKI = 0.0; //to tune
-    public static final double driveKD = 0.0; //to tune
-   public static final double driveKFF = 0.0; //to tune
+    public static final double driveKP = 0.1; // to tune
+    public static final double driveKI = 0.0; // to tune
+    public static final double driveKD = 0.0; // to tune
+    public static final double driveKFF = 0.0; // to tune
 
     /* Drive Motor Characterization Values */
-    //values to calculate the drive feedforward (KFF)
-    public static final double driveKS = 0.667; //to calculate
-    public static final double driveKV = 2.44; //to calculate
-    public static final double driveKA = 0.27; //to calculate
+    // values to calculate the drive feedforward (KFF)
+    public static final double driveKS = 0.667; // to calculate
+    public static final double driveKV = 2.44; // to calculate
+    public static final double driveKA = 0.27; // to calculate
 
     /* Drive Motor Conversion Factors */
-    public static final double driveConversionPositionFactor =
-    (wheelDiameter * Math.PI) / driveGearRatio;
+    public static final double driveConversionPositionFactor = (wheelDiameter * Math.PI) / driveGearRatio;
     public static final double driveConversionVelocityFactor = driveConversionPositionFactor / 60.0;
     public static final double angleConversionFactor = 360.0 / angleGearRatio;
 
@@ -90,7 +92,7 @@ public final class Constants {
 
     /* Angle Encoder Invert */
     public static final boolean canCoderInvert = false;
-    
+
     public static final class Firing {
       public static final int MotorID0 = 01;
       public static final int MotorID1 = 02;
@@ -98,22 +100,23 @@ public final class Constants {
       public static final double FarSpeed = 1; // must be between -1 and 1
       public static final double Duration = 3.0;
     }
-        /* Module Specific Constants */
+
+    /* Module Specific Constants */
     /* Front Left Module - Module 0 */
     public static final class Mod0 {
-      public static final int driveMotorID = 11; 
-      public static final int angleMotorID = 31; 
+      public static final int driveMotorID = 11;
+      public static final int angleMotorID = 31;
       public static final int canCoderID = 51;
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(180);
-    /* Angle Motor PID Values */
-      public static final double angleKP = 0.01; //to tune
-      public static final double angleKI = 0.0; //to tune
-      public static final double angleKD = 0.0; //to tune
-      public static final double angleKFF = 0.0; //to tune
-    
-      public static final SwerveModuleConstants constants =
-          new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset, angleKP, angleKI, angleKD, angleKFF);
-          //creates a constant with all info from swerve module
+      /* Angle Motor PID Values */
+      public static final double angleKP = 0.01; // to tune
+      public static final double angleKI = 0.0; // to tune
+      public static final double angleKD = 0.0; // to tune
+      public static final double angleKFF = 0.0; // to tune
+
+      public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
+          canCoderID, angleOffset, angleKP, angleKI, angleKD, angleKFF);
+      // creates a constant with all info from swerve module
     }
 
     /* Front Right Module - Module 1 */
@@ -123,14 +126,14 @@ public final class Constants {
       public static final int canCoderID = 52;
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(180);
       /* Angle Motor PID Values */
-      public static final double angleKP = 0.01; //to tune
-      public static final double angleKI = 0.0; //to tune
-      public static final double angleKD = 0.0; //to tune
-      public static final double angleKFF = 0.0; //to tune
-        
-      public static final SwerveModuleConstants constants =
-          new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset, angleKP, angleKI, angleKD, angleKFF);
-          //creates a constant with all info from swerve module
+      public static final double angleKP = 0.01; // to tune
+      public static final double angleKI = 0.0; // to tune
+      public static final double angleKD = 0.0; // to tune
+      public static final double angleKFF = 0.0; // to tune
+
+      public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
+          canCoderID, angleOffset, angleKP, angleKI, angleKD, angleKFF);
+      // creates a constant with all info from swerve module
     }
 
     /* Back Left Module - Module 2 */
@@ -140,14 +143,14 @@ public final class Constants {
       public static final int canCoderID = 61;
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
       /* Angle Motor PID Values */
-      public static final double angleKP = 0.01; //to tune
-      public static final double angleKI = 0.0; //to tune
-      public static final double angleKD = 0.0; //to tune
-      public static final double angleKFF = 0.0; //to tune
-  
-      public static final SwerveModuleConstants constants =
-        new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset, angleKP, angleKI, angleKD, angleKFF);
-        //creates a constant with all info from swerve module
+      public static final double angleKP = 0.01; // to tune
+      public static final double angleKI = 0.0; // to tune
+      public static final double angleKD = 0.0; // to tune
+      public static final double angleKFF = 0.0; // to tune
+
+      public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
+          canCoderID, angleOffset, angleKP, angleKI, angleKD, angleKFF);
+      // creates a constant with all info from swerve module
     }
 
     /* Back Right Module - Module 3 */
@@ -156,24 +159,19 @@ public final class Constants {
       public static final int angleMotorID = 42;
       public static final int canCoderID = 62;
       public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
-        /* Angle Motor PID Values */
-      public static final double angleKP = 0.01; //to tune
-      public static final double angleKI = 0.0; //to tune
-      public static final double angleKD = 0.0; //to tune
-      public static final double angleKFF = 0.0; //to tune
-    
-      public static final SwerveModuleConstants constants =
-          new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset, angleKP, angleKI, angleKD, angleKFF);
-          //creates a constant with all info from swerve module
+      /* Angle Motor PID Values */
+      public static final double angleKP = 0.01; // to tune
+      public static final double angleKI = 0.0; // to tune
+      public static final double angleKD = 0.0; // to tune
+      public static final double angleKFF = 0.0; // to tune
+
+      public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
+          canCoderID, angleOffset, angleKP, angleKI, angleKD, angleKFF);
+      // creates a constant with all info from swerve module
     }
-  
 
     public static final boolean angleMotorInvert = false;
     public static final boolean driveMotorInvert = false;
-
-    
-
-
 
   }
 
@@ -188,11 +186,8 @@ public final class Constants {
     public static final double kPThetaController = 1;
 
     // Constraint for the motion profilied robot angle controller
-    public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
-        new TrapezoidProfile.Constraints(
-            kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+    public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
+        kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
-
-
 
 }

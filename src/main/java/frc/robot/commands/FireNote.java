@@ -20,24 +20,23 @@ public class FireNote extends Command {
         addRequirements(FiringSub);
         if (far) {
             speed = Constants.SwerveConstants.Firing.FarSpeed;
-        }
-        else {
+        } else {
             speed = Constants.SwerveConstants.Firing.NearSpeed;
         }
     }
-    
+
     @Override
     public void initialize() {
         startTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
         // Spin up motors to the specified speed
         m_FiringSubsystem.spinUp(speed);
     }
-    
+
     @Override
     public boolean isFinished() {
         // Check if the button is released or if the specified duration has passed
         return !button.getAsBoolean() ||
-            (edu.wpi.first.wpilibj.Timer.getFPGATimestamp() - startTime >= duration);
+                (edu.wpi.first.wpilibj.Timer.getFPGATimestamp() - startTime >= duration);
     }
 
     @Override

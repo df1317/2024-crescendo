@@ -28,23 +28,22 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /** Creates a new SwerveSubsystem. */
   public SwerveSubsystem() {
-    //instantiates new gyro, wipes it, and zeros it
+    // instantiates new gyro, wipes it, and zeros it
     gyro = new ADXRS450_Gyro();
     zeroGyro();
 
-    //Creates all four swerve modules into a swerve drive
-    mSwerveMods =
-    new SwerveModule[] {
-      new SwerveModule(0, Constants.SwerveConstants.Mod0.constants),
-      new SwerveModule(1, Constants.SwerveConstants.Mod1.constants),
-      new SwerveModule(2, Constants.SwerveConstants.Mod2.constants),
-      new SwerveModule(3, Constants.SwerveConstants.Mod3.constants)
+    // Creates all four swerve modules into a swerve drive
+    mSwerveMods = new SwerveModule[] {
+        new SwerveModule(0, Constants.SwerveConstants.Mod0.constants),
+        new SwerveModule(1, Constants.SwerveConstants.Mod1.constants),
+        new SwerveModule(2, Constants.SwerveConstants.Mod2.constants),
+        new SwerveModule(3, Constants.SwerveConstants.Mod3.constants)
     };
 
-    //creates new swerve odometry (odometry is where the robot is on the field)
+    // creates new swerve odometry (odometry is where the robot is on the field)
     swerveOdometry = new SwerveDriveOdometry(Constants.SwerveConstants.swerveKinematics, getYaw(), getPositions());
 
-    //puts out the field
+    // puts out the field
     field = new Field2d();
     SmartDashboard.putData("Field", field);
 
@@ -55,20 +54,19 @@ public class SwerveSubsystem extends SubsystemBase {
     // Display whether the control is field relative on SmartDashboard
     SmartDashboard.putBoolean("Field Relative", fieldRelative);
 
-    // Calculate swerve module states based on control mode (field-relative or robot-centric)
+    // Calculate swerve module states based on control mode (field-relative or
+    // robot-centric)
     SwerveModuleState[] swerveModuleStates;
     if (fieldRelative) {
-        SmartDashboard.putNumber("Gyro Yaw", getYaw().getDegrees());
-        // Use field-relative control if fieldRelative is true
-        swerveModuleStates = Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
-            ChassisSpeeds.fromFieldRelativeSpeeds(
-                translation.getX(), translation.getY(), rotation, getYaw())
-        );
+      SmartDashboard.putNumber("Gyro Yaw", getYaw().getDegrees());
+      // Use field-relative control if fieldRelative is true
+      swerveModuleStates = Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
+          ChassisSpeeds.fromFieldRelativeSpeeds(
+              translation.getX(), translation.getY(), rotation, getYaw()));
     } else {
-        // Use robot-centric control if fieldRelative is false
-        swerveModuleStates = Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
-            new ChassisSpeeds(translation.getX(), translation.getY(), rotation)
-        );
+      // Use robot-centric control if fieldRelative is false
+      swerveModuleStates = Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
+          new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
     }
 
     // Set to top speed if above top speed
@@ -76,9 +74,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // Set states for all 4 modules
     for (SwerveModule mod : mSwerveMods) {
-        mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
+      mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
     }
-}
+  }
 
   /* Used by SwerveControllerCommand in Auto */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -88,7 +86,6 @@ public class SwerveSubsystem extends SubsystemBase {
       mod.setDesiredState(desiredStates[mod.moduleNumber], false);
     }
   }
-
 
   public Pose2d getPose() {
     return swerveOdometry.getPoseMeters();
@@ -100,14 +97,14 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void setWheelsToX() {
     setModuleStates(new SwerveModuleState[] {
-      // front left
-      new SwerveModuleState(0.0, Rotation2d.fromDegrees(45.0)),
-      // front right
-      new SwerveModuleState(0.0, Rotation2d.fromDegrees(-45.0)),
-      // back left
-      new SwerveModuleState(0.0, Rotation2d.fromDegrees(135.0)),
-      // back right
-      new SwerveModuleState(0.0, Rotation2d.fromDegrees(-135.0))
+        // front left
+        new SwerveModuleState(0.0, Rotation2d.fromDegrees(45.0)),
+        // front right
+        new SwerveModuleState(0.0, Rotation2d.fromDegrees(-45.0)),
+        // back left
+        new SwerveModuleState(0.0, Rotation2d.fromDegrees(135.0)),
+        // back right
+        new SwerveModuleState(0.0, Rotation2d.fromDegrees(-135.0))
     });
   }
 
@@ -116,10 +113,10 @@ public class SwerveSubsystem extends SubsystemBase {
       mod.resetToAbsolute();
     }
     setModuleStates(new SwerveModuleState[] {
-      new SwerveModuleState(0.0, Rotation2d.fromDegrees(0.0)),
-      new SwerveModuleState(0.0, Rotation2d.fromDegrees(0.0)),
-      new SwerveModuleState(0.0, Rotation2d.fromDegrees(0.0)),
-      new SwerveModuleState(0.0, Rotation2d.fromDegrees(0.0))
+        new SwerveModuleState(0.0, Rotation2d.fromDegrees(0.0)),
+        new SwerveModuleState(0.0, Rotation2d.fromDegrees(0.0)),
+        new SwerveModuleState(0.0, Rotation2d.fromDegrees(0.0)),
+        new SwerveModuleState(0.0, Rotation2d.fromDegrees(0.0))
     });
   }
 
@@ -131,21 +128,20 @@ public class SwerveSubsystem extends SubsystemBase {
     return states;
   }
 
-  public SwerveModulePosition[] getPositions(){
+  public SwerveModulePosition[] getPositions() {
     SwerveModulePosition[] positions = new SwerveModulePosition[4];
-    for(SwerveModule mod : mSwerveMods){
-        positions[mod.moduleNumber] = mod.getPosition();
+    for (SwerveModule mod : mSwerveMods) {
+      positions[mod.moduleNumber] = mod.getPosition();
     }
     return positions;
-}
-
+  }
 
   public void zeroGyro() {
     gyro.reset();
   }
 
   public Rotation2d getYaw() {
-    //fancy if else loop again
+    // fancy if else loop again
     return (Constants.SwerveConstants.invertGyro)
         ? Rotation2d.fromDegrees(360 - (gyro.getAngle()))
         : Rotation2d.fromDegrees(gyro.getAngle());
@@ -163,7 +159,7 @@ public class SwerveSubsystem extends SubsystemBase {
           "Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
+    }
   }
-}
 
 }
