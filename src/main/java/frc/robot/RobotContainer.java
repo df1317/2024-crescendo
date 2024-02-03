@@ -9,9 +9,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autos.exampleAuto;
+import frc.robot.commands.AutoAlign;
 import frc.robot.commands.FireNote;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.FiringSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -54,6 +56,7 @@ public class RobotContainer {
   /* Subsystems */
   private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem();
   private final FiringSubsystem m_FiringSubsystem = new FiringSubsystem();
+  private final LimelightSubsystem m_LimelightSubsystem = new LimelightSubsystem();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -86,7 +89,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_XboxController.button(Button.kA.value).onTrue(new InstantCommand(() -> m_SwerveSubsystem.zeroGyro()));
+    AutoAlign autoAlign = new AutoAlign(m_LimelightSubsystem, m_SwerveSubsystem);
+    m_XboxController.button(Button.kA.value).onTrue(autoAlign);
     m_XboxController.button(Button.kB.value).onTrue(new InstantCommand(() -> m_SwerveSubsystem.setWheelsToX()));
     // setup two firing speeds
     FireNote fireNoteCommandFar = new FireNote(m_FiringSubsystem, false, xButton);
