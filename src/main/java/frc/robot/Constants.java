@@ -26,6 +26,13 @@ import frc.lib.SwerveModuleConstants;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static final class SensorConstants {
+    public static final class Limelight {
+      public static final double speakerAprilTag3TY = 1.442593;
+      public static final double speakerAprilTag3TX = 8.308467;
+      public static final double speakerAprilTag3TZ = 1.451102;
+    }
+  }
   public static final class SwerveConstants {
     public static final double inputDeadband = .1;
     public static final boolean invertGyro = true;
