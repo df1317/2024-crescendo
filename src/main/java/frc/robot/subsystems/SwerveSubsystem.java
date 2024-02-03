@@ -108,18 +108,6 @@ public class SwerveSubsystem extends SubsystemBase {
     });
   }
 
-  public void setWheelsToZero() {
-    for (SwerveModule mod : mSwerveMods) {
-      mod.resetToAbsolute();
-    }
-    setModuleStates(new SwerveModuleState[] {
-        new SwerveModuleState(0.0, Rotation2d.fromDegrees(0.0)),
-        new SwerveModuleState(0.0, Rotation2d.fromDegrees(0.0)),
-        new SwerveModuleState(0.0, Rotation2d.fromDegrees(0.0)),
-        new SwerveModuleState(0.0, Rotation2d.fromDegrees(0.0))
-    });
-  }
-
   public SwerveModuleState[] getStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
     for (SwerveModule mod : mSwerveMods) {

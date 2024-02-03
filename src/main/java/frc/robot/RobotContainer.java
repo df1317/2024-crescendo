@@ -104,8 +104,4 @@ public class RobotContainer {
     // An example command will be run in autonomous
     return new exampleAuto(m_SwerveSubsystem);
   }
-
-  public Command resetSwerveWheels() {
-    return new InstantCommand(() -> m_SwerveSubsystem.setWheelsToZero());
-  }
 }

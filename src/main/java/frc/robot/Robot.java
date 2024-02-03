@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.CTREConfigs;
+import frc.robot.subsystems.LimelightSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -22,9 +23,10 @@ import frc.lib.CTREConfigs;
 public class Robot extends TimedRobot {
   public static CTREConfigs ctreConfigs;
   private Command m_autonomousCommand;
-  private Command resetSwerveWheels;
 
   private RobotContainer m_robotContainer;
+
+  private LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -60,6 +62,7 @@ public class Robot extends TimedRobot {
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    limelightSubsystem.updateLimelight();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -99,12 +102,6 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
-    }
-
-    resetSwerveWheels = m_robotContainer.resetSwerveWheels();
-
-    if (resetSwerveWheels != null) {
-      resetSwerveWheels.schedule();
     }
   }
 
