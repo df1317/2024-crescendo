@@ -30,7 +30,13 @@ public class LimelightSubsystem extends SubsystemBase {
         double op = botpose3d.getY() - Constants.SensorConstants.Limelight.speakerAprilTag3TY;
         double adj = botpose3d.getX() - Constants.SensorConstants.Limelight.speakerAprilTag3TX;
 
-        double trig = Math.atan(op/adj);
+        double trig;
+        if (op == 0 || adj == 0) {
+            trig = 0;
+        } else {
+            trig = Math.atan(op/adj);
+        }
+        
         return Math.toDegrees(trig);
     }
 
@@ -38,8 +44,13 @@ public class LimelightSubsystem extends SubsystemBase {
         // x = 5.93 , z = 
         double adj = botpose3d.getX() - Constants.SensorConstants.Limelight.speakerAprilTag3TX;
         double op = botpose3d.getZ() - Constants.SensorConstants.Limelight.speakerAprilTag3TZ;
-
-        double trig = Math.atan(op/adj);
+        
+        double trig;
+        if (op == 0 || adj == 0) {
+            trig = 0;
+        } else {
+            trig = Math.atan(op/adj);
+        }
 
         return Math.toDegrees(trig);
     }

@@ -31,6 +31,7 @@ public final class Constants {
       public static final double speakerAprilTag3TY = 1.442593;
       public static final double speakerAprilTag3TX = 8.308467;
       public static final double speakerAprilTag3TZ = 1.451102;
+      public static final double FeedbackDuration = 0.25;
     }
   }
   public static final class SwerveConstants {
