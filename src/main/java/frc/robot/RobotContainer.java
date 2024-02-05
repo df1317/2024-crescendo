@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autos.exampleAuto;
@@ -91,7 +90,7 @@ public class RobotContainer {
   private void configureBindings() {
     AutoAlign autoAlign = new AutoAlign(m_LimelightSubsystem, m_SwerveSubsystem);
     m_XboxController.button(Button.kA.value).onTrue(autoAlign);
-    m_XboxController.button(Button.kB.value).onTrue(new InstantCommand(() -> m_SwerveSubsystem.setWheelsToX()));
+    // m_XboxController.button(Button.kB.value).onTrue(new InstantCommand(() -> m_SwerveSubsystem.setWheelsToX()));
     // setup two firing speeds
     FireNote fireNoteCommandFar = new FireNote(m_FiringSubsystem, false, xButton);
     FireNote fireNoteCommandNear = new FireNote(m_FiringSubsystem, true, yButton);
