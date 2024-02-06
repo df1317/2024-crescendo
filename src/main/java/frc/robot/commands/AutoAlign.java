@@ -10,7 +10,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 public class AutoAlign extends Command {
 
-    // private LimelightSubsystem m_LimelightSubsystem;
+    private LimelightSubsystem m_LimelightSubsystem;
     private SwerveSubsystem m_SwerveSubsystem;
     private CommandXboxController m_XboxController;
     private double duration = Constants.SensorConstants.Controller.FeedbackDuration;
@@ -18,7 +18,7 @@ public class AutoAlign extends Command {
     private boolean canAlign;
 
     public AutoAlign(LimelightSubsystem LimelightSub, SwerveSubsystem SwerveSub, CommandXboxController XboxCont) {
-        // m_LimelightSubsystem = LimelightSub;
+        m_LimelightSubsystem = LimelightSub;
         m_XboxController = XboxCont;
         m_SwerveSubsystem = SwerveSub;
         addRequirements(LimelightSub, SwerveSub);
@@ -28,10 +28,10 @@ public class AutoAlign extends Command {
     @Override
     public void initialize() {
         // get the angles from limelight
-        // double floorAngle = m_LimelightSubsystem.getFloorAngle();
-        // double elevation = m_LimelightSubsystem.getElevation();
-        double floorAngle = 0;
-        double elevation = 0;
+        double floorAngle = m_LimelightSubsystem.getFloorAngle();
+        double elevation = m_LimelightSubsystem.getElevation();
+        // double floorAngle = 0;
+        // double elevation = 0;
         canAlign = floorAngle != 0 && elevation != 0;
 
         // turn the robot to the correct angle
@@ -47,8 +47,8 @@ public class AutoAlign extends Command {
     @Override
     public boolean isFinished() {
         // Check if the button is released or if the specified duration has passed
-        return (canAlign) ||
-            (edu.wpi.first.wpilibj.Timer.getFPGATimestamp() - startTime >= duration);
+        return (m_LimelightSubsystem.getFloorAngle() == 0 && canAlign && m_LimelightSubsystem.getElevation() == 0) ||
+            (edu.wpi.first.wpilibj.Timer.getFPGATimestamp() - startTime >= duration && !canAlign);
     }
 
     @Override

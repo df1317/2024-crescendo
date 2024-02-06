@@ -9,7 +9,7 @@ import frc.robot.Constants;
 
 public class LimelightSubsystem extends SubsystemBase {
 
-    private Pose3d botpose3d;
+    public Pose3d botpose3d;
     private double[] botposeArray;
 
     /**
