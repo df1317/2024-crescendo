@@ -88,7 +88,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    AutoAlign autoAlign = new AutoAlign(m_LimelightSubsystem, m_SwerveSubsystem);
+    AutoAlign autoAlign = new AutoAlign(m_LimelightSubsystem, m_SwerveSubsystem, m_XboxController);
     m_XboxController.button(Button.kA.value).onTrue(autoAlign);
     // m_XboxController.button(Button.kB.value).onTrue(new InstantCommand(() -> m_SwerveSubsystem.setWheelsToX()));
     // setup two firing speeds
