@@ -66,7 +66,7 @@ public class RobotContainer {
             m_SwerveSubsystem,
             () -> m_XboxController.getRawAxis(translationAxis),
             () -> m_XboxController.getRawAxis(strafeAxis),
-            () -> m_XboxController.getRawAxis(rotationAxis),
+            () -> -m_XboxController.getRawAxis(rotationAxis),
             () -> robotCentric.getAsBoolean()));
 
     // Configure the trigger bindings
