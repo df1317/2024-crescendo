@@ -28,11 +28,16 @@ public class AutoAlign extends Command {
     @Override
     public void initialize() {
         // get the angles from limelight
-        double floorAngle = m_LimelightSubsystem.getFloorAngle();
-        double elevation = m_LimelightSubsystem.getElevation();
-        // double floorAngle = 0;
-        // double elevation = 0;
-        canAlign = floorAngle != 0 && elevation != 0;
+        double floorAngle;
+        if (m_LimelightSubsystem.getFloorAngle() > 0) {
+            floorAngle = 1;
+        } else {
+            floorAngle = -1;
+        }
+        
+
+        // double elevation = m_LimelightSubsystem.getElevation();
+        canAlign = floorAngle != 0;
 
         // turn the robot to the correct angle
         if (!canAlign) {
@@ -40,21 +45,19 @@ public class AutoAlign extends Command {
             startTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
         } else {
             m_XboxController.getHID().setRumble(RumbleType.kBothRumble, 0);
-            m_SwerveSubsystem.drive(new Translation2d(0,0), floorAngle, true, false);
+            m_SwerveSubsystem.drive(new Translation2d(0,0), 4 * floorAngle, true, true);
         }
     }
 
     @Override
     public boolean isFinished() {
         // Check if the button is released or if the specified duration has passed
-        return (m_LimelightSubsystem.getFloorAngle() == 0 && canAlign && m_LimelightSubsystem.getElevation() == 0) ||
+        return (m_LimelightSubsystem.getFloorAngle() > -0.25 && m_LimelightSubsystem.getFloorAngle() < 0.25 && canAlign) ||
             (edu.wpi.first.wpilibj.Timer.getFPGATimestamp() - startTime >= duration && !canAlign);
     }
 
     @Override
     public void end(boolean interrupted) {
-        // Spin down motors
-        m_SwerveSubsystem.drive(new Translation2d(0,0), 0, true, false);
         m_XboxController.getHID().setRumble(RumbleType.kBothRumble, 0);
     }
 }
