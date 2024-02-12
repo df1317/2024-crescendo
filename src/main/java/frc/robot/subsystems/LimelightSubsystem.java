@@ -18,37 +18,41 @@ public class LimelightSubsystem extends SubsystemBase {
      */
     public void updateLimelight() {
         botposeArray = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
-        botpose3d = new Pose3d(botposeArray[0], botposeArray[1], botposeArray[2], new Rotation3d(botposeArray[3], botposeArray[4], botposeArray[5]));
+
+        botpose3d = new Pose3d(botposeArray[0], botposeArray[1], botposeArray[2], new Rotation3d(Math.toRadians(botposeArray[3]), Math.toRadians(botposeArray[4]), Math.toRadians(botposeArray[5])));
 
         // post to smart dashboard periodically
-        SmartDashboard.putNumber("LimelightX", botpose3d.getTranslation().getX());
-        SmartDashboard.putNumber("LimelightY", botpose3d.getTranslation().getY());
+        SmartDashboard.putNumber("LimelightX", botpose3d.getX());
+        SmartDashboard.putNumber("LimelightY", botpose3d.getY());
         SmartDashboard.putNumber("Limelight Floor Angle", getFloorAngle());
         SmartDashboard.putNumber("Limelight Elevation Angle", getElevation());
+        SmartDashboard.putNumber("LimelightRotation", botpose3d.getRotation().toRotation2d().getDegrees());
     }
 
     public double getFloorAngle() {
         // x = 5.93 , y = 1.3
-        double op = botpose3d.getY() - Constants.SensorConstants.Limelight.speakerAprilTag3TY;
-        double adj = botpose3d.getX() - Constants.SensorConstants.Limelight.speakerAprilTag3TX;
+        double op = botpose3d.getY() - Constants.SensorConstants.Limelight.speakerAprilTag4TY;
+        double adj = botpose3d.getX() - Constants.SensorConstants.Limelight.speakerAprilTag4TX;
+        SmartDashboard.putNumber("Limelight floor op", op);
+        SmartDashboard.putNumber("Limelight Floor adj", adj);
 
         double trig;
-        if (op == 0 || adj == 0) {
+        if (botpose3d.getY() == 0 && botpose3d.getX() == 0) {
             trig = 0;
         } else {
             trig = Math.atan(op/adj);
         }
 
-        return Math.toDegrees(trig);
+        return -(Math.toDegrees(trig) - botpose3d.getRotation().toRotation2d().getDegrees());
     }
 
     public double getElevation() {
         // x = 5.93 , z = 
-        double adj = botpose3d.getX() - Constants.SensorConstants.Limelight.speakerAprilTag3TX;
-        double op = botpose3d.getZ() - Constants.SensorConstants.Limelight.speakerAprilTag3TZ;
+        double adj = botpose3d.getX() - Constants.SensorConstants.Limelight.speakerAprilTag4TX;
+        double op = botpose3d.getZ() - Constants.SensorConstants.Limelight.speakerAprilTag4TZ;
         
         double trig;
-        if (op == 0 || adj == 0) {
+        if (botpose3d.getZ() == 0 && botpose3d.getX() == 0) {
             trig = 0;
         } else {
             trig = Math.atan(op/adj);
