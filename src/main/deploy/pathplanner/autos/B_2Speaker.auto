@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.48,
-      "y": 6.93
+      "x": 1.28,
+      "y": 5.57
     },
     "rotation": 0
   },
@@ -14,13 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "A_Amp1"
+            "pathName": "B_MultiNotes1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "A_AmpLeave"
+            "pathName": "B_2Notes2"
           }
         }
       ]

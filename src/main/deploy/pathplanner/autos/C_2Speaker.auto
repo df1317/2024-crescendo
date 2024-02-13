@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6,
+      "y": 4.18
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C_Leave2Notes1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C_Leave2Notes2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C_Leave2Notes3"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
