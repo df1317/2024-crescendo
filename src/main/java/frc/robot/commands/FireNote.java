@@ -7,7 +7,7 @@ import frc.robot.Constants;
 
 public class FireNote extends Command {
     private double startTime;
-    private double duration = Constants.SwerveConstants.Firing.Duration;
+    private double duration = Constants.ArmShooterConstants.Firing.Duration;
     private double speed;
     private Trigger button;
 
@@ -15,13 +15,13 @@ public class FireNote extends Command {
 
     public FireNote(FiringSubsystem FiringSub, boolean far, Trigger button) {
         m_FiringSubsystem = FiringSub;
-        this.duration = Constants.SwerveConstants.Firing.Duration;
+        this.duration = Constants.ArmShooterConstants.Firing.Duration;
         this.button = button;
         addRequirements(FiringSub);
         if (far) {
-            speed = Constants.SwerveConstants.Firing.FarSpeed;
+            speed = Constants.ArmShooterConstants.Firing.Duration;
         } else {
-            speed = Constants.SwerveConstants.Firing.NearSpeed;
+            speed = Constants.ArmShooterConstants.Firing.Duration;
         }
     }
 

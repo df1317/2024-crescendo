@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class FiringSubsystem extends SubsystemBase {
-    private TalonSRX motor0 = new TalonSRX(Constants.SwerveConstants.Firing.MotorID0);
-    private TalonSRX motor1 = new TalonSRX(Constants.SwerveConstants.Firing.MotorID1);
+    private TalonSRX motor0 = new TalonSRX(Constants.ArmShooterConstants.Firing.MotorID0);
+    private TalonSRX motor1 = new TalonSRX(Constants.ArmShooterConstants.Firing.MotorID1);
 
     public void spinUp(double speed) {
         SmartDashboard.putString("Firing Status", "Firing");
