@@ -40,17 +40,27 @@ public final class Constants {
   }
 
   public static final class ArmShooterConstants {
-    public static final class Firing {
-      public static final int MotorID0 = 01;
-      public static final int MotorID1 = 02;
-      public static final double NearSpeed = 0.35; // must be between -1 and 1
-      public static final double FarSpeed = 1; // must be between -1 and 1
-      public static final double Duration = 3.0;
+
+    public static final class ShooterCollectorConstants {
+      public static final class Firing {
+        public static final int MotorID0 = 01;
+        public static final int MotorID1 = 02;
+        public static final double NearSpeed = 0.35; // must be between -1 and 1
+        public static final double FarSpeed = 1; // must be between -1 and 1
+        public static final double Duration = 3.0;
+      }
+
+      public static final class Intake {
+        public static final double Speed = 0.5; // must be between -1 and 1
+      }
+
+      public static final int NoteSensorPort = 0; // TBD
     }
 
     public static final class Arm {
       public static final int MotorID = 03;
       public static final double Speed = 0.5; // must be between -1 and 1
+      public static final int EncoderPort = 0; // TBD
     }
   }
 

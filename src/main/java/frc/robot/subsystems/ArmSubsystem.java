@@ -11,7 +11,7 @@ import frc.robot.Constants;
 public class ArmSubsystem extends SubsystemBase {
     // get the firng subsystem
     private TalonSRX motor = new TalonSRX(Constants.ArmShooterConstants.Arm.MotorID);
-    public DutyCycleEncoder encoder = new DutyCycleEncoder(0);
+    public DutyCycleEncoder encoder = new DutyCycleEncoder(Constants.ArmShooterConstants.Arm.EncoderPort);
 
     public void spinUp(double speed) {
         motor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, speed);
