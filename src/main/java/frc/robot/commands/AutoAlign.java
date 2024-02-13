@@ -13,6 +13,7 @@ public class AutoAlign extends Command {
 
     private LimelightSubsystem m_LimelightSubsystem;
     private ArmSubsystem m_ArmSubsystem;
+    @SuppressWarnings("unused")
     private Command SetArmValue;
     private SwerveSubsystem m_SwerveSubsystem;
     private CommandXboxController m_XboxController;
