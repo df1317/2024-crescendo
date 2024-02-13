@@ -10,19 +10,19 @@ public class AutoSubsystem extends SubsystemBase {
     public final SendableChooser<Autos> autoChooser = new SendableChooser<>();
 
     public enum Autos {
-        A_LEAVE,
-        B_LEAVE,
-        C_LEAVE,
-        A_AMP,
-        A_2AMP,
-        A_SPEAKER,
-        A_2SPEAKER,
-        B_SPEKAER,
-        B_2SPEAKER,
-        B_3SPEAKER,
-        C_SPEAKER,
-        C_2SPEAKER,
-        C_STEALCENTERNOTES
+        A_Leave,
+        B_Leave,
+        C_Leave,
+        A_Amp,
+        A_2Amp,
+        A_Speaker,
+        A_2Speaker,
+        B_Speaker,
+        B_2Speaker,
+        B_3Speaker,
+        C_Speaker,
+        C_2Speaker,
+        C_StealCenterNotes
     }
 
     PathPlannerPath A_Leave = PathPlannerPath.fromPathFile("A_Leave.auto");
@@ -46,7 +46,7 @@ public class AutoSubsystem extends SubsystemBase {
     private Autos selectedAuto;// making a selected auto for later use
 
     public AutoSubsystem() {
-        autoChooser.setDefaultOption("A_Leave", Autos.A_LEAVE);
+        autoChooser.setDefaultOption("A_Leave", Autos.A_Leave);
         for (Autos autoChoice : Autos.values()) {
             // going through all options and putting them in a drop down in the driver
             // station
@@ -58,4 +58,5 @@ public class AutoSubsystem extends SubsystemBase {
         selectedAuto = autoChooser.getSelected();
         return selectedAuto;
     }
+
 }
