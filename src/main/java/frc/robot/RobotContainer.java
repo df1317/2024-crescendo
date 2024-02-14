@@ -8,17 +8,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.autos.exampleAuto;
 import frc.robot.commands.FireNote;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.subsystems.AutoSubsystem;
 import frc.robot.subsystems.FiringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -58,7 +59,8 @@ public class RobotContainer {
   /* Subsystems */
   private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem();
   private final FiringSubsystem m_FiringSubsystem = new FiringSubsystem();
-  private final AutoSubsystem m_AutoSubsystem = new AutoSubsystem();
+
+  private final SendableChooser<Command> autoChooser;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -76,6 +78,10 @@ public class RobotContainer {
     configureBindings();
 
     NamedCommands.registerCommand("FireNote", new FireNote(m_FiringSubsystem, false, xButton));
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   /**
@@ -109,6 +115,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new exampleAuto(m_SwerveSubsystem);
+    return autoChooser.getSelected();
   }
+
 }
