@@ -54,7 +54,7 @@ public final class Constants {
         public static final double Speed = 0.5; // must be between -1 and 1
       }
 
-      public static final int NoteSensorPort = 0; // TBD
+      public static final int NoteSensorPort = 1; // TBD
     }
 
     public static final class Arm {

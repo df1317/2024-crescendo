@@ -6,10 +6,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.FireNote;
+import frc.robot.commands.SetArmValue;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.FiringSubsystem;
@@ -32,7 +34,7 @@ public class RobotContainer {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController m_XboxController = new CommandXboxController(0);
-  // private final CommandJoystick m_JoystickL = new CommandJoystick(0);
+  private final CommandJoystick m_JoystickL = new CommandJoystick(0);
   // private final CommandJoystick m_JoystickR = new CommandJoystick(1);
 
   /* Drive Controls */
@@ -98,6 +100,7 @@ public class RobotContainer {
     FireNote fireNoteCommandNear = new FireNote(m_FiringSubsystem, true, yButton);
     m_XboxController.button(Button.kX.value).onTrue(fireNoteCommandFar);
     m_XboxController.button(Button.kY.value).onTrue(fireNoteCommandNear);
+    m_XboxController.button(Button.kB.value).onTrue(new SetArmValue(m_ArmSubsystem, m_JoystickL.getThrottle()));
   }
 
   /**
