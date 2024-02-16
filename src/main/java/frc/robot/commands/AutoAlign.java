@@ -5,22 +5,27 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class AutoAlign extends Command {
 
     private LimelightSubsystem m_LimelightSubsystem;
+    private ArmSubsystem m_ArmSubsystem;
+    @SuppressWarnings("unused")
+    private Command SetArmValue;
     private SwerveSubsystem m_SwerveSubsystem;
     private CommandXboxController m_XboxController;
     private double duration = Constants.SensorConstants.Controller.FeedbackDuration;
     private double startTime;
     private boolean canAlign;
 
-    public AutoAlign(LimelightSubsystem LimelightSub, SwerveSubsystem SwerveSub, CommandXboxController XboxCont) {
+    public AutoAlign(LimelightSubsystem LimelightSub, SwerveSubsystem SwerveSub, ArmSubsystem ArmSub, CommandXboxController XboxCont) {
         m_LimelightSubsystem = LimelightSub;
         m_XboxController = XboxCont;
         m_SwerveSubsystem = SwerveSub;
+        m_ArmSubsystem = ArmSub; 
         addRequirements(LimelightSub, SwerveSub);
         this.duration = Constants.SensorConstants.Controller.FeedbackDuration;
     }
@@ -34,9 +39,9 @@ public class AutoAlign extends Command {
         } else {
             floorAngle = -1;
         }
-        
 
-        // double elevation = m_LimelightSubsystem.getElevation();
+        double elevation = m_LimelightSubsystem.getElevation();
+        
         canAlign = floorAngle != 0;
 
         // turn the robot to the correct angle
@@ -45,6 +50,7 @@ public class AutoAlign extends Command {
             startTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
         } else {
             m_XboxController.getHID().setRumble(RumbleType.kBothRumble, 0);
+            SetArmValue = new SetArmValue(m_ArmSubsystem, elevation);
             m_SwerveSubsystem.drive(new Translation2d(0,0), 4 * floorAngle, true, true);
         }
     }

@@ -11,6 +11,7 @@ import frc.robot.autos.exampleAuto;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.FireNote;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.FiringSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -56,6 +57,7 @@ public class RobotContainer {
   private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem();
   private final FiringSubsystem m_FiringSubsystem = new FiringSubsystem();
   private final LimelightSubsystem m_LimelightSubsystem = new LimelightSubsystem();
+  private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -88,7 +90,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    AutoAlign autoAlign = new AutoAlign(m_LimelightSubsystem, m_SwerveSubsystem, m_XboxController);
+    AutoAlign autoAlign = new AutoAlign(m_LimelightSubsystem, m_SwerveSubsystem, m_ArmSubsystem, m_XboxController);
     m_XboxController.button(Button.kA.value).onTrue(autoAlign);
     // m_XboxController.button(Button.kB.value).onTrue(new InstantCommand(() -> m_SwerveSubsystem.setWheelsToX()));
     // setup two firing speeds
