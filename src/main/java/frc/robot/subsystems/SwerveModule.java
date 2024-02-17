@@ -77,6 +77,9 @@ public class SwerveModule {
         configDriveMotor();
 
         lastAngle = getState().angle;
+
+        // Align the wheels on startup
+        alignWheels();
     }
 
     public SwerveModuleState getState() {
@@ -85,6 +88,21 @@ public class SwerveModule {
 
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(driveEncoder.getPosition(), getAngle());
+    }
+
+    public void alignWheels() {
+        // Get the current angle of the wheel
+        Rotation2d currentAngle = getAngle();
+
+        // Define the desired starting angle. This could be a constant or a parameter.
+        Rotation2d startingAngle = Rotation2d.fromDegrees(0); // Assuming you want to align to 0 degrees
+
+        // Calculate the difference between the current angle and the desired starting
+        // angle
+        double angleDifference = startingAngle.getDegrees() - currentAngle.getDegrees();
+
+        // Use the angleController to adjust the wheel to the desired starting angle
+        angleController.setReference(angleDifference, ControlType.kPosition);
     }
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
