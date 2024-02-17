@@ -58,7 +58,8 @@ public final class Constants {
     }
 
     public static final class Arm {
-      public static final int MotorID = 02;
+      public static final int MotorID0 = 01;
+      public static final int MotorID1 = 02;
       public static final double Speed = 1; // must be between -1 and 1
       public static final int EncoderPort = 0;
       public static final double EncoderMax = 0.63;
