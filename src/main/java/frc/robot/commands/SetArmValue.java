@@ -11,6 +11,14 @@ public class SetArmValue extends Command {
     private ArmSubsystem m_ArmSubsystem;
     private CommandJoystick m_Joystick;
 
+    private double getAxis() {
+        return m_Joystick.getRawAxis(Joystick.AxisType.kY.value);
+    };
+
+    private boolean getButton() {
+        return m_Joystick.button(1).getAsBoolean();
+    };
+
     public SetArmValue(ArmSubsystem ArmSub, CommandJoystick joystick) {
         m_ArmSubsystem = ArmSub;
         m_Joystick = joystick;
@@ -24,13 +32,20 @@ public class SetArmValue extends Command {
 
     @Override
     public void execute() {
-        m_ArmSubsystem.spinUp(Constants.ArmShooterConstants.Arm.Speed * m_Joystick.getRawAxis(Joystick.AxisType.kY.value));
-        SmartDashboard.putNumber("Arm Value", Constants.ArmShooterConstants.Arm.Speed * m_Joystick.getRawAxis(Joystick.AxisType.kY.value));
+        if ((m_ArmSubsystem.encoder.get() >= Constants.ArmShooterConstants.Arm.EncoderMax && getAxis() < 0)
+                || (m_ArmSubsystem.encoder.get() <= Constants.ArmShooterConstants.Arm.EncoderMin && getAxis() > 0)) {
+            m_ArmSubsystem.spinDown();
+        } else {
+            m_ArmSubsystem.spinUp(
+                    Constants.ArmShooterConstants.Arm.Speed * m_Joystick.getRawAxis(Joystick.AxisType.kY.value));
+            SmartDashboard.putNumber("Arm Value",
+                    Constants.ArmShooterConstants.Arm.Speed * m_Joystick.getRawAxis(Joystick.AxisType.kY.value));
+        }
     }
 
     @Override
     public boolean isFinished() {
-        if (m_ArmSubsystem.encoder.get() >= Constants.ArmShooterConstants.Arm.EncoderMax || m_ArmSubsystem.encoder.get() <= Constants.ArmShooterConstants.Arm.EncoderMin  || m_Joystick.button(0).getAsBoolean()) {
+        if (getButton()) {
             m_ArmSubsystem.spinDown();
             return true;
         }
