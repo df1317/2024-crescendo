@@ -37,15 +37,15 @@ public class SetArmValue extends Command {
             m_ArmSubsystem.spinDown();
         } else {
             m_ArmSubsystem.spinUp(
-                    Constants.ArmShooterConstants.Arm.Speed * m_Joystick.getRawAxis(Joystick.AxisType.kY.value));
+                    Constants.ArmShooterConstants.Arm.Speed * getAxis());
             SmartDashboard.putNumber("Arm Value",
-                    Constants.ArmShooterConstants.Arm.Speed * m_Joystick.getRawAxis(Joystick.AxisType.kY.value));
+                    Constants.ArmShooterConstants.Arm.Speed * getAxis());
         }
     }
 
     @Override
     public boolean isFinished() {
-        if (getButton()) {
+        if (!getButton()) {
             m_ArmSubsystem.spinDown();
             return true;
         }
