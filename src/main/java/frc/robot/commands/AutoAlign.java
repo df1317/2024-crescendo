@@ -50,7 +50,7 @@ public class AutoAlign extends Command {
             startTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
         } else {
             m_XboxController.getHID().setRumble(RumbleType.kBothRumble, 0);
-            SetArmValue = new SetArmValue(m_ArmSubsystem, elevation);
+            SetArmValue = new SetArmValueAbsolute(m_ArmSubsystem, elevation);
             m_SwerveSubsystem.drive(new Translation2d(0,0), 4 * floorAngle, true, true);
         }
     }
