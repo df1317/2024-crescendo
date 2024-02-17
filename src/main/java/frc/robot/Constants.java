@@ -61,6 +61,8 @@ public final class Constants {
       public static final int MotorID = 02;
       public static final double Speed = 0.5; // must be between -1 and 1
       public static final int EncoderPort = 0; // TBD
+      public static final double EncoderMax = 0.0; // TBD
+      public static final double EncoderMin = 0.0; // TBD
     }
   }
 

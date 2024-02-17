@@ -100,7 +100,7 @@ public class RobotContainer {
     FireNote fireNoteCommandNear = new FireNote(m_FiringSubsystem, true, yButton);
     m_XboxController.button(Button.kX.value).onTrue(fireNoteCommandFar);
     m_XboxController.button(Button.kY.value).onTrue(fireNoteCommandNear);
-    m_XboxController.button(Button.kB.value).onTrue(new SetArmValue(m_ArmSubsystem, m_JoystickL.getThrottle()));
+    m_JoystickL.trigger().onTrue(new SetArmValue(m_ArmSubsystem, m_JoystickL));
   }
 
   /**
