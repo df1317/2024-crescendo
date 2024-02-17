@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.subsystems.ArmSubsystem;
@@ -18,16 +19,18 @@ public class SetArmValue extends Command {
 
     @Override
     public void initialize() {
+        SmartDashboard.putBoolean("Arm Command", true);
     }
 
     @Override
     public void execute() {
         m_ArmSubsystem.spinUp(Constants.ArmShooterConstants.Arm.Speed * m_Joystick.getRawAxis(Joystick.AxisType.kY.value));
+        SmartDashboard.putNumber("Arm Value", Constants.ArmShooterConstants.Arm.Speed * m_Joystick.getRawAxis(Joystick.AxisType.kY.value));
     }
 
     @Override
     public boolean isFinished() {
-        if (m_ArmSubsystem.encoder.get() >= Constants.ArmShooterConstants.Arm.EncoderMax || m_ArmSubsystem.encoder.get() <= Constants.ArmShooterConstants.Arm.EncoderMin  || !m_Joystick.trigger().getAsBoolean()) {
+        if (m_ArmSubsystem.encoder.get() >= Constants.ArmShooterConstants.Arm.EncoderMax || m_ArmSubsystem.encoder.get() <= Constants.ArmShooterConstants.Arm.EncoderMin  || m_Joystick.button(0).getAsBoolean()) {
             m_ArmSubsystem.spinDown();
             return true;
         }
@@ -37,6 +40,7 @@ public class SetArmValue extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        SmartDashboard.putBoolean("Arm Command", false);
         m_ArmSubsystem.spinDown();
     }
 }

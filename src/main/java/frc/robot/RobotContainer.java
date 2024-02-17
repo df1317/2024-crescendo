@@ -34,7 +34,7 @@ public class RobotContainer {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public final CommandXboxController m_XboxController = new CommandXboxController(0);
-  private final CommandJoystick m_JoystickL = new CommandJoystick(0);
+  private final CommandJoystick m_JoystickL = new CommandJoystick(1);
   // private final CommandJoystick m_JoystickR = new CommandJoystick(1);
 
   /* Drive Controls */
@@ -100,7 +100,7 @@ public class RobotContainer {
     FireNote fireNoteCommandNear = new FireNote(m_FiringSubsystem, true, yButton);
     m_XboxController.button(Button.kX.value).onTrue(fireNoteCommandFar);
     m_XboxController.button(Button.kY.value).onTrue(fireNoteCommandNear);
-    m_JoystickL.trigger().onTrue(new SetArmValue(m_ArmSubsystem, m_JoystickL));
+    m_JoystickL.button(1).onTrue(new SetArmValue(m_ArmSubsystem, m_JoystickL));
   }
 
   /**
