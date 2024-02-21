@@ -7,7 +7,7 @@ import frc.robot.Constants;
 public class SetArmValueAbsolute extends Command {
     private ArmSubsystem m_ArmSubsystem;
     private double target_value;
-    private double encoderShooterZero;
+    private double encoderShooterZero = 90;
 
     public SetArmValueAbsolute(ArmSubsystem ArmSub, double value) {
         m_ArmSubsystem = ArmSub;
@@ -23,8 +23,8 @@ public class SetArmValueAbsolute extends Command {
 
     @Override
     public boolean isFinished() {
-        if ((m_ArmSubsystem.encoder.get() >= Constants.ArmShooterConstants.Arm.EncoderMax && target_value < 0)
-                || (m_ArmSubsystem.encoder.get() <= Constants.ArmShooterConstants.Arm.EncoderMin && target_value > 0)) {
+        if ((m_ArmSubsystem.encoder.get() >= Constants.ArmShooterConstants.Arm.EncoderMax && target_value > 0)
+                || (m_ArmSubsystem.encoder.get() <= Constants.ArmShooterConstants.Arm.EncoderMin && target_value < 0)) {
 
             return true;
         }
