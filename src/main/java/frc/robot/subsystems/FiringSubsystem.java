@@ -15,8 +15,8 @@ public class FiringSubsystem extends SubsystemBase {
 
     public void spinUp(double speed) {
         SmartDashboard.putString("Firing Status", "Firing");
-        motor0.set(speed);
-        motor1.set(speed);
+        motor0.set(-speed);
+        motor1.set(-speed);
     }
 
     public void spinDown() {
