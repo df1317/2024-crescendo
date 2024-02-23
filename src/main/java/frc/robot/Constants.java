@@ -28,9 +28,13 @@ import frc.lib.SwerveModuleConstants;
 public final class Constants {
   public static final class SensorConstants {
     public static final class Limelight {
-      public static final double speakerAprilTag4TY = 1.442593;
-      public static final double speakerAprilTag4TX = 8.308467;
-      public static final double speakerAprilTag4TZ = 1.451102;
+      public static final double speakerYBlue = 1.442593;
+      public static final double speakerXBlue = -8.308467;
+      public static final double speakerZBlue = 2.085;
+
+      public static final double speakerYRed = 1.442593;
+      public static final double speakerXRed = 8.308467;
+      public static final double speakerZRed = 2.085;
     }
 
     public static final class Controller {
