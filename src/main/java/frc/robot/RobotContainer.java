@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import frc.robot.commands.AutoAlign;
 import frc.robot.commands.FireNote;
 import frc.robot.commands.SetArmValue;
 import frc.robot.commands.TeleopSwerve;
@@ -107,7 +108,8 @@ public class RobotContainer {
   private void configureBindings() {
     AutoAlign autoAlign = new AutoAlign(m_LimelightSubsystem, m_SwerveSubsystem, m_ArmSubsystem, m_XboxController);
     m_XboxController.button(Button.kA.value).onTrue(autoAlign);
-    // m_XboxController.button(Button.kB.value).onTrue(new InstantCommand(() -> m_SwerveSubsystem.setWheelsToX()));
+    // m_XboxController.button(Button.kB.value).onTrue(new InstantCommand(() ->
+    // m_SwerveSubsystem.setWheelsToX()));
     // setup two firing speeds
     FireNote fireNoteCommandFar = new FireNote(m_FiringSubsystem, false, xButton);
     FireNote fireNoteCommandNear = new FireNote(m_FiringSubsystem, true, yButton);
@@ -125,7 +127,6 @@ public class RobotContainer {
     // An example command will be run in autonomous
     return autoChooser.getSelected();
   }
-
 
   public void updateLimelight() {
     m_LimelightSubsystem.updateLimelight();
