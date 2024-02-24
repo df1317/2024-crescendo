@@ -11,11 +11,17 @@ public class ClimbingSubsystem extends SubsystemBase {
     private TalonSRX motorRight = new TalonSRX(7);
 
     public void setLeftArm(double output) {
-        motorLeft.set(TalonSRXControlMode.PercentOutput, 1);
+        motorLeft.set(TalonSRXControlMode.PercentOutput, output);
     }
 
     public void setRightArm(double output) {
-        motorRight.set(TalonSRXControlMode.PercentOutput, 1);
+        motorRight.set(TalonSRXControlMode.PercentOutput, output);
+    }
+
+    // holds the value of the arms
+    public void stop() {
+        motorLeft.set(TalonSRXControlMode.PercentOutput, 0);
+        motorRight.set(TalonSRXControlMode.PercentOutput, 0);
     }
 
 }
