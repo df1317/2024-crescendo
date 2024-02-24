@@ -7,8 +7,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class ClimbingSubsystem extends SubsystemBase {
     // device numbers to be changed when we have the devices
-    private TalonSRX motorLeft = new TalonSRX(1);
-    private TalonSRX motorRight = new TalonSRX(2);
+    private TalonSRX motorLeft = new TalonSRX(6);
+    private TalonSRX motorRight = new TalonSRX(7);
 
     public void setLeftArm(double output) {
         motorLeft.set(TalonSRXControlMode.PercentOutput, 1);
