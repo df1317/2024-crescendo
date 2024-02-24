@@ -21,7 +21,6 @@ import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -88,8 +87,6 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    NamedCommands.registerCommand("FireNote", new FireNote(m_FiringSubsystem, false, xButton));
-
     autoChooser = AutoBuilder.buildAutoChooser();
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -118,10 +115,10 @@ public class RobotContainer {
     Climb climbCommand = new Climb(m_ClimbingSubsystem, m_JoystickL, m_JoystickR);
     m_JoystickL.button(3).and(m_JoystickL.trigger()).onTrue(climbCommand);
     // setup two firing speeds
-    FireNote fireNoteCommandFar = new FireNote(m_FiringSubsystem, false, xButton);
-    FireNote fireNoteCommandNear = new FireNote(m_FiringSubsystem, true, yButton);
-    m_XboxController.button(Button.kX.value).onTrue(fireNoteCommandFar);
-    m_XboxController.button(Button.kY.value).onTrue(fireNoteCommandNear);
+    FireNote fireNoteCommandIntake = new FireNote(m_FiringSubsystem, m_JoystickL.button(5), true, false);
+    FireNote fireNoteCommandFlywheel = new FireNote(m_FiringSubsystem, m_JoystickL.button(6), false, true);
+    m_JoystickL.button(5).onTrue(fireNoteCommandIntake);
+    m_JoystickL.button(6).onTrue(fireNoteCommandFlywheel);
 
     m_JoystickL.button(3).negate().and(m_JoystickL.trigger()).onTrue(new SetArmValue(m_ArmSubsystem, m_JoystickL));
     m_JoystickL.button(1).onTrue(new SetArmValue(m_ArmSubsystem, m_JoystickL));

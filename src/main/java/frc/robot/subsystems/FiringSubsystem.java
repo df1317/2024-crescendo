@@ -8,20 +8,31 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class FiringSubsystem extends SubsystemBase {
-    private Spark motor0 = new Spark(Constants.ArmShooterConstants.ShooterCollectorConstants.Firing.MotorID0);
-    private Spark motor1 = new Spark(Constants.ArmShooterConstants.ShooterCollectorConstants.Firing.MotorID1);
+    private Spark shooter0 = new Spark(3);
+    private Spark shooter1 = new Spark(4);
 
-    public DigitalInput noteSensor = new DigitalInput(Constants.ArmShooterConstants.ShooterCollectorConstants.NoteSensorPort);
+    private Spark intake = new Spark(5);
 
-    public void spinUp(double speed) {
+    public DigitalInput noteSensor = new DigitalInput(
+            Constants.ArmShooterConstants.ShooterCollectorConstants.NoteSensorPort);
+
+    public void spinUpShooter(double speed) {
         SmartDashboard.putString("Firing Status", "Firing");
-        motor0.set(-speed);
-        motor1.set(-speed);
+        shooter0.set(speed);
+        shooter1.set(speed);
     }
 
-    public void spinDown() {
+    public void spinDownShooter() {
         SmartDashboard.putString("Firing Status", "Armed");
-        motor0.stopMotor();
-        motor1.stopMotor();
+        shooter0.stopMotor();
+        shooter1.stopMotor();
+    }
+
+    public void spinUpIntake(double speed) {
+        intake.set(speed);
+    }
+
+    public void spinDownIntake() {
+        intake.stopMotor();
     }
 }
