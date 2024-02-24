@@ -8,8 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.autos.exampleAuto;
-import frc.robot.commands.AutoAlign;
+
 import frc.robot.commands.FireNote;
 import frc.robot.commands.SetArmValue;
 import frc.robot.commands.TeleopSwerve;
@@ -17,8 +16,14 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.FiringSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -32,7 +37,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
+  // Replace with CommandPS4C,ontroller or CommandJoystick if needed
   public final CommandXboxController m_XboxController = new CommandXboxController(0);
   private final CommandJoystick m_JoystickL = new CommandJoystick(1);
   // private final CommandJoystick m_JoystickR = new CommandJoystick(1);
@@ -61,6 +66,8 @@ public class RobotContainer {
   private final LimelightSubsystem m_LimelightSubsystem = new LimelightSubsystem();
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
 
+  private final SendableChooser<Command> autoChooser;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -75,6 +82,12 @@ public class RobotContainer {
 
     // Configure the trigger bindings
     configureBindings();
+
+    NamedCommands.registerCommand("FireNote", new FireNote(m_FiringSubsystem, false, xButton));
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   /**
@@ -110,8 +123,9 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new exampleAuto(m_SwerveSubsystem);
+    return autoChooser.getSelected();
   }
+
 
   public void updateLimelight() {
     m_LimelightSubsystem.updateLimelight();
