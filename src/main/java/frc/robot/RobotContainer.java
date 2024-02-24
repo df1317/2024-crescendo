@@ -10,10 +10,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.AutoAlign;
+import frc.robot.commands.Climb;
 import frc.robot.commands.FireNote;
 import frc.robot.commands.SetArmValue;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.subsystems.FiringSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -41,6 +43,7 @@ public class RobotContainer {
   // Replace with CommandPS4C,ontroller or CommandJoystick if needed
   public final CommandXboxController m_XboxController = new CommandXboxController(0);
   private final CommandJoystick m_JoystickL = new CommandJoystick(1);
+  private final CommandJoystick m_JoystickR = new CommandJoystick(2);
   // private final CommandJoystick m_JoystickR = new CommandJoystick(1);
 
   /* Drive Controls */
@@ -66,6 +69,7 @@ public class RobotContainer {
   private final FiringSubsystem m_FiringSubsystem = new FiringSubsystem();
   private final LimelightSubsystem m_LimelightSubsystem = new LimelightSubsystem();
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+  private final ClimbingSubsystem m_ClimbingSubsystem = new ClimbingSubsystem();
 
   private final SendableChooser<Command> autoChooser;
 
@@ -108,13 +112,18 @@ public class RobotContainer {
   private void configureBindings() {
     AutoAlign autoAlign = new AutoAlign(m_LimelightSubsystem, m_SwerveSubsystem, m_ArmSubsystem, m_XboxController);
     m_XboxController.button(Button.kA.value).onTrue(autoAlign);
-    // m_XboxController.button(Button.kB.value).onTrue(new InstantCommand(() ->
-    // m_SwerveSubsystem.setWheelsToX()));
+
+    // climb command should be able to work only if a button is pressed on the
+    // joystick and the trigger is pressed
+    Climb climbCommand = new Climb(m_ClimbingSubsystem, m_JoystickL, m_JoystickR);
+    m_JoystickL.button(3).and(m_JoystickL.trigger()).onTrue(climbCommand);
     // setup two firing speeds
     FireNote fireNoteCommandFar = new FireNote(m_FiringSubsystem, false, xButton);
     FireNote fireNoteCommandNear = new FireNote(m_FiringSubsystem, true, yButton);
     m_XboxController.button(Button.kX.value).onTrue(fireNoteCommandFar);
     m_XboxController.button(Button.kY.value).onTrue(fireNoteCommandNear);
+
+    m_JoystickL.button(3).negate().and(m_JoystickL.trigger()).onTrue(new SetArmValue(m_ArmSubsystem, m_JoystickL));
     m_JoystickL.button(1).onTrue(new SetArmValue(m_ArmSubsystem, m_JoystickL));
   }
 
