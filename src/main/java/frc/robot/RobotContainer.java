@@ -5,12 +5,16 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import frc.robot.commands.FireNote;
+import frc.robot.commands.SetArmValue;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.FiringSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -35,7 +39,7 @@ public class RobotContainer {
 
   // Replace with CommandPS4C,ontroller or CommandJoystick if needed
   public final CommandXboxController m_XboxController = new CommandXboxController(0);
-  // private final CommandJoystick m_JoystickL = new CommandJoystick(0);
+  private final CommandJoystick m_JoystickL = new CommandJoystick(1);
   // private final CommandJoystick m_JoystickR = new CommandJoystick(1);
 
   /* Drive Controls */
@@ -59,6 +63,8 @@ public class RobotContainer {
   /* Subsystems */
   private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem();
   private final FiringSubsystem m_FiringSubsystem = new FiringSubsystem();
+  private final LimelightSubsystem m_LimelightSubsystem = new LimelightSubsystem();
+  private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
 
   private final SendableChooser<Command> autoChooser;
 
@@ -71,7 +77,7 @@ public class RobotContainer {
             m_SwerveSubsystem,
             () -> m_XboxController.getRawAxis(translationAxis),
             () -> m_XboxController.getRawAxis(strafeAxis),
-            () -> m_XboxController.getRawAxis(rotationAxis),
+            () -> -m_XboxController.getRawAxis(rotationAxis),
             () -> robotCentric.getAsBoolean()));
 
     // Configure the trigger bindings
@@ -99,13 +105,15 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_XboxController.button(Button.kA.value).onTrue(new InstantCommand(() -> m_SwerveSubsystem.zeroGyro()));
-    m_XboxController.button(Button.kB.value).onTrue(new InstantCommand(() -> m_SwerveSubsystem.setWheelsToX()));
+    AutoAlign autoAlign = new AutoAlign(m_LimelightSubsystem, m_SwerveSubsystem, m_ArmSubsystem, m_XboxController);
+    m_XboxController.button(Button.kA.value).onTrue(autoAlign);
+    // m_XboxController.button(Button.kB.value).onTrue(new InstantCommand(() -> m_SwerveSubsystem.setWheelsToX()));
     // setup two firing speeds
     FireNote fireNoteCommandFar = new FireNote(m_FiringSubsystem, false, xButton);
     FireNote fireNoteCommandNear = new FireNote(m_FiringSubsystem, true, yButton);
     m_XboxController.button(Button.kX.value).onTrue(fireNoteCommandFar);
     m_XboxController.button(Button.kY.value).onTrue(fireNoteCommandNear);
+    m_JoystickL.button(1).onTrue(new SetArmValue(m_ArmSubsystem, m_JoystickL));
   }
 
   /**
@@ -118,4 +126,8 @@ public class RobotContainer {
     return autoChooser.getSelected();
   }
 
+
+  public void updateLimelight() {
+    m_LimelightSubsystem.updateLimelight();
+  }
 }
