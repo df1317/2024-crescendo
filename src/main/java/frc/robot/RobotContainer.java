@@ -117,8 +117,10 @@ public class RobotContainer {
     // setup two firing speeds
     FireNote fireNoteCommandIntake = new FireNote(m_FiringSubsystem, m_JoystickL.button(5), true, false);
     FireNote fireNoteCommandFlywheel = new FireNote(m_FiringSubsystem, m_JoystickL.button(6), false, true);
+    FireNote fireNoteCommandAll = new FireNote(m_FiringSubsystem, m_JoystickL.button(4), true, true);
     m_JoystickL.button(5).onTrue(fireNoteCommandIntake);
     m_JoystickL.button(6).onTrue(fireNoteCommandFlywheel);
+    m_JoystickL.button(4).onTrue(fireNoteCommandAll);
 
     m_JoystickL.button(3).negate().and(m_JoystickL.trigger()).onTrue(new SetArmValue(m_ArmSubsystem, m_JoystickL));
     m_JoystickL.button(1).onTrue(new SetArmValue(m_ArmSubsystem, m_JoystickL));
