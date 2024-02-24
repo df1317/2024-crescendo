@@ -1,38 +1,48 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import frc.robot.Constants;
 
 public class FiringSubsystem extends SubsystemBase {
-    private Spark shooter0 = new Spark(3);
-    private Spark shooter1 = new Spark(4);
+    private CANSparkMax shooter0 = new CANSparkMax(3, MotorType.kBrushless);
+    private CANSparkMax shooter1 = new CANSparkMax(4, MotorType.kBrushless);
 
-    private Spark intake = new Spark(5);
+    private CANSparkMax intake = new CANSparkMax(5, MotorType.kBrushless);
 
     public DigitalInput noteSensor = new DigitalInput(
             Constants.ArmShooterConstants.ShooterCollectorConstants.NoteSensorPort);
 
     public void spinUpShooter(double speed) {
-        SmartDashboard.putString("Firing Status", "Firing");
-        shooter0.set(speed);
-        shooter1.set(speed);
+        SmartDashboard.putString("Firing Status", "Firing Shooter");
+        shooter0.set(-1);
+        shooter1.set(-1);
     }
 
     public void spinDownShooter() {
-        SmartDashboard.putString("Firing Status", "Armed");
+        SmartDashboard.putString("Firing Status", "Spinning Down Shooter");
         shooter0.stopMotor();
         shooter1.stopMotor();
     }
 
     public void spinUpIntake(double speed) {
-        intake.set(speed);
+        SmartDashboard.putString("Firing Status", "Spin up Intake");
+        intake.set(-0.5);
+
     }
 
     public void spinDownIntake() {
+        SmartDashboard.putString("Firing Status", "Spin down Intake");
         intake.stopMotor();
+    }
+
+    public void logVals() {
+        SmartDashboard.putNumber("shooter0 value", shooter0.get());
+        SmartDashboard.putNumber("shooter1 value", shooter1.get());
+        SmartDashboard.putNumber("intake value", intake.get());
     }
 }

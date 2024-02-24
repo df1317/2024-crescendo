@@ -31,6 +31,11 @@ public class FireNote extends Command {
     }
 
     @Override
+    public void execute() {
+        m_FiringSubsystem.logVals();
+    }
+
+    @Override
     public boolean isFinished() {
         // Check if the button is released or if the specified duration has passed
         return !button.getAsBoolean();
