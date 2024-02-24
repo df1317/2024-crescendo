@@ -69,7 +69,7 @@ public final class Constants {
 
   public static final class ClimberConstants {
     public static final int MotorID = 04;
-    public static final double Speed = 0.5; // must be between -1 and 1
+    public static final double Speed = 1; // must be between -1 and 1
   }
 
   public static final class SwerveConstants {

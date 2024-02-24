@@ -113,7 +113,7 @@ public class RobotContainer {
     // climb command should be able to work only if a button is pressed on the
     // joystick and the trigger is pressed
     Climb climbCommand = new Climb(m_ClimbingSubsystem, m_JoystickL, m_JoystickR);
-    m_JoystickL.button(3).and(m_JoystickL.trigger()).onTrue(climbCommand);
+    SetArmValue setArmValueCommand = new SetArmValue(m_ArmSubsystem, m_JoystickL);
     // setup two firing speeds
     FireNote fireNoteCommandIntake = new FireNote(m_FiringSubsystem, m_JoystickL.button(5), true, false);
     FireNote fireNoteCommandFlywheel = new FireNote(m_FiringSubsystem, m_JoystickL.button(6), false, true);
@@ -122,8 +122,9 @@ public class RobotContainer {
     m_JoystickL.button(6).onTrue(fireNoteCommandFlywheel);
     m_JoystickL.button(4).onTrue(fireNoteCommandAll);
 
-    m_JoystickL.button(3).negate().and(m_JoystickL.trigger()).onTrue(new SetArmValue(m_ArmSubsystem, m_JoystickL));
-    m_JoystickL.button(1).onTrue(new SetArmValue(m_ArmSubsystem, m_JoystickL));
+    (m_JoystickL.trigger().and(m_JoystickL.button(3))).or(m_JoystickR.trigger().and(m_JoystickR.button(3)))
+        .onTrue(climbCommand);
+    m_JoystickL.button(2).and(m_JoystickL.trigger()).onTrue(setArmValueCommand);
   }
 
   /**

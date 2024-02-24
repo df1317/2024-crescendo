@@ -13,7 +13,7 @@ public class Climb extends Command {
     private CommandJoystick m_JoystickR;
 
     private boolean getTrigger() {
-        return m_JoystickL.trigger().getAsBoolean() && m_JoystickR.trigger().getAsBoolean();
+        return !m_JoystickL.trigger().getAsBoolean() && !m_JoystickR.trigger().getAsBoolean();
     };
 
     public Climb(ClimbingSubsystem climbingSub, CommandJoystick joystickL, CommandJoystick joystickR) {
@@ -25,6 +25,7 @@ public class Climb extends Command {
 
     @Override
     public void initialize() {
+        SmartDashboard.putBoolean("Climbing", true);
     }
 
     @Override
@@ -32,17 +33,18 @@ public class Climb extends Command {
         if (m_JoystickL.getRawAxis(Joystick.AxisType.kY.value) != 0) {
             m_ClimbingSubsystem
                     .setLeftArm(m_JoystickL.getRawAxis(Joystick.AxisType.kY.value) * Constants.ClimberConstants.Speed);
+            SmartDashboard.putNumber("Climbing Joystick Left", m_JoystickL.getRawAxis(Joystick.AxisType.kY.value));
         }
         if (m_JoystickR.getRawAxis(Joystick.AxisType.kY.value) != 0) {
             m_ClimbingSubsystem
                     .setRightArm(m_JoystickR.getRawAxis(Joystick.AxisType.kY.value) * Constants.ClimberConstants.Speed);
-
+            SmartDashboard.putNumber("Climbing Joystick Right", m_JoystickR.getRawAxis(Joystick.AxisType.kY.value));
         }
     }
 
     @Override
     public boolean isFinished() {
-        if (!getTrigger()) {
+        if (getTrigger()) {
             return true;
         }
 
@@ -51,7 +53,7 @@ public class Climb extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        SmartDashboard.putBoolean("Arm Command", false);
+        SmartDashboard.putBoolean("Climbing", false);
         m_ClimbingSubsystem.stop();
     }
 }
