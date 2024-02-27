@@ -119,7 +119,7 @@ public class RobotContainer {
     FireNote fireNoteCommandFlywheel = new FireNote(m_FiringSubsystem, m_JoystickR.button(5), m_JoystickR, false, true);
     FireNote fireNoteCommandAll = new FireNote(m_FiringSubsystem, m_JoystickL.button(4), m_JoystickL, true, true);
     m_JoystickL.button(5).onTrue(fireNoteCommandIntake);
-    m_JoystickL.button(6).onTrue(fireNoteCommandFlywheel);
+    m_JoystickR.button(5).onTrue(fireNoteCommandFlywheel);
     m_JoystickL.button(4).onTrue(fireNoteCommandAll);
 
     (m_JoystickL.trigger().and(m_JoystickL.button(3))).or(m_JoystickR.trigger().and(m_JoystickR.button(3)))
