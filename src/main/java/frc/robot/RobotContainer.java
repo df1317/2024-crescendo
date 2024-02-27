@@ -115,9 +115,9 @@ public class RobotContainer {
     Climb climbCommand = new Climb(m_ClimbingSubsystem, m_JoystickL, m_JoystickR);
     SetArmValue setArmValueCommand = new SetArmValue(m_ArmSubsystem, m_JoystickL);
     // setup two firing speeds
-    FireNote fireNoteCommandIntake = new FireNote(m_FiringSubsystem, m_JoystickL.button(5), true, false);
-    FireNote fireNoteCommandFlywheel = new FireNote(m_FiringSubsystem, m_JoystickL.button(6), false, true);
-    FireNote fireNoteCommandAll = new FireNote(m_FiringSubsystem, m_JoystickL.button(4), true, true);
+    FireNote fireNoteCommandIntake = new FireNote(m_FiringSubsystem, m_JoystickL.button(5), m_JoystickL, true, false);
+    FireNote fireNoteCommandFlywheel = new FireNote(m_FiringSubsystem, m_JoystickR.button(5), m_JoystickR, false, true);
+    FireNote fireNoteCommandAll = new FireNote(m_FiringSubsystem, m_JoystickL.button(4), m_JoystickL, true, true);
     m_JoystickL.button(5).onTrue(fireNoteCommandIntake);
     m_JoystickL.button(6).onTrue(fireNoteCommandFlywheel);
     m_JoystickL.button(4).onTrue(fireNoteCommandAll);
