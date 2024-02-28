@@ -138,7 +138,9 @@ public class SwerveModule {
 
     private void configAngleEncoder() {
         angleEncoder.getConfigurator().apply(new CANcoderConfiguration());
-        angleEncoder.getConfigurator().apply(Robot.ctreConfigs.swerveCanCoderConfig);
+        CANcoderConfiguration config = Robot.ctreConfigs.swerveCanCoderConfig;
+        config.MagnetSensor.MagnetOffset = angleOffset.getRotations();
+        angleEncoder.getConfigurator().apply(config);
     }
 
     // private void configAngleMotor() {
@@ -197,9 +199,9 @@ public class SwerveModule {
     // }
 
     private Rotation2d getAngle() {
-        return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition()); // Must be degrees even though
-                                                                             // documentation says it should be
-                                                                             // rotations
+        return Rotation2d.fromDegrees(angleEncoder.getPosition().getValueAsDouble()); // Must be degrees even though
+        // documentation says it should be
+        // rotations
     }
 
 }
