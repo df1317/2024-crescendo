@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants;
@@ -21,11 +22,16 @@ public class AutoFireNote extends Command {
         m_FiringSubsystem = FiringSub;
         this.joystickL = joystickL;
         this.joystickR = joystickR;
+        this.intake = intake;
+        this.shoot = shoot;
         addRequirements(FiringSub);
     }
 
     @Override
     public void initialize() {
+        SmartDashboard.putBoolean("Auto Firing Intake Status", intake);
+        SmartDashboard.putBoolean("Auto Firing Shooter Status", shoot);
+
         if (intake) {
             m_FiringSubsystem.spinUpIntake(joystickL.getThrottle());
         }
@@ -38,8 +44,6 @@ public class AutoFireNote extends Command {
 
     @Override
     public void execute() {
-        m_FiringSubsystem.logVals();
-
         if (shoot && System.currentTimeMillis()
                 - timer > Constants.ArmShooterConstants.ShooterCollectorConstants.Firing.Duration
                         * 1000) {
@@ -58,7 +62,7 @@ public class AutoFireNote extends Command {
             return true;
         }
 
-        if (intake && m_FiringSubsystem.noteSensor.get()) {
+        if (intake && !m_FiringSubsystem.noteSensor.get()) {
             return true;
         }
 
@@ -67,6 +71,9 @@ public class AutoFireNote extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        SmartDashboard.putBoolean("Auto Firing Intake Status", false);
+        SmartDashboard.putBoolean("Auto Firing Shooter Status", false);
+
         // Spin down motors
         m_FiringSubsystem.spinDownIntake();
         m_FiringSubsystem.spinDownShooter();
