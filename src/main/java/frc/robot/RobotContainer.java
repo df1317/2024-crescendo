@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.AutoAlign;
+import frc.robot.commands.AutoFireNote;
 import frc.robot.commands.Climb;
 import frc.robot.commands.FireNote;
 import frc.robot.commands.SetArmValue;
@@ -125,6 +126,13 @@ public class RobotContainer {
     (m_JoystickL.trigger().and(m_JoystickL.button(3))).or(m_JoystickR.trigger().and(m_JoystickR.button(3)))
         .onTrue(climbCommand);
     m_JoystickL.button(2).and(m_JoystickL.trigger()).onTrue(setArmValueCommand);
+
+    AutoFireNote autoFireNoteCommandIntake = new AutoFireNote(m_FiringSubsystem, m_JoystickL, m_JoystickR, true, false);
+    AutoFireNote autoFireNoteCommandFlywheel = new AutoFireNote(m_FiringSubsystem, m_JoystickL, m_JoystickR, false,
+        true);
+
+    m_JoystickL.button(6).onTrue(autoFireNoteCommandIntake);
+    m_JoystickR.button(6).onTrue(autoFireNoteCommandFlywheel);
   }
 
   /**
@@ -139,5 +147,9 @@ public class RobotContainer {
 
   public void updateLimelight() {
     m_LimelightSubsystem.updateLimelight();
+  }
+
+  public void updateFiringSubsystem() {
+    m_FiringSubsystem.logVals();
   }
 }
