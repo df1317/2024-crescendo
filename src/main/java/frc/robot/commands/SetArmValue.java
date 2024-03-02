@@ -56,7 +56,6 @@ public class SetArmValue extends Command {
         m_ArmSubsystem.setAngle(armAngle);
         SmartDashboard.putNumber("Current Arm Angle", m_ArmSubsystem.getArmAngle());
         SmartDashboard.putNumber("Desired Arm Angle", armAngle);
-
     }
 
     @Override

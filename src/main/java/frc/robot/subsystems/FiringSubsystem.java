@@ -19,8 +19,8 @@ public class FiringSubsystem extends SubsystemBase {
 
     public void spinUpShooter(double speed) {
         SmartDashboard.putString("Firing Status", "Firing Shooter");
-        shooter0.set(-0.7);
-        shooter1.set(-0.7);
+        shooter0.set(speed);
+        shooter1.set(speed);
     }
 
     public void spinDownShooter() {
@@ -31,7 +31,7 @@ public class FiringSubsystem extends SubsystemBase {
 
     public void spinUpIntake(double speed) {
         SmartDashboard.putString("Firing Status", "Spin up Intake");
-        intake.set(-1);
+        intake.set(speed);
 
     }
 
@@ -44,5 +44,6 @@ public class FiringSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("shooter0 value", shooter0.get());
         SmartDashboard.putNumber("shooter1 value", shooter1.get());
         SmartDashboard.putNumber("intake value", intake.get());
+        SmartDashboard.putBoolean("Note Sensor", noteSensor.get());
     }
 }

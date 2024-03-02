@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.AutoAlign;
+import frc.robot.commands.AutoFireNote;
 import frc.robot.commands.Climb;
 import frc.robot.commands.FireNote;
 import frc.robot.commands.SetArmValue;
@@ -115,16 +116,23 @@ public class RobotContainer {
     Climb climbCommand = new Climb(m_ClimbingSubsystem, m_JoystickL, m_JoystickR);
     SetArmValue setArmValueCommand = new SetArmValue(m_ArmSubsystem, m_JoystickL);
     // setup two firing speeds
-    FireNote fireNoteCommandIntake = new FireNote(m_FiringSubsystem, m_JoystickL.button(5), true, false);
-    FireNote fireNoteCommandFlywheel = new FireNote(m_FiringSubsystem, m_JoystickL.button(6), false, true);
-    FireNote fireNoteCommandAll = new FireNote(m_FiringSubsystem, m_JoystickL.button(4), true, true);
+    FireNote fireNoteCommandIntake = new FireNote(m_FiringSubsystem, m_JoystickL.button(5), m_JoystickL, true, false);
+    FireNote fireNoteCommandFlywheel = new FireNote(m_FiringSubsystem, m_JoystickR.button(5), m_JoystickR, false, true);
+    FireNote fireNoteCommandAll = new FireNote(m_FiringSubsystem, m_JoystickL.button(4), m_JoystickL, true, true);
     m_JoystickL.button(5).onTrue(fireNoteCommandIntake);
-    m_JoystickL.button(6).onTrue(fireNoteCommandFlywheel);
+    m_JoystickR.button(5).onTrue(fireNoteCommandFlywheel);
     m_JoystickL.button(4).onTrue(fireNoteCommandAll);
 
     (m_JoystickL.trigger().and(m_JoystickL.button(3))).or(m_JoystickR.trigger().and(m_JoystickR.button(3)))
         .onTrue(climbCommand);
     m_JoystickL.button(2).and(m_JoystickL.trigger()).onTrue(setArmValueCommand);
+
+    AutoFireNote autoFireNoteCommandIntake = new AutoFireNote(m_FiringSubsystem, m_JoystickL, m_JoystickR, true, false);
+    AutoFireNote autoFireNoteCommandFlywheel = new AutoFireNote(m_FiringSubsystem, m_JoystickL, m_JoystickR, false,
+        true);
+
+    m_JoystickL.button(6).onTrue(autoFireNoteCommandIntake);
+    m_JoystickR.button(6).onTrue(autoFireNoteCommandFlywheel);
   }
 
   /**
@@ -139,5 +147,9 @@ public class RobotContainer {
 
   public void updateLimelight() {
     m_LimelightSubsystem.updateLimelight();
+  }
+
+  public void updateFiringSubsystem() {
+    m_FiringSubsystem.logVals();
   }
 }
