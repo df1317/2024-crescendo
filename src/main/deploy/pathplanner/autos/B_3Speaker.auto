@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.28,
+      "y": 5.57
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B_MultiNotes1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B_3Notes2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B_3Notes3"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
