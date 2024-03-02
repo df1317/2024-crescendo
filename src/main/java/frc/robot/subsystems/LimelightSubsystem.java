@@ -57,6 +57,9 @@ public class LimelightSubsystem extends SubsystemBase {
     }
 
     public double getElevation() {
+        // double armOffSetAtBottom = 6 degrees
+        // shooter to arm offset = 60 degrees
+
         double op;
         double adj;
 
@@ -75,6 +78,14 @@ public class LimelightSubsystem extends SubsystemBase {
             trig = Math.atan(op / adj);
         }
 
-        return Math.toDegrees(trig);
+        double angle = Math.toDegrees(trig) / 100;
+
+        if (angle > 1) {
+            angle = 1;
+        } else if (angle < 0) {
+            angle = 0;
+        }
+
+        return angle + Constants.ArmShooterConstants.Arm.EncoderMin;
     }
 }
