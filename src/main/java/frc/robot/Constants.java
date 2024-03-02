@@ -56,7 +56,7 @@ public final class Constants {
         public static final int Timeout = 4;
       }
 
-      public static final int NoteSensorPort = 1; // TBD
+      public static final int NoteSensorPort = 1;
     }
 
     public static final class Arm {
@@ -66,6 +66,7 @@ public final class Constants {
       public static final int EncoderPort = 0;
       public static final double EncoderMin = 0.63; // toward the bumper
       public static final double EncoderMax = 0.91; // toward the top
+      public static final int LimitSwitchPort = 3;
     }
   }
 

@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,6 +14,7 @@ public class ArmSubsystem extends SubsystemBase {
     private TalonSRX motor0 = new TalonSRX(Constants.ArmShooterConstants.Arm.MotorID0);
     private TalonSRX motor1 = new TalonSRX(Constants.ArmShooterConstants.Arm.MotorID1);
     public DutyCycleEncoder encoder = new DutyCycleEncoder(Constants.ArmShooterConstants.Arm.EncoderPort);
+    public DigitalInput limitSwitch = new DigitalInput(Constants.ArmShooterConstants.Arm.LimitSwitchPort);
 
     private double armSetPoint = Constants.ArmShooterConstants.Arm.EncoderMin;
     private double errorSum = 0;
@@ -37,6 +39,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void periodic() {
         SmartDashboard.putNumber("Arm Encoder", encoder.get());
+        SmartDashboard.putBoolean("Limit Switch", limitSwitch.get());
     }
 
     public double getArmAngle() {
