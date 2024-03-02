@@ -66,14 +66,14 @@ public final class Constants {
       public static final int MotorID1 = 02;
       public static final double Speed = 1; // must be between -1 and 1
       public static final int EncoderPort = 0;
-      public static final double EncoderMax = 0.93; // toward the bumper
-      public static final double EncoderMin = 0.6; // toward the top
+      public static final double EncoderMax = 0.63; // toward the bumper
+      public static final double EncoderMin = 0.25; // toward the top
     }
   }
 
   public static final class ClimberConstants {
     public static final int MotorID = 04;
-    public static final double Speed = 0.5; // must be between -1 and 1
+    public static final double Speed = 1; // must be between -1 and 1
   }
 
   public static final class SwerveConstants {
@@ -149,7 +149,7 @@ public final class Constants {
       public static final int driveMotorID = 11;
       public static final int angleMotorID = 31;
       public static final int canCoderID = 51;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(180);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
       /* Angle Motor PID Values */
       public static final double angleKP = 0.01; // to tune
       public static final double angleKI = 0.0; // to tune
@@ -166,7 +166,7 @@ public final class Constants {
       public static final int driveMotorID = 12;
       public static final int angleMotorID = 32;
       public static final int canCoderID = 52;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(180);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
       /* Angle Motor PID Values */
       public static final double angleKP = 0.01; // to tune
       public static final double angleKI = 0.0; // to tune
