@@ -48,6 +48,7 @@ public final class Constants {
         public static final double NearSpeed = 0.35; // must be between -1 and 1
         public static final double FarSpeed = 1; // must be between -1 and 1
         public static final double Duration = 3.0;
+        public static final double ClearingDelay = 0.5;
       }
 
       public static final class Intake {
