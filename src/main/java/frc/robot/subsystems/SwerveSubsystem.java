@@ -144,13 +144,13 @@ public class SwerveSubsystem extends SubsystemBase {
   public void setWheelsToX() {
     setModuleStates(new SwerveModuleState[] {
         // front left
-        new SwerveModuleState(0.0, Rotation2d.fromDegrees(45.0)),
+        new SwerveModuleState(0.0, Rotation2d.fromDegrees(mSwerveMods[0].getCanCoder().getDegrees())),
         // front right
-        new SwerveModuleState(0.0, Rotation2d.fromDegrees(-45.0)),
+        new SwerveModuleState(0.0, Rotation2d.fromDegrees(mSwerveMods[1].getCanCoder().getDegrees())),
         // back left
-        new SwerveModuleState(0.0, Rotation2d.fromDegrees(135.0)),
+        new SwerveModuleState(0.0, Rotation2d.fromDegrees(mSwerveMods[2].getCanCoder().getDegrees())),
         // back right
-        new SwerveModuleState(0.0, Rotation2d.fromDegrees(-135.0))
+        new SwerveModuleState(0.0, Rotation2d.fromDegrees(mSwerveMods[3].getCanCoder().getDegrees()))
     });
   }
 

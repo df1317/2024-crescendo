@@ -145,7 +145,7 @@ public final class Constants {
       public static final int driveMotorID = 11;
       public static final int angleMotorID = 31;
       public static final int canCoderID = 51;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(180);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
       /* Angle Motor PID Values */
       public static final double angleKP = 0.01; // to tune
       public static final double angleKI = 0.0; // to tune
@@ -162,7 +162,7 @@ public final class Constants {
       public static final int driveMotorID = 12;
       public static final int angleMotorID = 32;
       public static final int canCoderID = 52;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(180);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
       /* Angle Motor PID Values */
       public static final double angleKP = 0.01; // to tune
       public static final double angleKI = 0.0; // to tune
