@@ -11,13 +11,34 @@ public class SetArmValue extends Command {
     private ArmSubsystem m_ArmSubsystem;
     private CommandJoystick m_Joystick;
 
+    private double joystickMax = 1;
+    private double joystickMin = 0;
+    private double joystickRange = joystickMax - joystickMin;
+
     private double getAxis() {
-        return m_Joystick.getRawAxis(Joystick.AxisType.kY.value);
-    };
+        SmartDashboard.putNumber("arm joystick", m_Joystick.getRawAxis(Joystick.AxisType.kY.value) + 1);
+        return m_Joystick.getRawAxis(Joystick.AxisType.kY.value) + 1;
+    }
+
+    private double getJoystickArm() {
+        double joystickPos = getAxis();
+        // clamp joystick input value
+        if (joystickPos > joystickMax) {
+            joystickPos = joystickMax;
+        } else if (joystickPos < joystickMin) {
+            joystickPos = joystickMin;
+        }
+        // get percent of joystick range
+        double joySlope = 1 / joystickRange;
+        double percent = joySlope * joystickPos + joySlope * joystickMin;
+        // get same percent of arm range
+        double armAngle = ArmSubsystem.armRange / 1 * percent + Constants.ArmShooterConstants.Arm.EncoderMin;
+        return armAngle;
+    }
 
     private boolean getButton() {
         return m_Joystick.button(1).getAsBoolean();
-    };
+    }
 
     public SetArmValue(ArmSubsystem ArmSub, CommandJoystick joystick) {
         m_ArmSubsystem = ArmSub;
@@ -32,15 +53,11 @@ public class SetArmValue extends Command {
 
     @Override
     public void execute() {
-        if ((m_ArmSubsystem.encoder.get() <= Constants.ArmShooterConstants.Arm.EncoderMax && getAxis() < 0)
-                || (m_ArmSubsystem.encoder.get() >= Constants.ArmShooterConstants.Arm.EncoderMin && getAxis() > 0)) {
-            m_ArmSubsystem.spinDown();
-        } else {
-            m_ArmSubsystem.spinUp(
-                    Constants.ArmShooterConstants.Arm.Speed * getAxis());
-            SmartDashboard.putNumber("Arm Value",
-                    Constants.ArmShooterConstants.Arm.Speed * getAxis());
-        }
+        double armAngle = getJoystickArm();
+        m_ArmSubsystem.setAngle(armAngle);
+        m_ArmSubsystem.runPID();
+        SmartDashboard.putNumber("Current Arm Angle", m_ArmSubsystem.getArmAngle());
+        SmartDashboard.putNumber("Desired Arm Angle", armAngle);
     }
 
     @Override

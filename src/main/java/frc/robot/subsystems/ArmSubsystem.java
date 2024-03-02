@@ -14,6 +14,17 @@ public class ArmSubsystem extends SubsystemBase {
     private TalonSRX motor1 = new TalonSRX(Constants.ArmShooterConstants.Arm.MotorID1);
     public DutyCycleEncoder encoder = new DutyCycleEncoder(Constants.ArmShooterConstants.Arm.EncoderPort);
 
+    private double armSetPoint = Constants.ArmShooterConstants.Arm.EncoderMin;
+    private double errorSum = 0;
+    private double prevError = 0;
+    public static final double armRange = Constants.ArmShooterConstants.Arm.EncoderMax
+            - Constants.ArmShooterConstants.Arm.EncoderMin;
+
+    // TO-DO make constants
+    public double Kp = 2.5;
+    public double Ki = 0;
+    public double Kd = 0;
+
     public void spinUp(double speed) {
         motor0.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, speed);
         motor1.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, speed);
@@ -26,5 +37,34 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void periodic() {
         SmartDashboard.putNumber("Arm Encoder", encoder.get());
+    }
+
+    public double getArmAngle() {
+        double armAngle = encoder.get();
+        return armAngle;
+    }
+
+    public void setAngle(double newArmAngle) {
+        if (newArmAngle < Constants.ArmShooterConstants.Arm.EncoderMin) {
+            armSetPoint = Constants.ArmShooterConstants.Arm.EncoderMin;
+        } else if (newArmAngle > Constants.ArmShooterConstants.Arm.EncoderMax) {
+            armSetPoint = Constants.ArmShooterConstants.Arm.EncoderMax;
+        } else {
+            armSetPoint = newArmAngle;
+        }
+    }
+
+    public void runPID() {
+        double error = armSetPoint - getArmAngle();
+        errorSum += error;
+        if (errorSum < Constants.ArmShooterConstants.Arm.EncoderMin + 0.2 * armRange) {
+            errorSum = Constants.ArmShooterConstants.Arm.EncoderMin + 0.2 * armRange;
+        } else if (errorSum > Constants.ArmShooterConstants.Arm.EncoderMax - 0.2 * armRange) {
+            errorSum = Constants.ArmShooterConstants.Arm.EncoderMax - 0.2 * armRange;
+        }
+        double errorDif = error - prevError;
+        double motorPower = Kp * error + Ki * errorSum + Kd * errorDif;
+        prevError = error;
+        spinUp(motorPower);
     }
 }
