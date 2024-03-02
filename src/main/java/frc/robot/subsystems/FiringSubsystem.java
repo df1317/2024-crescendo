@@ -44,5 +44,6 @@ public class FiringSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("shooter0 value", shooter0.get());
         SmartDashboard.putNumber("shooter1 value", shooter1.get());
         SmartDashboard.putNumber("intake value", intake.get());
+        SmartDashboard.putBoolean("Note Sensor", noteSensor.get());
     }
 }
