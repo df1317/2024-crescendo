@@ -29,6 +29,8 @@ public class AutoFireNote extends Command {
 
         if (intake) {
             m_FiringSubsystem.spinUpIntake(Constants.ArmShooterConstants.ShooterCollectorConstants.Intake.Speed);
+
+            timer = System.currentTimeMillis();
         }
         if (shoot) {
             m_FiringSubsystem.spinUpShooter(Constants.ArmShooterConstants.ShooterCollectorConstants.Firing.Speed);
@@ -57,7 +59,8 @@ public class AutoFireNote extends Command {
             return true;
         }
 
-        if (intake && !m_FiringSubsystem.noteSensor.get()) {
+        if (intake && !m_FiringSubsystem.noteSensor.get() || System.currentTimeMillis()
+                - timer > Constants.ArmShooterConstants.ShooterCollectorConstants.Intake.Timeout * 1000) {
             return true;
         }
 
