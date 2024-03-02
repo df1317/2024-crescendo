@@ -143,61 +143,6 @@ public class SwerveModule {
         angleEncoder.getConfigurator().apply(config);
     }
 
-    // private void configAngleMotor() {
-    // // resets angle motor
-    // angleMotor.restoreFactoryDefaults();
-    // // limits can bus usage
-    // CANSparkMaxUtil.setCANSparkMaxBusUsage(angleMotor, Usage.kPositionOnly);
-    // // sets current limit
-    // angleMotor.setSmartCurrentLimit(Constants.SwerveConstants.angleContinuousCurrentLimit);
-    // // sets inversion
-    // angleMotor.setInverted(Constants.SwerveConstants.angleInvert);
-    // // sets brake mode or not
-    // angleMotor.setIdleMode(Constants.SwerveConstants.angleNeutralMode);
-    // // sets a conversion factor for the encoder so it output correlates with the
-    // // rotation of the module
-    // integratedAngleEncoder.setPositionConversionFactor(Constants.SwerveConstants.angleConversionFactor);
-    // // oops pid loop time sets the pid
-    // angleController.setP(m_angleKP);
-    // angleController.setI(m_angleKI);
-    // angleController.setD(m_angleKD);
-    // angleController.setFF(m_angleKFF);
-    // angleMotor.enableVoltageCompensation(Constants.SwerveConstants.voltageComp);
-    // // burns spark max
-    // angleMotor.burnFlash();
-
-    // Timer.delay(1.0);
-    // // resets to the cancoder
-    // resetToAbsolute();
-    // }
-
-    // private void configDriveMotor() {
-    // // factory resets the spark max
-    // driveMotor.restoreFactoryDefaults();
-    // // full utilisation on the can loop hell yea
-    // CANSparkMaxUtil.setCANSparkMaxBusUsage(driveMotor, Usage.kAll);
-    // // sets current limit
-    // driveMotor.setSmartCurrentLimit(Constants.SwerveConstants.driveContinuousCurrentLimit);
-    // // sets inverted or not
-    // driveMotor.setInverted(Constants.SwerveConstants.driveInvert);
-    // // sets brake mode or not
-    // driveMotor.setIdleMode(Constants.SwerveConstants.driveNeutralMode);
-    // // sets encoder to read velocities as meters per second
-    // driveEncoder.setVelocityConversionFactor(Constants.SwerveConstants.driveConversionVelocityFactor);
-    // // sets encoder to read positions as meters traveled
-    // driveEncoder.setPositionConversionFactor(Constants.SwerveConstants.driveConversionPositionFactor);
-    // // pid setting fun
-    // driveController.setP(Constants.SwerveConstants.driveKP);
-    // driveController.setI(Constants.SwerveConstants.driveKI);
-    // driveController.setD(Constants.SwerveConstants.driveKD);
-    // driveController.setFF(Constants.SwerveConstants.driveKFF);
-    // driveMotor.enableVoltageCompensation(Constants.SwerveConstants.voltageComp);
-    // // burns to spark max
-    // driveMotor.burnFlash();
-    // // resets encoder position to 0
-    // driveEncoder.setPosition(0.0);
-    // }
-
     private Rotation2d getAngle() {
         return Rotation2d.fromDegrees(angleEncoder.getPosition().getValueAsDouble()); // Must be degrees even though
         // documentation says it should be
