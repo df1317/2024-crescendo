@@ -1,20 +1,23 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.FiringSubsystem;
 
 public class FireNote extends Command {
     private boolean intake;
     private boolean flywheels;
-    private double speed = 1;
     private Trigger button;
+    private CommandJoystick joystick;
 
     private FiringSubsystem m_FiringSubsystem;
 
-    public FireNote(FiringSubsystem FiringSub, Trigger button, boolean intake, boolean flywheels) {
+    public FireNote(FiringSubsystem FiringSub, Trigger button, CommandJoystick joystick, boolean intake,
+            boolean flywheels) {
         m_FiringSubsystem = FiringSub;
         this.button = button;
+        this.joystick = joystick;
         this.intake = intake;
         this.flywheels = flywheels;
         addRequirements(FiringSub);
@@ -23,10 +26,10 @@ public class FireNote extends Command {
     @Override
     public void initialize() {
         if (intake) {
-            m_FiringSubsystem.spinUpIntake(speed);
+            m_FiringSubsystem.spinUpIntake((joystick.getThrottle() - 0.5) * 2);
         }
         if (flywheels) {
-            m_FiringSubsystem.spinUpShooter(speed);
+            m_FiringSubsystem.spinUpShooter((joystick.getThrottle() - 0.5) * 2);
         }
     }
 
