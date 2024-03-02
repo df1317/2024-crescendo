@@ -45,14 +45,13 @@ public final class Constants {
       public static final class Firing {
         public static final int MotorID0 = 01;
         public static final int MotorID1 = 02;
-        public static final double NearSpeed = 0.35; // must be between -1 and 1
-        public static final double FarSpeed = 1; // must be between -1 and 1
+        public static final double Speed = 1; // must be between -1 and 1
         public static final double Duration = 1.25;
         public static final double ClearingDelay = 0.5;
       }
 
       public static final class Intake {
-        public static final double Speed = 0.5; // must be between -1 and 1
+        public static final double Speed = 1; // must be between -1 and 1
       }
 
       public static final int NoteSensorPort = 1; // TBD

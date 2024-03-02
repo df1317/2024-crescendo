@@ -32,8 +32,11 @@ public class AutoFireNote extends Command {
         SmartDashboard.putBoolean("Auto Firing Intake Status", intake);
         SmartDashboard.putBoolean("Auto Firing Shooter Status", shoot);
 
+        // log joystick values
+        SmartDashboard.putNumber("Joystick L Throttle", joystickL.getThrottle());
+
         if (intake) {
-            m_FiringSubsystem.spinUpIntake(joystickL.getThrottle());
+            m_FiringSubsystem.spinUpIntake(Constants.ArmShooterConstants.ShooterCollectorConstants.Intake.Speed);
         }
         if (shoot) {
             m_FiringSubsystem.spinUpShooter(joystickR.getThrottle());
