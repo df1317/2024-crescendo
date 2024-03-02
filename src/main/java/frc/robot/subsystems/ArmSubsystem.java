@@ -21,7 +21,7 @@ public class ArmSubsystem extends SubsystemBase {
             - Constants.ArmShooterConstants.Arm.EncoderMin;
 
     // TO-DO make constants
-    public double Kp = 2;
+    public double Kp = 2.5;
     public double Ki = 0;
     public double Kd = 0;
 
