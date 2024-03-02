@@ -148,4 +148,8 @@ public class RobotContainer {
   public void updateLimelight() {
     m_LimelightSubsystem.updateLimelight();
   }
+
+  public void updateFiringSubsystem() {
+    m_FiringSubsystem.logVals();
+  }
 }
