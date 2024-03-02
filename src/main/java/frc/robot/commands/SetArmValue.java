@@ -11,12 +11,13 @@ public class SetArmValue extends Command {
     private ArmSubsystem m_ArmSubsystem;
     private CommandJoystick m_Joystick;
 
-    private double joystickMax = -1;
-    private double joystickMin = 1;
+    private double joystickMax = 1;
+    private double joystickMin = 0;
     private double joystickRange = joystickMax - joystickMin;
 
     private double getAxis() {
-        return m_Joystick.getRawAxis(Joystick.AxisType.kY.value);
+        SmartDashboard.putNumber("arm joystick", m_Joystick.getRawAxis(Joystick.AxisType.kY.value) + 1);
+        return m_Joystick.getRawAxis(Joystick.AxisType.kY.value) + 1;
     }
 
     private double getJoystickArm() {
