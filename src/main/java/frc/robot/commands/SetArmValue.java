@@ -11,8 +11,8 @@ public class SetArmValue extends Command {
     private ArmSubsystem m_ArmSubsystem;
     private CommandJoystick m_Joystick;
 
-    private double joystickMax = 1;
-    private double joystickMin = 0;
+    private double joystickMax = -1;
+    private double joystickMin = 1;
     private double joystickRange = joystickMax - joystickMin;
 
     private double getAxis() {
@@ -54,6 +54,7 @@ public class SetArmValue extends Command {
     public void execute() {
         double armAngle = getJoystickArm();
         m_ArmSubsystem.setAngle(armAngle);
+        m_ArmSubsystem.runPID();
         SmartDashboard.putNumber("Current Arm Angle", m_ArmSubsystem.getArmAngle());
         SmartDashboard.putNumber("Desired Arm Angle", armAngle);
     }
