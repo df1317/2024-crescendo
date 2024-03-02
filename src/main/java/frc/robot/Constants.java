@@ -65,7 +65,7 @@ public final class Constants {
       public static final double Speed = 1; // must be between -1 and 1
       public static final int EncoderPort = 0;
       public static final double EncoderMax = 0.63; // toward the bumper
-      public static final double EncoderMin = 0.25; // toward the top
+      public static final double EncoderMin = 0.91; // toward the top
     }
   }
 

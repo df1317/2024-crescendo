@@ -32,8 +32,8 @@ public class SetArmValue extends Command {
 
     @Override
     public void execute() {
-        if ((m_ArmSubsystem.encoder.get() >= Constants.ArmShooterConstants.Arm.EncoderMax && getAxis() < 0)
-                || (m_ArmSubsystem.encoder.get() <= Constants.ArmShooterConstants.Arm.EncoderMin && getAxis() > 0)) {
+        if ((m_ArmSubsystem.encoder.get() <= Constants.ArmShooterConstants.Arm.EncoderMax && getAxis() < 0)
+                || (m_ArmSubsystem.encoder.get() >= Constants.ArmShooterConstants.Arm.EncoderMin && getAxis() > 0)) {
             m_ArmSubsystem.spinDown();
         } else {
             m_ArmSubsystem.spinUp(
