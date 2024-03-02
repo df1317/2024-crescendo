@@ -36,11 +36,11 @@ public class LimelightSubsystem extends SubsystemBase {
         double op;
         double adj;
         if (DriverStation.getAlliance().orElseThrow() == DriverStation.Alliance.Blue) {
-            op = botpose3d.getY() - Constants.SensorConstants.Limelight.speakerXBlue;
-            adj = botpose3d.getX() - Constants.SensorConstants.Limelight.speakerYBlue;
+            op = botpose3d.getY() - Constants.SensorConstants.Limelight.speakerYBlue;
+            adj = botpose3d.getX() - Constants.SensorConstants.Limelight.speakerXBlue;
         } else {
-            op = botpose3d.getY() - Constants.SensorConstants.Limelight.speakerXRed;
-            adj = botpose3d.getX() - Constants.SensorConstants.Limelight.speakerYRed;
+            op = botpose3d.getY() - Constants.SensorConstants.Limelight.speakerYRed;
+            adj = botpose3d.getX() - Constants.SensorConstants.Limelight.speakerXRed;
         }
 
         SmartDashboard.putNumber("Limelight floor op", op);
