@@ -28,7 +28,7 @@ public class ArmSubsystem extends SubsystemBase {
     public double Kd = 0;
 
     public void spinUp(double speed) {
-        if (limitSwitch.get() && speed < 0) {
+        if (limitSwitch.get() && speed > 0) {
             speed = 0;
         }
 
