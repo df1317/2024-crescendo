@@ -28,6 +28,10 @@ public class ArmSubsystem extends SubsystemBase {
     public double Kd = 0;
 
     public void spinUp(double speed) {
+        if (limitSwitch.get() && speed < 0) {
+            speed = 0;
+        }
+
         motor0.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, speed);
         motor1.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, speed);
     }
