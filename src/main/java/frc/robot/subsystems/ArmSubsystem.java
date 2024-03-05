@@ -63,15 +63,37 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void runPID() {
         double error = armSetPoint - getArmAngle();
+
+        double oldErrorSum = errorSum;
         errorSum += error;
-        if (errorSum < Constants.ArmShooterConstants.Arm.EncoderMin + 0.2 * armRange) {
-            errorSum = Constants.ArmShooterConstants.Arm.EncoderMin + 0.2 * armRange;
-        } else if (errorSum > Constants.ArmShooterConstants.Arm.EncoderMax - 0.2 * armRange) {
-            errorSum = Constants.ArmShooterConstants.Arm.EncoderMax - 0.2 * armRange;
-        }
+
         double errorDif = error - prevError;
         double motorPower = Kp * error + Ki * errorSum + Kd * errorDif;
         prevError = error;
+
+        // anti integral windup https://www.youtube.com/watch?v=NVLXCwc8HzM
+
+        double preClamp = motorPower;
+
+        if (motorPower > 1) {
+            motorPower = 1;
+        } else if (motorPower < -1) {
+            motorPower = -1;
+        }
+        double postClamp = motorPower;
+
+        boolean inRange = preClamp != postClamp;
+
+        boolean errorGrowing = preClamp > 0 == error > 0;
+
+        boolean intClamp = inRange && errorGrowing;
+
+        if (intClamp) {
+            errorSum = oldErrorSum;
+        }
+
+        motorPower = Kp * error + Ki * errorSum + Kd * errorDif;
+
         spinUp(motorPower);
     }
 }
