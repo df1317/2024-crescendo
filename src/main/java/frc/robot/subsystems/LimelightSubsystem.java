@@ -78,14 +78,6 @@ public class LimelightSubsystem extends SubsystemBase {
             trig = Math.atan(op / adj);
         }
 
-        double angle = Math.toDegrees(trig) / 100;
-
-        if (angle > 1) {
-            angle = 1;
-        } else if (angle < 0) {
-            angle = 0;
-        }
-
-        return angle + Constants.ArmShooterConstants.Arm.EncoderMin;
+        return Math.toDegrees(trig);
     }
 }

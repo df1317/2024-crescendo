@@ -32,7 +32,7 @@ public class SetArmValue extends Command {
         double joySlope = 1 / joystickRange;
         double percent = joySlope * joystickPos + joySlope * joystickMin;
         // get same percent of arm range
-        double armAngle = ArmSubsystem.armRange / 1 * percent + Constants.ArmShooterConstants.Arm.EncoderMin;
+        double armAngle = (ArmSubsystem.armRange / 1 * percent) * 360 + Constants.ArmShooterConstants.Arm.angle;
         return armAngle;
     }
 

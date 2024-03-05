@@ -58,7 +58,7 @@ public class AutoAlign extends Command {
             startTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
         } else {
             m_XboxController.getHID().setRumble(RumbleType.kBothRumble, 0);
-            m_ArmSubsystem.setAngle(elevation);
+            m_ArmSubsystem.setAngle(elevation + Constants.ArmShooterConstants.ShooterCollectorConstants.Intake.angle);
             m_ArmSubsystem.runPID();
             m_SwerveSubsystem.drive(new Translation2d(0, 0), 1 * floorAngle, true, true);
         }

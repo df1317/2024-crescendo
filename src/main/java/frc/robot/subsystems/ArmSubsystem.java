@@ -45,6 +45,9 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setAngle(double newArmAngle) {
+        newArmAngle = (newArmAngle - Constants.ArmShooterConstants.Arm.angle) / 360
+                + Constants.ArmShooterConstants.Arm.EncoderMin;
+
         if (newArmAngle < Constants.ArmShooterConstants.Arm.EncoderMin) {
             armSetPoint = Constants.ArmShooterConstants.Arm.EncoderMin;
         } else if (newArmAngle > Constants.ArmShooterConstants.Arm.EncoderMax) {
