@@ -61,6 +61,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     m_robotContainer.updateLimelight();
     m_robotContainer.updateFiringSubsystem();
+    m_robotContainer.updateArmSubsystem();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
