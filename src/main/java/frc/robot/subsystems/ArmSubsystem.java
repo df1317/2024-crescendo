@@ -28,7 +28,7 @@ public class ArmSubsystem extends SubsystemBase {
     public double Kd = 0;
 
     public void spinUp(double speed) {
-        if (limitSwitch.get() && speed > 0) {
+        if (!limitSwitch.get() && speed > 0) {
             speed = 0;
         }
 
@@ -44,6 +44,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Arm Encoder", encoder.get());
         SmartDashboard.putBoolean("Limit Switch", limitSwitch.get());
+        SmartDashboard.putNumber("Arm Motor Speed", motor0.getMotorOutputPercent());
     }
 
     public double getArmAngle() {
