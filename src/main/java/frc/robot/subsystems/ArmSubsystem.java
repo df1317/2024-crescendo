@@ -10,6 +10,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
+    // put initial code here
+    public ArmSubsystem() {
+        SmartDashboard.putNumber("Arm Kp", Kp);
+        SmartDashboard.putNumber("Arm Ki", Ki);
+        SmartDashboard.putNumber("Arm Kd", Kd);
+    }
+
     // get the firng subsystem
     private TalonSRX motor0 = new TalonSRX(Constants.ArmShooterConstants.Arm.MotorID0);
     private TalonSRX motor1 = new TalonSRX(Constants.ArmShooterConstants.Arm.MotorID1);
@@ -23,8 +30,9 @@ public class ArmSubsystem extends SubsystemBase {
             - Constants.ArmShooterConstants.Arm.EncoderMin;
 
     // TO-DO make constants
-    public double Kp = 2.5;
-    public double Ki = 0;
+    private boolean editablePIDConstants = false;
+    public double Kp = 1.8;
+    public double Ki = 0.05;
     public double Kd = 0;
 
     public void spinUp(double speed) {
@@ -45,6 +53,17 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Arm Encoder", encoder.get());
         SmartDashboard.putBoolean("Limit Switch", limitSwitch.get());
         SmartDashboard.putNumber("Arm Motor Speed", motor0.getMotorOutputPercent());
+
+        // get and set PID constants from SmartDashboard
+        if (editablePIDConstants) {
+            Kp = SmartDashboard.getNumber("Arm Kp", Kp);
+            Ki = SmartDashboard.getNumber("Arm Ki", Ki);
+            Kd = SmartDashboard.getNumber("Arm Kd", Kd);
+        }
+
+        SmartDashboard.putNumber("Arm Kp", Kp);
+        SmartDashboard.putNumber("Arm Ki", Ki);
+        SmartDashboard.putNumber("Arm Kd", Kd);
     }
 
     public double getArmAngle() {
