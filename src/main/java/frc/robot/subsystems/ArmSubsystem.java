@@ -40,7 +40,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public double getArmAngle() {
-        double armAngle = encoder.get();
+        double armAngle = (encoder.get() - Constants.ArmShooterConstants.Arm.EncoderMin) * 360
+                + Constants.ArmShooterConstants.Arm.angle;
         return armAngle;
     }
 
