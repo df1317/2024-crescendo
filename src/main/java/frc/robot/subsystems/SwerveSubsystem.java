@@ -92,8 +92,9 @@ public class SwerveSubsystem extends SubsystemBase {
     // Calculate swerve module states based on control mode (field-relative or
     // robot-centric)
     SwerveModuleState[] swerveModuleStates;
+    SmartDashboard.putNumber("Gyro Yaw", getYaw().getDegrees());
+    SmartDashboard.putNumber("Swerve rotation", rotation);
     if (fieldRelative) {
-      SmartDashboard.putNumber("Gyro Yaw", getYaw().getDegrees());
       // Use field-relative control if fieldRelative is true
       swerveModuleStates = Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
           ChassisSpeeds.fromFieldRelativeSpeeds(
