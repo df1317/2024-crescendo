@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.AutoAlign;
+import frc.robot.commands.AutoAlignArm;
 import frc.robot.commands.AutoFireNote;
 import frc.robot.commands.Climb;
 import frc.robot.commands.FireNote;
@@ -133,6 +134,10 @@ public class RobotContainer {
 
     m_JoystickL.button(6).onTrue(autoFireNoteCommandIntake);
     m_JoystickR.button(6).onTrue(autoFireNoteCommandFlywheel);
+
+    AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem);
+
+    m_JoystickL.button(7).onTrue(autoAlignArm);
   }
 
   /**
