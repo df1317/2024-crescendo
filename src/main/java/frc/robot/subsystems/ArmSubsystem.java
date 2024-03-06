@@ -26,6 +26,12 @@ public class ArmSubsystem extends SubsystemBase {
     public double Kd = 0;
 
     public void spinUp(double speed) {
+        if (encoder.get() > Constants.ArmShooterConstants.Arm.EncoderMax && speed < 0) {
+            speed = 0;
+        } else if (encoder.get() < Constants.ArmShooterConstants.Arm.EncoderMin && speed > 0) {
+            speed = 0;
+        }
+
         motor0.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, speed);
         motor1.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, speed);
     }
