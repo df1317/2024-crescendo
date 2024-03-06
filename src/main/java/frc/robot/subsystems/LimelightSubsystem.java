@@ -57,6 +57,9 @@ public class LimelightSubsystem extends SubsystemBase {
     }
 
     public double getElevation() {
+        // double armOffSetAtBottom = 6 degrees
+        // shooter to arm offset = 60 degrees
+
         double op;
         double adj;
 

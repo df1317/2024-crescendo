@@ -36,6 +36,12 @@ public class ArmSubsystem extends SubsystemBase {
     public double Kd = 0;
 
     public void spinUp(double speed) {
+        if (encoder.get() > Constants.ArmShooterConstants.Arm.EncoderMax && speed < 0) {
+            speed = 0;
+        } else if (encoder.get() < Constants.ArmShooterConstants.Arm.EncoderMin && speed > 0) {
+          speed = 0;
+        }
+      
         if (!limitSwitch.get() && speed > 0) {
             speed = 0;
         }
@@ -67,11 +73,15 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public double getArmAngle() {
-        double armAngle = encoder.get();
+        double armAngle = (encoder.get() - Constants.ArmShooterConstants.Arm.EncoderMin) * 360
+                + Constants.ArmShooterConstants.Arm.angle;
         return armAngle;
     }
 
     public void setAngle(double newArmAngle) {
+        newArmAngle = (newArmAngle - Constants.ArmShooterConstants.Arm.angle) / 360
+                + Constants.ArmShooterConstants.Arm.EncoderMin;
+
         if (newArmAngle < Constants.ArmShooterConstants.Arm.EncoderMin) {
             armSetPoint = Constants.ArmShooterConstants.Arm.EncoderMin;
         } else if (newArmAngle > Constants.ArmShooterConstants.Arm.EncoderMax) {
