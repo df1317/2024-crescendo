@@ -99,7 +99,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // log values of translation as graphs
     SmartDashboard.putNumber("Translation X", translation.getX());
     SmartDashboard.putNumber("Translation Y", translation.getY());
-
+    
     if (fieldRelative) {
       // Use field-relative control if fieldRelative is true
       swerveModuleStates = Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
