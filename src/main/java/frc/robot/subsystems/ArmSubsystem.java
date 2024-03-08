@@ -30,22 +30,30 @@ public class ArmSubsystem extends SubsystemBase {
             - Constants.ArmShooterConstants.Arm.EncoderMin;
 
     // TO-DO make constants
-    private boolean editablePIDConstants = false;
-    public double Kp = 1.8;
-    public double Ki = 0.05;
-    public double Kd = 0;
+    private boolean editablePIDConstants = true;
+    public double Kp = 1.8 / 360;
+    public double Ki = 0.05 / 360;
+    public double Kd = 0 / 360;
 
     public void spinUp(double speed) {
+        SmartDashboard.putNumber("Pre Arm Motor Speed", speed);
+        SmartDashboard.putNumber("Arm Encoder", encoder.get());
+
         if (encoder.get() > Constants.ArmShooterConstants.Arm.EncoderMax && speed < 0) {
             speed = 0;
         } else if (encoder.get() < Constants.ArmShooterConstants.Arm.EncoderMin && speed > 0) {
-          speed = 0;
+            speed = 0;
         }
-      
+
         if (!limitSwitch.get() && speed > 0) {
             speed = 0;
         }
 
+        if (speed == 0) {
+            SmartDashboard.putBoolean("Motor E-Stopped", true);
+        } else {
+            SmartDashboard.putBoolean("Motor E-Stopped", false);
+        }
         motor0.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, speed);
         motor1.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, speed);
     }
