@@ -9,22 +9,15 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-// import edu.wpi.first.wpilibj.Timer;
-// import frc.lib.CANCoderUtil;
-// import frc.lib.CANSparkMaxUtil;
 import frc.lib.OnboardModuleState;
 import frc.lib.SwerveModuleConstants;
-// import frc.lib.CANSparkMaxUtil.Usage;
 import frc.robot.Constants;
-// import frc.robot.Robot;
-import frc.robot.Robot;
 
 /** Add your docs here. */
 public class SwerveModule {
@@ -63,20 +56,17 @@ public class SwerveModule {
         // this.?
         /* Angle Encoder Config */
         angleEncoder = new CANcoder(moduleConstants.cancoderID);
-        configAngleEncoder();
+        // configAngleEncoder();
 
         /* Angle Motor Config */
         angleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
         integratedAngleEncoder = angleMotor.getEncoder();
         angleController = angleMotor.getPIDController();
 
-        // configAngleMotor(); disabling to save on flash writes
-
         /* Drive Motor Config */
         driveMotor = new CANSparkMax(moduleConstants.driveMotorID, MotorType.kBrushless);
         driveEncoder = driveMotor.getEncoder();
         driveController = driveMotor.getPIDController();
-        // configDriveMotor(); disabling to save on flash writes
 
         lastAngle = getState().angle;
     }
@@ -134,13 +124,6 @@ public class SwerveModule {
 
     public Rotation2d getCanCoder() {
         return Rotation2d.fromRotations(-angleEncoder.getAbsolutePosition().getValueAsDouble());
-    }
-
-    private void configAngleEncoder() {
-        angleEncoder.getConfigurator().apply(new CANcoderConfiguration());
-        CANcoderConfiguration config = Robot.ctreConfigs.swerveCanCoderConfig;
-        config.MagnetSensor.MagnetOffset = angleOffset.getRotations();
-        angleEncoder.getConfigurator().apply(config);
     }
 
     private Rotation2d getAngle() {
