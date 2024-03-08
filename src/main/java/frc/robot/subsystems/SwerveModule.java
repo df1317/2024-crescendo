@@ -9,7 +9,6 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -19,7 +18,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.lib.OnboardModuleState;
 import frc.lib.SwerveModuleConstants;
 import frc.robot.Constants;
-import frc.robot.Robot;
 
 /** Add your docs here. */
 public class SwerveModule {
@@ -58,7 +56,7 @@ public class SwerveModule {
         // this.?
         /* Angle Encoder Config */
         angleEncoder = new CANcoder(moduleConstants.cancoderID);
-        configAngleEncoder();
+        // configAngleEncoder();
 
         /* Angle Motor Config */
         angleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
@@ -126,13 +124,6 @@ public class SwerveModule {
 
     public Rotation2d getCanCoder() {
         return Rotation2d.fromRotations(-angleEncoder.getAbsolutePosition().getValueAsDouble());
-    }
-
-    private void configAngleEncoder() {
-        angleEncoder.getConfigurator().apply(new CANcoderConfiguration());
-        CANcoderConfiguration config = Robot.ctreConfigs.swerveCanCoderConfig;
-        config.MagnetSensor.MagnetOffset = angleOffset.getRotations();
-        angleEncoder.getConfigurator().apply(config);
     }
 
     private Rotation2d getAngle() {
