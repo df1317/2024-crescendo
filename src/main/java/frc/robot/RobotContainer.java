@@ -135,7 +135,7 @@ public class RobotContainer {
     m_JoystickL.button(6).onTrue(autoFireNoteCommandIntake);
     m_JoystickR.button(6).onTrue(autoFireNoteCommandFlywheel);
 
-    AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem);
+    AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_JoystickL.button(7));
 
     m_JoystickL.button(7).onTrue(autoAlignArm);
   }

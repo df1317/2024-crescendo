@@ -26,17 +26,15 @@ import frc.lib.SwerveModuleConstants;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static final class Field {
+    public static final double speakerY = 1.442593; // Field width posistion
+    public static final double speakerZ = 2.085; // Speaker height
+
+    public static final double speakerXBlue = -8.308467; // Field length posistion
+    public static final double speakerXRed = 8.308467; // Field lenght posistion
+  }
+
   public static final class SensorConstants {
-    public static final class Limelight {
-      public static final double speakerYBlue = 1.442593;
-      public static final double speakerXBlue = -8.308467;
-      public static final double speakerZBlue = 2.085;
-
-      public static final double speakerYRed = 1.442593;
-      public static final double speakerXRed = 8.308467;
-      public static final double speakerZRed = 2.085;
-    }
-
     public static final class Controller {
       public static final double FeedbackDuration = 0.2;
       public static final double rumble = 0.3;
@@ -49,7 +47,7 @@ public final class Constants {
       public static final class Firing {
         public static final int MotorID0 = 01;
         public static final int MotorID1 = 02;
-        public static final double Speed = -0.65; // must be between -1 and 1
+        public static final double Speed = -0.75; // must be between -1 and 1
         public static final double Duration = 1.25;
         public static final double ClearingDelay = 0.5;
       }
@@ -70,10 +68,14 @@ public final class Constants {
       public static final int MotorID1 = 02;
       public static final double Speed = 1; // must be between -1 and 1
       public static final int EncoderPort = 0;
+      public static final double encoderZero = 0.928;
       public static final double EncoderMin = 64; // toward the bumper in shooter degrees
-      public static final double EncoderMax = -30; // toward the top in shooter degrees
+      public static final double EncoderMax = -25; // toward the top in shooter degrees
       public static final int LimitSwitchPort = 3;
       public static final double shooterArmOffset = 66; // degrees between ground and shooter
+      public static final double jointHeight = 0.34; // in meters
+      public static final double armLenght = 0.6; // in meters
+      public static final double optimizedAngle = 45; // in degrees, angle used to optimize shooter angle calculation
     }
   }
 
