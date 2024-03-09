@@ -33,14 +33,14 @@ public class AutoAlignArm extends Command {
         m_ArmSubsystem.setAngle(elevation + Constants.ArmShooterConstants.ShooterCollectorConstants.Intake.angle);
         m_ArmSubsystem.runPID();
 
-        SmartDashboard.putNumber("Current Arm Angle", m_ArmSubsystem.getArmAngle());
+        SmartDashboard.putNumber("Current Arm Angle", m_ArmSubsystem.getAngle());
         SmartDashboard.putNumber("Desired Arm Angle", elevation);
     }
 
     @Override
     public boolean isFinished() {
         // Check if the button is released or if the specified duration has passed
-        return (m_LimelightSubsystem.getElevation() == m_ArmSubsystem.getArmAngle());
+        return (m_LimelightSubsystem.getElevation() == m_ArmSubsystem.getAngle());
     }
 
     @Override

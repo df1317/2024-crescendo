@@ -32,7 +32,7 @@ public class SetArmValue extends Command {
         double joySlope = 1 / joystickRange;
         double percent = joySlope * joystickPos + joySlope * joystickMin;
         // get same percent of arm range
-        double armAngle = (ArmSubsystem.armRange / 1 * percent) * 360 + Constants.ArmShooterConstants.Arm.angle;
+        double armAngle = (ArmSubsystem.armRange / 1 * percent);
         return armAngle;
     }
 
@@ -56,7 +56,7 @@ public class SetArmValue extends Command {
         double armAngle = getJoystickArm();
         m_ArmSubsystem.setAngle(armAngle);
         m_ArmSubsystem.runPID();
-        SmartDashboard.putNumber("Current Arm Angle", m_ArmSubsystem.getArmAngle());
+        SmartDashboard.putNumber("Current Arm Angle", m_ArmSubsystem.getAngle());
         SmartDashboard.putNumber("Desired Arm Angle", armAngle);
     }
 
