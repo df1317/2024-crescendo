@@ -36,41 +36,49 @@ public class AutoAlign extends Command {
     public void initialize() {
         // get the angles from limelight
         double floorAngle;
-        if (m_LimelightSubsystem.getFloorAngle() > 0) {
-            floorAngle = 1;
-        } else if (m_LimelightSubsystem.getFloorAngle() < 0) {
-            floorAngle = -1;
-        } else {
-            floorAngle = 0;
-        }
-
-        SmartDashboard.putNumber("Floor Angle", floorAngle);
-
-        double elevation = m_LimelightSubsystem.getElevation();
-
-        canAlign = floorAngle != 0;
-
-        SmartDashboard.putBoolean("Can Align", canAlign);
-
-        // turn the robot to the correct angle
-        if (!canAlign) {
-            m_XboxController.getHID().setRumble(RumbleType.kBothRumble, Constants.SensorConstants.Controller.rumble);
-            startTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
-        } else {
-            m_XboxController.getHID().setRumble(RumbleType.kBothRumble, 0);
-            m_ArmSubsystem.setAngle(elevation + Constants.ArmShooterConstants.ShooterCollectorConstants.Intake.angle);
-            m_ArmSubsystem.runPID();
-            m_SwerveSubsystem.drive(new Translation2d(0, 0), 1 * floorAngle, true, true);
-        }
+        /*
+         * if (m_LimelightSubsystem.getFloorAngle() > 0) {
+         * floorAngle = 1;
+         * } else if (m_LimelightSubsystem.getFloorAngle() < 0) {
+         * floorAngle = -1;
+         * } else {
+         * floorAngle = 0;
+         * }
+         * 
+         * SmartDashboard.putNumber("Floor Angle", floorAngle);
+         * 
+         * double elevation = m_LimelightSubsystem.getElevation();
+         * 
+         * canAlign = floorAngle != 0;
+         * 
+         * SmartDashboard.putBoolean("Can Align", canAlign);
+         * 
+         * // turn the robot to the correct angle
+         * if (!canAlign) {
+         * m_XboxController.getHID().setRumble(RumbleType.kBothRumble,
+         * Constants.SensorConstants.Controller.rumble);
+         * startTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
+         * } else {
+         * m_XboxController.getHID().setRumble(RumbleType.kBothRumble, 0);
+         * m_ArmSubsystem.setAngle(elevation +
+         * Constants.ArmShooterConstants.ShooterCollectorConstants.Intake.angle);
+         * m_ArmSubsystem.runPID();
+         * m_SwerveSubsystem.drive(new Translation2d(0, 0), 1 * floorAngle, true, true);
+         * }
+         */
     }
 
     @Override
     public boolean isFinished() {
         // Check if the button is released or if the specified duration has passed
-        return (m_LimelightSubsystem.getFloorAngle() > -0.25 && m_LimelightSubsystem.getFloorAngle() < 0.25 && canAlign)
-                ||
-                (edu.wpi.first.wpilibj.Timer.getFPGATimestamp() - startTime >= duration && !canAlign);
-    }
+        return true;
+        /*
+         * (m_LimelightSubsystem.getFloorAngle() > -0.25 &&
+         * m_LimelightSubsystem.getFloorAngle() < 0.25 && canAlign)
+         * ||
+         * (edu.wpi.first.wpilibj.Timer.getFPGATimestamp() - startTime >= duration &&
+         * !canAlign);
+         */}
 
     @Override
     public void end(boolean interrupted) {

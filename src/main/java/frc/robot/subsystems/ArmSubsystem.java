@@ -39,9 +39,9 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Pre Arm Motor Speed", speed);
         SmartDashboard.putNumber("Arm Encoder", encoder.get());
 
-        if (encoder.get() > Constants.ArmShooterConstants.Arm.EncoderMax && speed < 0) {
+        if (getAngle() < Constants.ArmShooterConstants.Arm.EncoderMax && speed < 0) {
             speed = 0;
-        } else if (encoder.get() < Constants.ArmShooterConstants.Arm.EncoderMin && speed > 0) {
+        } else if (getAngle() > Constants.ArmShooterConstants.Arm.EncoderMin && speed > 0) {
             speed = 0;
         }
 
@@ -54,6 +54,7 @@ public class ArmSubsystem extends SubsystemBase {
         } else {
             SmartDashboard.putBoolean("Motor E-Stopped", false);
         }
+
         motor0.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, speed);
         motor1.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, speed);
     }
@@ -80,27 +81,27 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Arm Kd", Kd);
     }
 
-    public double getArmAngle() {
-        double armAngle = (encoder.get() - Constants.ArmShooterConstants.Arm.EncoderMin) * 360
-                + Constants.ArmShooterConstants.Arm.angle;
-        return armAngle;
-    }
-
-    public void setAngle(double newArmAngle) {
-        newArmAngle = (newArmAngle - Constants.ArmShooterConstants.Arm.angle) / 360
-                + Constants.ArmShooterConstants.Arm.EncoderMin;
-
-        if (newArmAngle < Constants.ArmShooterConstants.Arm.EncoderMin) {
+    public void setAngle(double setpoint) {
+        if (setpoint > Constants.ArmShooterConstants.Arm.EncoderMin) {
             armSetPoint = Constants.ArmShooterConstants.Arm.EncoderMin;
-        } else if (newArmAngle > Constants.ArmShooterConstants.Arm.EncoderMax) {
+        } else if (setpoint < Constants.ArmShooterConstants.Arm.EncoderMax) {
             armSetPoint = Constants.ArmShooterConstants.Arm.EncoderMax;
         } else {
-            armSetPoint = newArmAngle;
+            armSetPoint = setpoint;
         }
     }
 
+    /** convert from encoder rotation to shooter angle */
+    public double getAngle() {
+        // convert encoder rotation to encoder degrees
+        // encoder reads negative when arm goes up
+        double degreesEncoder = (encoder.get() - Constants.ArmShooterConstants.Arm.encoderZero) * -360;
+        // convert encoder degrees to shooter angle
+        return Constants.ArmShooterConstants.Arm.shooterArmOffset - degreesEncoder;
+    }
+
     public void runPID() {
-        double error = armSetPoint - getArmAngle();
+        double error = armSetPoint - getAngle();
 
         double oldErrorSum = errorSum;
         errorSum += error;
@@ -131,6 +132,9 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
         motorPower = Kp * error + Ki * errorSum + Kd * errorDif;
+
+        SmartDashboard.putNumber("ArmMotorPower", motorPower);
+        SmartDashboard.putNumber("ShooterAngle", getAngle());
 
         spinUp(motorPower);
     }
