@@ -28,9 +28,9 @@ public class ArmSubsystem extends SubsystemBase {
     public double Ki = 0 / 360;
     public double Kd = 0 / 360;
 
-    public double Ks = 0;
-    public double Kg = -0.15;
-    public double Kv = 0;
+    public double Ks = 0.8;
+    public double Kg = 0.9;
+    public double Kv = 2;
     public static final double armVelocity = Math.toRadians(62); // from degrees/s
 
     PIDController pidController;
