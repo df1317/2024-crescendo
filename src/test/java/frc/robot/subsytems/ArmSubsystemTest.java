@@ -82,6 +82,39 @@ public class ArmSubsystemTest {
         sleep(100);
         // expect zero motor voltage
         assert(motor0Sim.getMotorOutputLeadVoltage() == 0);
+
+
+        // arm encoder at maximum, speed is negative, limit switch true
+        encoderSim.set(Constants.ArmShooterConstants.Arm.EncoderMax);
+        limitSwitch.set(true);
+        armSub.spinUp(-0.5);
+        sleep(100);
+        // expect negative motor voltage
+        assert(motor0Sim.getMotorOutputLeadVoltage() < 0);
+
+        // arm encoder greater than maximum, speed is negative, limit switch true
+        encoderSim.set(Constants.ArmShooterConstants.Arm.EncoderMax + 0.1);
+        limitSwitch.set(true);
+        armSub.spinUp(-0.5);
+        sleep(100);
+        // expect motor voltage to be zero
+        assert(motor0Sim.getMotorOutputLeadVoltage() == 0);
+
+        // arm encoder less than minimum, speed is negative, limit switch true
+        encoderSim.set(Constants.ArmShooterConstants.Arm.EncoderMin - 0.1);
+        limitSwitch.set(true);
+        armSub.spinUp(-0.5);
+        sleep(100);
+        // expect negative motor voltage -- bringing the arm back from having gone too far the other way
+        assert(motor0Sim.getMotorOutputLeadVoltage() < 0);
+
+        // arm encoder at maximum, speed is negative, limit switch false
+        encoderSim.set(Constants.ArmShooterConstants.Arm.EncoderMax);
+        limitSwitch.set(false);
+        armSub.spinUp(-0.5);
+        sleep(100);
+        // expect negative motor voltage
+        assert(motor0Sim.getMotorOutputLeadVoltage() < 0);
     }
 
     @Test
