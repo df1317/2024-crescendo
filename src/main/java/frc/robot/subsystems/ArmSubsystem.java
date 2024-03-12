@@ -31,10 +31,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     // TO-DO make constants
     private boolean editablePIDConstants = true;
-    public double Kp = 0 / 360;
+    public double Kp = 2.5 / 360;
     public double Ki = 0 / 360;
     public double Kd = 0 / 360;
-    public double Kg = -0.075; // half of calculation
+    public double Kg = -0.15; // half of calculation
 
     public void spinUp(double speed) {
         SmartDashboard.putNumber("Pre Arm Motor Speed", speed);
@@ -69,18 +69,19 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Arm Encoder", encoder.get());
         SmartDashboard.putBoolean("Limit Switch", limitSwitch.get());
         SmartDashboard.putNumber("Arm Motor Speed", motor0.getMotorOutputPercent());
+        SmartDashboard.putNumber("ShooterAngle", getAngle());
 
         // get and set PID constants from SmartDashboard
         if (editablePIDConstants) {
-            Kp = SmartDashboard.getNumber("Arm Kp", Kp);
-            Ki = SmartDashboard.getNumber("Arm Ki", Ki);
-            Kd = SmartDashboard.getNumber("Arm Kd", Kd);
+            Kp = SmartDashboard.getNumber("Arm Kp", Kp) / 360;
+            Ki = SmartDashboard.getNumber("Arm Ki", Ki) / 360;
+            Kd = SmartDashboard.getNumber("Arm Kd", Kd) / 360;
             Kg = SmartDashboard.getNumber("Arm Kg", Kg);
         }
 
-        SmartDashboard.putNumber("Arm Kp", Kp);
-        SmartDashboard.putNumber("Arm Ki", Ki);
-        SmartDashboard.putNumber("Arm Kd", Kd);
+        SmartDashboard.putNumber("Arm Kp", Kp * 360);
+        SmartDashboard.putNumber("Arm Ki", Ki * 360);
+        SmartDashboard.putNumber("Arm Kd", Kd * 360);
         SmartDashboard.putNumber("Arm Kg", Kg);
     }
 
@@ -141,10 +142,7 @@ public class ArmSubsystem extends SubsystemBase {
             errorSum = oldErrorSum;
         }
 
-        motorPower = Kp * error + Ki * errorSum + Kd * errorDif;
-
-        SmartDashboard.putNumber("ArmMotorPower", motorPower);
-        SmartDashboard.putNumber("ShooterAngle", getAngle());
+        motorPower = Kp * error + Ki * errorSum + Kd * errorDif + Kg * Math.sin(Math.toRadians(armGravAngle));
 
         spinUp(motorPower);
     }
