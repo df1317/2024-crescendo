@@ -30,7 +30,7 @@ public class SwerveModule {
     private Rotation2d angleOffset;
 
     private CANSparkMax angleMotor;
-    private CANSparkMax driveMotor;
+    public CANSparkMax driveMotor;
 
     private RelativeEncoder driveEncoder;
     private RelativeEncoder integratedAngleEncoder;
@@ -131,5 +131,4 @@ public class SwerveModule {
         // documentation says it should be
         // rotations
     }
-
 }

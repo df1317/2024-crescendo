@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -22,6 +23,7 @@ import frc.robot.subsystems.FiringSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.XboxController;
@@ -111,8 +113,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    AutoAlign autoAlign = new AutoAlign(m_LimelightSubsystem, m_SwerveSubsystem, m_ArmSubsystem, m_XboxController);
-    m_XboxController.button(Button.kA.value).onTrue(autoAlign);
+    // reenabe once we finish tuning
+    // AutoAlign autoAlign = new AutoAlign(m_LimelightSubsystem, m_SwerveSubsystem, m_ArmSubsystem, m_XboxController);
+    // m_XboxController.button(Button.kA.value).onTrue(autoAlign);
 
     // climb command should be able to work only if a button is pressed on the
     // joystick and the trigger is pressed
@@ -140,6 +143,11 @@ public class RobotContainer {
     autoAlignArm = new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_JoystickL.button(7));
 
     m_JoystickL.button(7).onTrue(autoAlignArm);
+
+    m_XboxController.a().onTrue(m_SwerveSubsystem.sysIdQuasistatic(Direction.kForward));
+    m_XboxController.b().onTrue(m_SwerveSubsystem.sysIdQuasistatic(Direction.kReverse));
+    m_XboxController.x().onTrue(m_SwerveSubsystem.sysIdDynamic(Direction.kForward));
+    m_XboxController.y().onTrue(m_SwerveSubsystem.sysIdDynamic(Direction.kReverse));
   }
 
   /**
