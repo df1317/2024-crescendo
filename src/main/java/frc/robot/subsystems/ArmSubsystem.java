@@ -31,9 +31,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     // TO-DO make constants
     private boolean editablePIDConstants = true;
-    public double Kp = 1.8 / 360;
-    public double Ki = 0.05 / 360;
+    public double Kp = 0 / 360;
+    public double Ki = 0 / 360;
     public double Kd = 0 / 360;
+    public double Kg = -0.075; // half of calculation
 
     public void spinUp(double speed) {
         SmartDashboard.putNumber("Pre Arm Motor Speed", speed);
@@ -74,13 +75,16 @@ public class ArmSubsystem extends SubsystemBase {
             Kp = SmartDashboard.getNumber("Arm Kp", Kp);
             Ki = SmartDashboard.getNumber("Arm Ki", Ki);
             Kd = SmartDashboard.getNumber("Arm Kd", Kd);
+            Kg = SmartDashboard.getNumber("Arm Kg", Kg);
         }
 
         SmartDashboard.putNumber("Arm Kp", Kp);
         SmartDashboard.putNumber("Arm Ki", Ki);
         SmartDashboard.putNumber("Arm Kd", Kd);
+        SmartDashboard.putNumber("Arm Kg", Kg);
     }
 
+    /** set setpoint */
     public void setAngle(double setpoint) {
         if (setpoint > Constants.ArmShooterConstants.Arm.EncoderMin) {
             armSetPoint = Constants.ArmShooterConstants.Arm.EncoderMin;
@@ -100,14 +104,20 @@ public class ArmSubsystem extends SubsystemBase {
         return Constants.ArmShooterConstants.Arm.shooterArmOffset - degreesEncoder;
     }
 
+    /** Convert from shooter angle to angle with which gravity acts on arm */
+    public double calculateArmAngle(double setPoint) {
+        return Constants.ArmShooterConstants.Arm.shooterGravOffset - setPoint;
+    }
+
     public void runPID() {
+        double armGravAngle = calculateArmAngle(armSetPoint);
         double error = armSetPoint - getAngle();
 
         double oldErrorSum = errorSum;
         errorSum += error;
 
         double errorDif = error - prevError;
-        double motorPower = Kp * error + Ki * errorSum + Kd * errorDif;
+        double motorPower = Kp * error + Ki * errorSum + Kd * errorDif + Kg * Math.sin(Math.toRadians(armGravAngle));
         prevError = error;
 
         // anti integral windup https://www.youtube.com/watch?v=NVLXCwc8HzM

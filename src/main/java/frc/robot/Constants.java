@@ -76,6 +76,7 @@ public final class Constants {
       public static final double jointHeight = 0.34; // in meters
       public static final double armLenght = 0.6; // in meters
       public static final double optimizedAngle = 45; // in degrees, angle used to optimize shooter angle calculation
+      public static final double shooterGravOffset = 150; // in degrees, angle between shooter and force of gravity
     }
   }
 
