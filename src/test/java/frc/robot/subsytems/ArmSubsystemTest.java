@@ -2,13 +2,13 @@ package frc.robot.subsytems;
 
 import frc.robot.Constants;
 import frc.robot.MockDigitalInput;
+import frc.robot.TestUtil;
 import frc.robot.subsystems.ArmSubsystem;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
-import com.ctre.phoenix.unmanaged.Unmanaged;
 
 import edu.wpi.first.wpilibj.simulation.DutyCycleEncoderSim;
 
@@ -39,7 +39,7 @@ public class ArmSubsystemTest {
         encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMin));
         limitSwitch.set(true);
         armSub.spinUp(0.5);
-        sleep(150);
+        TestUtil.sleep();
         // expect positive motor voltage
         assert(motor0Sim.getMotorOutputLeadVoltage() > 0);
 
@@ -47,7 +47,7 @@ public class ArmSubsystemTest {
         encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMin + 0.1));
         limitSwitch.set(true);
         armSub.spinUp(0.5);
-        sleep(150);
+        TestUtil.sleep();
         // expect motor voltage to be zero
         assert(motor0Sim.getMotorOutputLeadVoltage() == 0);
 
@@ -55,7 +55,7 @@ public class ArmSubsystemTest {
         encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMax - 0.1));
         limitSwitch.set(true);
         armSub.spinUp(0.5);
-        sleep(150);
+        TestUtil.sleep();
         // expect positive motor voltage -- bringing the arm back from having gone too far the other way
         assert(motor0Sim.getMotorOutputLeadVoltage() > 0);
 
@@ -63,7 +63,7 @@ public class ArmSubsystemTest {
         encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMin));
         limitSwitch.set(false);
         armSub.spinUp(0.5);
-        sleep(150);
+        TestUtil.sleep();
         // expect zero motor voltage
         assert(motor0Sim.getMotorOutputLeadVoltage() == 0);
 
@@ -71,7 +71,7 @@ public class ArmSubsystemTest {
         encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMin + 0.1));
         limitSwitch.set(false);
         armSub.spinUp(0.5);
-        sleep(150);
+        TestUtil.sleep();
         // expect motor voltage to be zero
         assert(motor0Sim.getMotorOutputLeadVoltage() == 0);
 
@@ -79,7 +79,7 @@ public class ArmSubsystemTest {
         encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMax - 0.1));
         limitSwitch.set(false);
         armSub.spinUp(0.5);
-        sleep(150);
+        TestUtil.sleep();
         // expect zero motor voltage
         assert(motor0Sim.getMotorOutputLeadVoltage() == 0);
 
@@ -88,7 +88,7 @@ public class ArmSubsystemTest {
         encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMax));
         limitSwitch.set(true);
         armSub.spinUp(-0.5);
-        sleep(150);
+        TestUtil.sleep();
         // expect negative motor voltage
         assert(motor0Sim.getMotorOutputLeadVoltage() < 0);
 
@@ -96,7 +96,7 @@ public class ArmSubsystemTest {
         encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMax - 0.1));
         limitSwitch.set(true);
         armSub.spinUp(-0.5);
-        sleep(150);
+        TestUtil.sleep();
         // expect motor voltage to be zero
         assert(motor0Sim.getMotorOutputLeadVoltage() == 0);
 
@@ -104,7 +104,7 @@ public class ArmSubsystemTest {
         encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMin + 0.1));
         limitSwitch.set(true);
         armSub.spinUp(-0.5);
-        sleep(150);
+        TestUtil.sleep();
         // expect negative motor voltage -- bringing the arm back from having gone too far the other way
         assert(motor0Sim.getMotorOutputLeadVoltage() < 0);
 
@@ -112,7 +112,7 @@ public class ArmSubsystemTest {
         encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMax));
         limitSwitch.set(false);
         armSub.spinUp(-0.5);
-        sleep(150);
+        TestUtil.sleep();
         // expect negative motor voltage
         assert(motor0Sim.getMotorOutputLeadVoltage() < 0);
     }
@@ -132,17 +132,5 @@ public class ArmSubsystemTest {
         // angle = Constants.ArmShooterConstants.Arm.shooterArmOffset - ((encoder.get() - Constants.ArmShooterConstants.Arm.encoderZero) * -360)
         double encoderVal = ((Constants.ArmShooterConstants.Arm.shooterArmOffset - armAngle) / -360) + Constants.ArmShooterConstants.Arm.encoderZero;
         return encoderVal;
-    }
-
-    // todo move to util
-    void sleep(long millis) {
-        try {
-            for(int i = 0; i < millis; i += 10) {
-                Unmanaged.feedEnable(20);
-                Thread.sleep(10);
-            }
-        } catch(InterruptedException ex) {
-            ex.printStackTrace();
-        }
     }
 }
