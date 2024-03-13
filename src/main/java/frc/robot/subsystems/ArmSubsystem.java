@@ -38,10 +38,6 @@ public class ArmSubsystem extends SubsystemBase {
 
     // put initial code here
     public ArmSubsystem() {
-        SmartDashboard.putNumber("Arm Kp", Kp);
-        SmartDashboard.putNumber("Arm Ki", Ki);
-        SmartDashboard.putNumber("Arm Kd", Kd);
-
         pidController = new PIDController(Kp, Ki, Kd);
         armFeedforward = new ArmFeedforward(Ks, Kg, Kv);
     }
