@@ -24,7 +24,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     // TO-DO make constants
     private boolean editablePIDConstants = true;
-    public double Kp = 0 / 360;
+    public double Kp = 2.7 / 360;
     public double Ki = 0 / 360;
     public double Kd = 0 / 360;
 
