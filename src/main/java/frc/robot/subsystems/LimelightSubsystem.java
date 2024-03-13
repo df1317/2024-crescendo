@@ -27,57 +27,20 @@ public class LimelightSubsystem extends SubsystemBase {
         // post to smart dashboard periodically
         SmartDashboard.putNumber("LimelightX", botpose3d.getX());
         SmartDashboard.putNumber("LimelightY", botpose3d.getY());
-        SmartDashboard.putNumber("Limelight Floor Angle", getFloorAngle());
-        SmartDashboard.putNumber("Limelight Elevation Angle", getElevation());
         SmartDashboard.putNumber("LimelightRotation", botpose3d.getRotation().toRotation2d().getDegrees());
     }
 
-    public double getFloorAngle() {
-        double op;
-        double adj;
-        if (DriverStation.getAlliance().orElseThrow() == DriverStation.Alliance.Blue) {
-            op = botpose3d.getY() - Constants.SensorConstants.Limelight.speakerYBlue;
-            adj = botpose3d.getX() - Constants.SensorConstants.Limelight.speakerXBlue;
-        } else {
-            op = botpose3d.getY() - Constants.SensorConstants.Limelight.speakerYRed;
-            adj = botpose3d.getX() - Constants.SensorConstants.Limelight.speakerXRed;
-        }
-
-        SmartDashboard.putNumber("Limelight floor op", op);
-        SmartDashboard.putNumber("Limelight Floor adj", adj);
-
-        double trig;
-        if (botpose3d.getY() == 0 && botpose3d.getX() == 0) {
-            trig = 0;
-        } else {
-            trig = Math.atan(op / adj);
-        }
-
-        return -(Math.toDegrees(trig) - botpose3d.getRotation().toRotation2d().getDegrees());
+    /** returning distance from speaker to robot */
+    public double getSpeakerDistance() {
+        // get alliance speaker X posistion
+        double speakerX = (DriverStation.getAlliance().orElseThrow() == DriverStation.Alliance.Blue)
+                ? Constants.Field.speakerXBlue
+                : Constants.Field.speakerXRed;
+        // getting X and Y distance from the robot
+        double distX = speakerX - botpose3d.getX();
+        double distY = Constants.Field.speakerY - botpose3d.getY();
+        // returning distance from speaker to robot
+        return Math.sqrt(distX * distX + distY * distY);
     }
 
-    public double getElevation() {
-        // double armOffSetAtBottom = 6 degrees
-        // shooter to arm offset = 60 degrees
-
-        double op;
-        double adj;
-
-        if (DriverStation.getAlliance().orElseThrow() == DriverStation.Alliance.Blue) {
-            op = botpose3d.getZ() - Constants.SensorConstants.Limelight.speakerZBlue;
-            adj = botpose3d.getX() - Constants.SensorConstants.Limelight.speakerXBlue;
-        } else {
-            op = botpose3d.getZ() - Constants.SensorConstants.Limelight.speakerZRed;
-            adj = botpose3d.getX() - Constants.SensorConstants.Limelight.speakerXRed;
-        }
-
-        double trig;
-        if (botpose3d.getZ() == 0 && botpose3d.getX() == 0) {
-            trig = 0;
-        } else {
-            trig = Math.atan(op / adj);
-        }
-
-        return Math.toDegrees(trig);
-    }
 }
