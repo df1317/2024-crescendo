@@ -36,92 +36,105 @@ public class ArmSubsystemTest {
     @Test
     public void spinUp() {
         // arm encoder at minimum, speed is positive, limit switch true
-        encoderSim.set(Constants.ArmShooterConstants.Arm.EncoderMin);
+        encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMin));
         limitSwitch.set(true);
         armSub.spinUp(0.5);
-        sleep(100);
+        sleep(150);
         // expect positive motor voltage
         assert(motor0Sim.getMotorOutputLeadVoltage() > 0);
 
         // arm encoder less than minimum, speed is positive, limit switch true
-        encoderSim.set(Constants.ArmShooterConstants.Arm.EncoderMin - 0.1);
+        encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMin + 0.1));
         limitSwitch.set(true);
         armSub.spinUp(0.5);
-        sleep(100);
+        sleep(150);
         // expect motor voltage to be zero
         assert(motor0Sim.getMotorOutputLeadVoltage() == 0);
 
         // arm encoder greater than maximum, speed is positive, limit switch true
-        encoderSim.set(Constants.ArmShooterConstants.Arm.EncoderMax + 0.1);
+        encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMax - 0.1));
         limitSwitch.set(true);
         armSub.spinUp(0.5);
-        sleep(100);
+        sleep(150);
         // expect positive motor voltage -- bringing the arm back from having gone too far the other way
         assert(motor0Sim.getMotorOutputLeadVoltage() > 0);
 
         // arm encoder at minimum, speed is positive, limit switch false
-        encoderSim.set(Constants.ArmShooterConstants.Arm.EncoderMin);
+        encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMin));
         limitSwitch.set(false);
         armSub.spinUp(0.5);
-        sleep(100);
+        sleep(150);
         // expect zero motor voltage
         assert(motor0Sim.getMotorOutputLeadVoltage() == 0);
 
         // arm encoder less than minimum, speed is positive, limit switch false
-        encoderSim.set(Constants.ArmShooterConstants.Arm.EncoderMin - 0.1);
+        encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMin + 0.1));
         limitSwitch.set(false);
         armSub.spinUp(0.5);
-        sleep(100);
+        sleep(150);
         // expect motor voltage to be zero
         assert(motor0Sim.getMotorOutputLeadVoltage() == 0);
 
         // arm encoder greater than maximum, speed is positive, limit switch false
-        encoderSim.set(Constants.ArmShooterConstants.Arm.EncoderMax + 0.1);
+        encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMax - 0.1));
         limitSwitch.set(false);
         armSub.spinUp(0.5);
-        sleep(100);
+        sleep(150);
         // expect zero motor voltage
         assert(motor0Sim.getMotorOutputLeadVoltage() == 0);
 
 
         // arm encoder at maximum, speed is negative, limit switch true
-        encoderSim.set(Constants.ArmShooterConstants.Arm.EncoderMax);
+        encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMax));
         limitSwitch.set(true);
         armSub.spinUp(-0.5);
-        sleep(100);
+        sleep(150);
         // expect negative motor voltage
         assert(motor0Sim.getMotorOutputLeadVoltage() < 0);
 
         // arm encoder greater than maximum, speed is negative, limit switch true
-        encoderSim.set(Constants.ArmShooterConstants.Arm.EncoderMax + 0.1);
+        encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMax - 0.1));
         limitSwitch.set(true);
         armSub.spinUp(-0.5);
-        sleep(100);
+        sleep(150);
         // expect motor voltage to be zero
         assert(motor0Sim.getMotorOutputLeadVoltage() == 0);
 
         // arm encoder less than minimum, speed is negative, limit switch true
-        encoderSim.set(Constants.ArmShooterConstants.Arm.EncoderMin - 0.1);
+        encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMin + 0.1));
         limitSwitch.set(true);
         armSub.spinUp(-0.5);
-        sleep(100);
+        sleep(150);
         // expect negative motor voltage -- bringing the arm back from having gone too far the other way
         assert(motor0Sim.getMotorOutputLeadVoltage() < 0);
 
         // arm encoder at maximum, speed is negative, limit switch false
-        encoderSim.set(Constants.ArmShooterConstants.Arm.EncoderMax);
+        encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMax));
         limitSwitch.set(false);
         armSub.spinUp(-0.5);
-        sleep(100);
+        sleep(150);
         // expect negative motor voltage
         assert(motor0Sim.getMotorOutputLeadVoltage() < 0);
     }
 
     @Test
-    public void spinDown() {
+    public void getAngle() {
+        // is this a test for armSub.getAngle(_)? or for calculateEncoderalue(_)?
 
+        encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMax));
+        assert armSub.getAngle() == Constants.ArmShooterConstants.Arm.EncoderMax;
+
+        encoderSim.set(calculateEncoderValue(Constants.ArmShooterConstants.Arm.EncoderMin));
+        assert armSub.getAngle() == Constants.ArmShooterConstants.Arm.EncoderMin;
     }
 
+    private double calculateEncoderValue(double armAngle) {
+        // angle = Constants.ArmShooterConstants.Arm.shooterArmOffset - ((encoder.get() - Constants.ArmShooterConstants.Arm.encoderZero) * -360)
+        double encoderVal = ((Constants.ArmShooterConstants.Arm.shooterArmOffset - armAngle) / -360) + Constants.ArmShooterConstants.Arm.encoderZero;
+        return encoderVal;
+    }
+
+    // todo move to util
     void sleep(long millis) {
         try {
             for(int i = 0; i < millis; i += 10) {
