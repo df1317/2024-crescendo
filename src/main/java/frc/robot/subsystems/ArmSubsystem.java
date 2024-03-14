@@ -31,7 +31,8 @@ public class ArmSubsystem extends SubsystemBase {
     public double Ks = 0.07;
     public double Kg = 0.13;
     public double Kv = 1.2;
-    public static final double armVelocity = Math.toRadians(62); // from degrees/s
+
+    public double armVelocity; // from degrees/s
 
     PIDController pidController;
     ArmFeedforward armFeedforward;
@@ -77,6 +78,7 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Arm Motor Speed", motor0.getMotorOutputPercent());
         SmartDashboard.putNumber("ShooterAngle", getAngle());
         SmartDashboard.putNumber("calc arm angle: ", calculateArmAngle(armSetPoint));
+        SmartDashboard.putNumber("arm velo:", armVelocity);
 
         // get and set PID constants from SmartDashboard
         if (editablePIDConstants) {
@@ -134,9 +136,10 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void runPID() {
-        double motorPower = pidController.calculate(getAngle())
-                + -armFeedforward.calculate(Math.toRadians(calculateArmAngle(armSetPoint)),
-                        armVelocity * (armSetPoint - getAngle()) / armRange);
+        armVelocity = -pidController.calculate(getAngle(), armSetPoint);
+
+        double motorPower = -armFeedforward.calculate(Math.toRadians(calculateArmAngle(armSetPoint)),
+                armVelocity);
 
         spinUp(motorPower);
     }
