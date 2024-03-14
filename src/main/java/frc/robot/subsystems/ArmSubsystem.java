@@ -24,13 +24,13 @@ public class ArmSubsystem extends SubsystemBase {
 
     // TO-DO make constants
     private boolean editablePIDConstants = true;
-    public double Kp = 2.7 / 360;
+    public double Kp = 0 / 360;
     public double Ki = 0 / 360;
     public double Kd = 0 / 360;
 
-    public double Ks = 0.09;
-    public double Kg = 0.9;
-    public double Kv = 2;
+    public double Ks = 0.07;
+    public double Kg = 0.13;
+    public double Kv = 1.2;
     public static final double armVelocity = Math.toRadians(62); // from degrees/s
 
     PIDController pidController;
@@ -76,6 +76,7 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Limit Switch", limitSwitch.get());
         SmartDashboard.putNumber("Arm Motor Speed", motor0.getMotorOutputPercent());
         SmartDashboard.putNumber("ShooterAngle", getAngle());
+        SmartDashboard.putNumber("calc arm angle: ", calculateArmAngle(armSetPoint));
 
         // get and set PID constants from SmartDashboard
         if (editablePIDConstants) {
@@ -129,7 +130,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     /** Convert from shooter angle to angle with which gravity acts on arm */
     public double calculateArmAngle(double setPoint) {
-        return Constants.ArmShooterConstants.Arm.shooterGravOffset - setPoint;
+        return Constants.ArmShooterConstants.Arm.shooterGravOffset - setPoint - 90;
     }
 
     public void runPID() {
