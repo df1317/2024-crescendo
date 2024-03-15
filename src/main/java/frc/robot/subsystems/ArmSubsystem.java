@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -10,13 +12,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
-    // put initial code here
-    public ArmSubsystem() {
-        SmartDashboard.putNumber("Arm Kp", Kp);
-        SmartDashboard.putNumber("Arm Ki", Ki);
-        SmartDashboard.putNumber("Arm Kd", Kd);
-    }
-
     // get the firng subsystem
     private TalonSRX motor0 = new TalonSRX(Constants.ArmShooterConstants.Arm.MotorID0);
     private TalonSRX motor1 = new TalonSRX(Constants.ArmShooterConstants.Arm.MotorID1);
@@ -24,16 +19,29 @@ public class ArmSubsystem extends SubsystemBase {
     public DigitalInput limitSwitch = new DigitalInput(Constants.ArmShooterConstants.Arm.LimitSwitchPort);
 
     private double armSetPoint = Constants.ArmShooterConstants.Arm.EncoderMin;
-    private double errorSum = 0;
-    private double prevError = 0;
     public static final double armRange = Constants.ArmShooterConstants.Arm.EncoderMax
             - Constants.ArmShooterConstants.Arm.EncoderMin;
 
     // TO-DO make constants
     private boolean editablePIDConstants = true;
-    public double Kp = 1.8 / 360;
-    public double Ki = 0.05 / 360;
-    public double Kd = 0 / 360;
+    public double Kp = 2.35 / 360;
+    public double Ki = 0.23 / 360;
+    public double Kd = 0.2 / 360;
+
+    public double Ks = 0.07;
+    public double Kg = 0.13;
+    public double Kv = 1.2;
+
+    public double armVelocity; // from degrees/s
+
+    PIDController pidController;
+    ArmFeedforward armFeedforward;
+
+    // put initial code here
+    public ArmSubsystem() {
+        pidController = new PIDController(Kp, Ki, Kd);
+        armFeedforward = new ArmFeedforward(Ks, Kg, Kv);
+    }
 
     public void spinUp(double speed) {
         SmartDashboard.putNumber("Pre Arm Motor Speed", speed);
@@ -68,19 +76,43 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Arm Encoder", encoder.get());
         SmartDashboard.putBoolean("Limit Switch", limitSwitch.get());
         SmartDashboard.putNumber("Arm Motor Speed", motor0.getMotorOutputPercent());
+        SmartDashboard.putNumber("ShooterAngle", getAngle());
+        SmartDashboard.putNumber("calc arm angle: ", calculateArmAngle(armSetPoint));
+        SmartDashboard.putNumber("arm velo:", armVelocity);
+        SmartDashboard.putNumber("Current Arm Angle", getAngle());
+        SmartDashboard.putNumber("Desired Arm Angle", armSetPoint);
 
         // get and set PID constants from SmartDashboard
         if (editablePIDConstants) {
-            Kp = SmartDashboard.getNumber("Arm Kp", Kp);
-            Ki = SmartDashboard.getNumber("Arm Ki", Ki);
-            Kd = SmartDashboard.getNumber("Arm Kd", Kd);
+            Kp = SmartDashboard.getNumber("Arm Kp", Kp) / 360;
+            Ki = SmartDashboard.getNumber("Arm Ki", Ki) / 360;
+            Kd = SmartDashboard.getNumber("Arm Kd", Kd) / 360;
+
+            Ks = SmartDashboard.getNumber("Arm Ks", Ks);
+            Kg = SmartDashboard.getNumber("Arm Kg", Kg);
+            Kv = SmartDashboard.getNumber("Arm Kv", Kv);
+
+            if (Kp != pidController.getP() || Ki != pidController.getI() || Kd != pidController.getD()) {
+                pidController.setP(Kp);
+                pidController.setI(Ki);
+                pidController.setD(Kd);
+            }
+
+            if (Ks != armFeedforward.ks || Kg != armFeedforward.kg || Kv != armFeedforward.kv) {
+                armFeedforward = new ArmFeedforward(Ks, Kg, Kv);
+            }
         }
 
-        SmartDashboard.putNumber("Arm Kp", Kp);
-        SmartDashboard.putNumber("Arm Ki", Ki);
-        SmartDashboard.putNumber("Arm Kd", Kd);
+        SmartDashboard.putNumber("Arm Kp", Kp * 360);
+        SmartDashboard.putNumber("Arm Ki", Ki * 360);
+        SmartDashboard.putNumber("Arm Kd", Kd * 360);
+
+        SmartDashboard.putNumber("Arm Ks", Ks);
+        SmartDashboard.putNumber("Arm Kg", Kg);
+        SmartDashboard.putNumber("Arm Kv", Kv);
     }
 
+    /** set setpoint */
     public void setAngle(double setpoint) {
         if (setpoint > Constants.ArmShooterConstants.Arm.EncoderMin) {
             armSetPoint = Constants.ArmShooterConstants.Arm.EncoderMin;
@@ -100,41 +132,16 @@ public class ArmSubsystem extends SubsystemBase {
         return Constants.ArmShooterConstants.Arm.shooterArmOffset - degreesEncoder;
     }
 
+    /** Convert from shooter angle to angle with which gravity acts on arm */
+    public double calculateArmAngle(double setPoint) {
+        return Constants.ArmShooterConstants.Arm.shooterGravOffset - setPoint - 90;
+    }
+
     public void runPID() {
-        double error = armSetPoint - getAngle();
+        armVelocity = -pidController.calculate(getAngle(), armSetPoint);
 
-        double oldErrorSum = errorSum;
-        errorSum += error;
-
-        double errorDif = error - prevError;
-        double motorPower = Kp * error + Ki * errorSum + Kd * errorDif;
-        prevError = error;
-
-        // anti integral windup https://www.youtube.com/watch?v=NVLXCwc8HzM
-
-        double preClamp = motorPower;
-
-        if (motorPower > 1) {
-            motorPower = 1;
-        } else if (motorPower < -1) {
-            motorPower = -1;
-        }
-        double postClamp = motorPower;
-
-        boolean inRange = preClamp != postClamp;
-
-        boolean errorGrowing = preClamp > 0 == error > 0;
-
-        boolean intClamp = inRange && errorGrowing;
-
-        if (intClamp) {
-            errorSum = oldErrorSum;
-        }
-
-        motorPower = Kp * error + Ki * errorSum + Kd * errorDif;
-
-        SmartDashboard.putNumber("ArmMotorPower", motorPower);
-        SmartDashboard.putNumber("ShooterAngle", getAngle());
+        double motorPower = -armFeedforward.calculate(Math.toRadians(calculateArmAngle(armSetPoint)),
+                armVelocity);
 
         spinUp(motorPower);
     }

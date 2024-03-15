@@ -74,8 +74,6 @@ public class RobotContainer {
 
   private final SendableChooser<Command> autoChooser;
 
-  AutoAlignArm autoAlignArm;
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -137,7 +135,7 @@ public class RobotContainer {
     m_JoystickL.button(6).onTrue(autoFireNoteCommandIntake);
     m_JoystickR.button(6).onTrue(autoFireNoteCommandFlywheel);
 
-    autoAlignArm = new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_JoystickL.button(7));
+    AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_JoystickL.button(7));
 
     m_JoystickL.button(7).onTrue(autoAlignArm);
   }
@@ -162,6 +160,5 @@ public class RobotContainer {
 
   public void updateArmSubsystem() {
     m_ArmSubsystem.periodic();
-    SmartDashboard.putNumber("Desired Arm Angle", autoAlignArm.calculateShooterAngle());
   }
 }

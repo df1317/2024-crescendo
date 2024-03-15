@@ -28,7 +28,7 @@ import frc.lib.SwerveModuleConstants;
 public final class Constants {
   public static final class Field {
     public static final double speakerY = 1.442593; // Field width posistion
-    public static final double speakerZ = 2.085; // Speaker height
+    public static final double speakerZ = 2; // Speaker height
 
     public static final double speakerXBlue = -8.308467; // Field length posistion
     public static final double speakerXRed = 8.308467; // Field lenght posistion
@@ -76,6 +76,7 @@ public final class Constants {
       public static final double jointHeight = 0.34; // in meters
       public static final double armLenght = 0.6; // in meters
       public static final double optimizedAngle = 45; // in degrees, angle used to optimize shooter angle calculation
+      public static final double shooterGravOffset = 150; // in degrees, angle between shooter and force of gravity
     }
   }
 
