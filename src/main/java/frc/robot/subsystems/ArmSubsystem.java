@@ -24,9 +24,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     // TO-DO make constants
     private boolean editablePIDConstants = true;
-    public double Kp = 0 / 360;
-    public double Ki = 0 / 360;
-    public double Kd = 0 / 360;
+    public double Kp = 2.35 / 360;
+    public double Ki = 0.23 / 360;
+    public double Kd = 0.2 / 360;
 
     public double Ks = 0.07;
     public double Kg = 0.13;
@@ -79,6 +79,8 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("ShooterAngle", getAngle());
         SmartDashboard.putNumber("calc arm angle: ", calculateArmAngle(armSetPoint));
         SmartDashboard.putNumber("arm velo:", armVelocity);
+        SmartDashboard.putNumber("Current Arm Angle", getAngle());
+        SmartDashboard.putNumber("Desired Arm Angle", armSetPoint);
 
         // get and set PID constants from SmartDashboard
         if (editablePIDConstants) {

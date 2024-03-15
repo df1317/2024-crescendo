@@ -57,8 +57,6 @@ public class SetArmValue extends Command {
         double armAngle = getJoystickArm();
         m_ArmSubsystem.setAngle(armAngle);
         m_ArmSubsystem.runPID();
-        SmartDashboard.putNumber("Current Arm Angle", m_ArmSubsystem.getAngle());
-        SmartDashboard.putNumber("Desired Arm Angle", armAngle);
     }
 
     @Override

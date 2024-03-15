@@ -28,7 +28,7 @@ import frc.lib.SwerveModuleConstants;
 public final class Constants {
   public static final class Field {
     public static final double speakerY = 1.442593; // Field width posistion
-    public static final double speakerZ = 2.085; // Speaker height
+    public static final double speakerZ = 2; // Speaker height
 
     public static final double speakerXBlue = -8.308467; // Field length posistion
     public static final double speakerXRed = 8.308467; // Field lenght posistion

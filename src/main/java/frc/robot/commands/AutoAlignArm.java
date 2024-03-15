@@ -51,9 +51,6 @@ public class AutoAlignArm extends Command {
 
         m_ArmSubsystem.setAngle(calculateShooterAngle());
         m_ArmSubsystem.runPID();
-
-        SmartDashboard.putNumber("Current Arm Angle", m_ArmSubsystem.getAngle());
-        SmartDashboard.putNumber("Desired Arm Angle", calculateShooterAngle());
     }
 
     @Override
