@@ -13,8 +13,8 @@ import frc.robot.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
     // get the firng subsystem
-    private TalonSRX motor0 = new TalonSRX(Constants.ArmShooterConstants.Arm.MotorID0);
-    private TalonSRX motor1 = new TalonSRX(Constants.ArmShooterConstants.Arm.MotorID1);
+    public TalonSRX motor0 = new TalonSRX(Constants.ArmShooterConstants.Arm.MotorID0);
+    public TalonSRX motor1 = new TalonSRX(Constants.ArmShooterConstants.Arm.MotorID1);
     public DutyCycleEncoder encoder = new DutyCycleEncoder(Constants.ArmShooterConstants.Arm.EncoderPort);
     public DigitalInput limitSwitch = new DigitalInput(Constants.ArmShooterConstants.Arm.LimitSwitchPort);
 
