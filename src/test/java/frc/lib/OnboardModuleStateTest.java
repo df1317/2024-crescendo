@@ -114,10 +114,7 @@ public class OnboardModuleStateTest {
 
         result = OnboardModuleState.optimize(desState, currentAngle);
 
-
-        
-
-         // current angle in quad 2 and and desidered stat in quad 1
+        // current angle in quad 2 and and desidered stat in quad 1
         desAngle = 400;
         desState.angle = Rotation2d.fromDegrees(desAngle);
         desState.speedMetersPerSecond = 1;
@@ -137,6 +134,33 @@ public class OnboardModuleStateTest {
      */
     @Test
     public void optimize_condiion_4() {
+        double tol = 0.01;
+        SwerveModuleState desState = new SwerveModuleState();
+        double desAngle = 0;
+
+        // current angle in quad 4 and and desidered stat in quad 1
+        desAngle = 340;
+        desState.angle = Rotation2d.fromDegrees(desAngle);
+        desState.speedMetersPerSecond = 1;
+
+        Rotation2d currentAngle = Rotation2d.fromDegrees(10);
+
+        SwerveModuleState result = OnboardModuleState.optimize(desState, currentAngle);
+
+        assert (result.speedMetersPerSecond > 0);
+        assert (testEquals(result, desAngle - 360, tol));
+
+        // current angle in quad 2 and and desidered stat in quad 1
+        desAngle = 45;
+        desState.angle = Rotation2d.fromDegrees(desAngle);
+        desState.speedMetersPerSecond = 1;
+
+        currentAngle = Rotation2d.fromDegrees(100);
+
+        result = OnboardModuleState.optimize(desState, currentAngle);
+
+        assert (result.speedMetersPerSecond > 0);
+        assert (testEquals(result, desAngle - 360, tol));
 
     }
 }
