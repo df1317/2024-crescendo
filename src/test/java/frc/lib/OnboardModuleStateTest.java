@@ -163,4 +163,66 @@ public class OnboardModuleStateTest {
         assert (testEquals(result, desAngle - 360, tol));
 
     }
+
+    /*
+     * condition 5 where desired angle is bewtween -90 and 0 below desired angle
+     */
+    @Test
+    public void optimize_condition_5() {
+        double tol = 0.01;
+        SwerveModuleState desState = new SwerveModuleState();
+        double desAngle = 0;
+
+        // current angle in quad 1 and and desidered is in quad 1 and desired angle less
+        // than current
+        desAngle = 10;
+        desState.angle = Rotation2d.fromDegrees(desAngle);
+        desState.speedMetersPerSecond = 1;
+
+        Rotation2d currentAngle = Rotation2d.fromDegrees(10);
+
+        SwerveModuleState result = OnboardModuleState.optimize(desState, currentAngle);
+
+        assert (result.speedMetersPerSecond > 0);
+        assert (testEquals(result, desAngle, tol));
+
+        // current angle in quad 2 and and desidered is in quad 2 and desired angle less
+        // than current
+        desAngle = 100;
+        desState.angle = Rotation2d.fromDegrees(desAngle);
+        desState.speedMetersPerSecond = 1;
+
+        currentAngle = Rotation2d.fromDegrees(150);
+
+        result = OnboardModuleState.optimize(desState, currentAngle);
+
+        assert (result.speedMetersPerSecond > 0);
+        assert (testEquals(result, desAngle, tol));
+
+        // current angle in quad 3 and and desidered is in quad 3 and desired angle less
+        // than current
+        desAngle = 200;
+        desState.angle = Rotation2d.fromDegrees(desAngle);
+        desState.speedMetersPerSecond = 1;
+
+        currentAngle = Rotation2d.fromDegrees(253);
+
+        result = OnboardModuleState.optimize(desState, currentAngle);
+
+        assert (result.speedMetersPerSecond > 0);
+        assert (testEquals(result, desAngle, tol));
+
+        // current angle in quad 4 and and desidered is in quad 4 and desired angle less
+        // than current
+        desAngle = 323;
+        desState.angle = Rotation2d.fromDegrees(desAngle);
+        desState.speedMetersPerSecond = 1;
+
+        currentAngle = Rotation2d.fromDegrees(350);
+
+        result = OnboardModuleState.optimize(desState, currentAngle);
+
+        assert (result.speedMetersPerSecond > 0);
+        assert (testEquals(result, desAngle, tol));
+    }
 }
