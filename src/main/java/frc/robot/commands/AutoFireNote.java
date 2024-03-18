@@ -1,13 +1,16 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.subsystems.FiringSubsystem;
 
 public class AutoFireNote extends Command {
     private FiringSubsystem m_FiringSubsystem;
+    private CommandXboxController xboxController;
 
     private boolean intake;
     private boolean shoot;
@@ -15,8 +18,9 @@ public class AutoFireNote extends Command {
     private double timer;
 
     public AutoFireNote(FiringSubsystem FiringSub, CommandJoystick joystickL, CommandJoystick joystickR, boolean intake,
-            boolean shoot) {
+            boolean shoot, CommandXboxController xboxController) {
         m_FiringSubsystem = FiringSub;
+        this.xboxController = xboxController;
         this.intake = intake;
         this.shoot = shoot;
         addRequirements(FiringSub);
@@ -41,10 +45,15 @@ public class AutoFireNote extends Command {
 
     @Override
     public void execute() {
+        if (intake && !m_FiringSubsystem.noteSensor.get()) {
+            new Rumble(xboxController, 0.5, 1).schedule();
+        }
+
         if (shoot && System.currentTimeMillis()
                 - timer > Constants.ArmShooterConstants.ShooterCollectorConstants.Firing.Duration
                         * 1000) {
-            m_FiringSubsystem.spinUpIntake(Constants.ArmShooterConstants.ShooterCollectorConstants.Intake.ShootSpeed);
+            m_FiringSubsystem
+                    .spinUpIntake(Constants.ArmShooterConstants.ShooterCollectorConstants.Intake.ShootSpeed);
         }
     }
 

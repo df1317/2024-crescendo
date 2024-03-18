@@ -128,9 +128,10 @@ public class RobotContainer {
         .onTrue(climbCommand);
     m_JoystickL.button(2).and(m_JoystickL.trigger()).onTrue(setArmValueCommand);
 
-    AutoFireNote autoFireNoteCommandIntake = new AutoFireNote(m_FiringSubsystem, m_JoystickL, m_JoystickR, true, false);
+    AutoFireNote autoFireNoteCommandIntake = new AutoFireNote(m_FiringSubsystem, m_JoystickL, m_JoystickR, true, false,
+        m_XboxController);
     AutoFireNote autoFireNoteCommandFlywheel = new AutoFireNote(m_FiringSubsystem, m_JoystickL, m_JoystickR, false,
-        true);
+        true, m_XboxController);
 
     m_JoystickL.button(6).onTrue(autoFireNoteCommandIntake);
     m_JoystickR.button(6).onTrue(autoFireNoteCommandFlywheel);
