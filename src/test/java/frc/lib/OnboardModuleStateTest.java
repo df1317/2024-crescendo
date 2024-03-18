@@ -225,4 +225,41 @@ public class OnboardModuleStateTest {
         assert (result.speedMetersPerSecond > 0);
         assert (testEquals(result, desAngle, tol));
     }
+
+    /*
+     * condition 6 and 7 where desired angle is between -270 and -90 below desired
+     * angle
+     */
+    @Test
+    public void optimize_condition_6_7() {
+        double tol = 0.01;
+        SwerveModuleState desState = new SwerveModuleState();
+        double desAngle = 0;
+
+        // current angle in quad 1 and and desidered is in quad 3 and desired angle less
+        // than current
+        desAngle = 196;
+        desState.angle = Rotation2d.fromDegrees(desAngle);
+        desState.speedMetersPerSecond = 1;
+
+        Rotation2d currentAngle = Rotation2d.fromDegrees(56);
+
+        SwerveModuleState result = OnboardModuleState.optimize(desState, currentAngle);
+
+        assert (result.speedMetersPerSecond < 0);
+        assert (testEquals(result, desAngle + 180, tol));
+
+        // current angle in quad 2 and and desidered is in quad 4 and desired angle less
+        // than current
+        desAngle = 100;
+        desState.angle = Rotation2d.fromDegrees(desAngle);
+        desState.speedMetersPerSecond = 1;
+
+        currentAngle = Rotation2d.fromDegrees(300);
+
+        result = OnboardModuleState.optimize(desState, currentAngle);
+
+        assert (result.speedMetersPerSecond < 0);
+        assert (testEquals(result, desAngle + 180, tol));
+    }
 }
