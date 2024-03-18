@@ -109,7 +109,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    AutoAlign autoAlign = new AutoAlign(m_LimelightSubsystem, m_SwerveSubsystem, m_ArmSubsystem, m_XboxController);
+    AutoAlign autoAlign = new AutoAlign();
     m_XboxController.button(Button.kA.value).onTrue(autoAlign);
 
     // climb command should be able to work only if a button is pressed on the
