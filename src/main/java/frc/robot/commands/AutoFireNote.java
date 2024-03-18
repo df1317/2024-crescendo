@@ -27,7 +27,7 @@ public class AutoFireNote extends Command {
         SmartDashboard.putBoolean("Auto Firing Intake Status", intake);
         SmartDashboard.putBoolean("Auto Firing Shooter Status", shoot);
 
-        if (intake) {
+        if (intake && m_FiringSubsystem.noteSensor.get()) {
             m_FiringSubsystem.spinUpIntake(Constants.ArmShooterConstants.ShooterCollectorConstants.Intake.Speed);
 
             timer = System.currentTimeMillis();
