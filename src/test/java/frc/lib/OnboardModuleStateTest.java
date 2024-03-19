@@ -12,6 +12,14 @@ public class OnboardModuleStateTest {
 
     }
 
+    private double mod(double a, double b) {
+        double c = a%b;
+        if(c<0){
+            c+=b;
+        }
+        return c;
+    }
+
     /*
      * condition 1 where desidered angle is between 0 and 90 deg above current angle
      */
@@ -25,7 +33,7 @@ public class OnboardModuleStateTest {
 
         Rotation2d currentAngle = Rotation2d.fromDegrees(10);
 
-        SwerveModuleState result = OnboardModuleState.optimize(desState, currentAngle);
+        SwerveModuleState result = SwerveModuleState.optimize(desState, currentAngle);
 
         assert (result.speedMetersPerSecond > 0);
         assert (result.angle.getDegrees() == 35);
@@ -34,8 +42,8 @@ public class OnboardModuleStateTest {
         desState.speedMetersPerSecond = 1;
 
         currentAngle = Rotation2d.fromDegrees(100);
-
-        result = OnboardModuleState.optimize(desState, currentAngle);
+        
+        result = SwerveModuleState.optimize(desState, currentAngle);
 
         assert (result.speedMetersPerSecond > 0);
         assert (result.angle.getDegrees() == 154);
@@ -45,7 +53,7 @@ public class OnboardModuleStateTest {
 
         currentAngle = Rotation2d.fromDegrees(198);
 
-        result = OnboardModuleState.optimize(desState, currentAngle);
+        result = SwerveModuleState.optimize(desState, currentAngle);
 
         assert result.speedMetersPerSecond > 0;
         assert result.angle.getDegrees() == 265;
@@ -55,17 +63,18 @@ public class OnboardModuleStateTest {
 
         currentAngle = Rotation2d.fromDegrees(300);
 
-        result = OnboardModuleState.optimize(desState, currentAngle);
+        result = SwerveModuleState.optimize(desState, currentAngle);
 
         assert result.speedMetersPerSecond > 0;
         assert result.angle.getDegrees() == 346;
 
         desState.angle = Rotation2d.fromDegrees(370);
+        desState.angle = Rotation2d.fromDegrees(mod(desState.angle.getDegrees(),360));
         desState.speedMetersPerSecond = 1;
 
         currentAngle = Rotation2d.fromDegrees(300);
-
-        result = OnboardModuleState.optimize(desState, currentAngle);
+        
+        result = SwerveModuleState.optimize(desState, currentAngle);
 
         assert result.speedMetersPerSecond > 0;
         assert testEquals(result, 10, tol);
@@ -88,7 +97,7 @@ public class OnboardModuleStateTest {
 
         Rotation2d currentAngle = Rotation2d.fromDegrees(10);
 
-        SwerveModuleState result = OnboardModuleState.optimize(desState, currentAngle);
+        SwerveModuleState result = SwerveModuleState.optimize(desState, currentAngle);
 
         assert (result.speedMetersPerSecond < 0);
         assert (result.angle.getDegrees() == desAngle - 180);
@@ -100,7 +109,7 @@ public class OnboardModuleStateTest {
 
         currentAngle = Rotation2d.fromDegrees(10);
 
-        result = OnboardModuleState.optimize(desState, currentAngle);
+        result = SwerveModuleState.optimize(desState, currentAngle);
 
         assert (result.speedMetersPerSecond < 0);
         assert (testEquals(result, desAngle - 180, tol));
@@ -112,7 +121,7 @@ public class OnboardModuleStateTest {
 
         currentAngle = Rotation2d.fromDegrees(200);
 
-        result = OnboardModuleState.optimize(desState, currentAngle);
+        result = SwerveModuleState.optimize(desState, currentAngle);
 
         // current angle in quad 2 and and desidered stat in quad 1
         desAngle = 400;
@@ -121,7 +130,7 @@ public class OnboardModuleStateTest {
 
         currentAngle = Rotation2d.fromDegrees(200);
 
-        result = OnboardModuleState.optimize(desState, currentAngle);
+        result = SwerveModuleState.optimize(desState, currentAngle);
 
         assert (result.speedMetersPerSecond < 0);
         assert (testEquals(result, desAngle - 180, tol));
@@ -145,7 +154,7 @@ public class OnboardModuleStateTest {
 
         Rotation2d currentAngle = Rotation2d.fromDegrees(10);
 
-        SwerveModuleState result = OnboardModuleState.optimize(desState, currentAngle);
+        SwerveModuleState result = SwerveModuleState.optimize(desState, currentAngle);
 
         assert (result.speedMetersPerSecond > 0);
         assert (testEquals(result, desAngle - 360, tol));
@@ -157,7 +166,7 @@ public class OnboardModuleStateTest {
 
         currentAngle = Rotation2d.fromDegrees(100);
 
-        result = OnboardModuleState.optimize(desState, currentAngle);
+        result = SwerveModuleState.optimize(desState, currentAngle);
 
         assert (result.speedMetersPerSecond > 0);
         assert (testEquals(result, desAngle - 360, tol));
@@ -181,7 +190,7 @@ public class OnboardModuleStateTest {
 
         Rotation2d currentAngle = Rotation2d.fromDegrees(10);
 
-        SwerveModuleState result = OnboardModuleState.optimize(desState, currentAngle);
+        SwerveModuleState result = SwerveModuleState.optimize(desState, currentAngle);
 
         assert (result.speedMetersPerSecond > 0);
         assert (testEquals(result, desAngle, tol));
@@ -194,7 +203,7 @@ public class OnboardModuleStateTest {
 
         currentAngle = Rotation2d.fromDegrees(150);
 
-        result = OnboardModuleState.optimize(desState, currentAngle);
+        result = SwerveModuleState.optimize(desState, currentAngle);
 
         assert (result.speedMetersPerSecond > 0);
         assert (testEquals(result, desAngle, tol));
@@ -207,7 +216,7 @@ public class OnboardModuleStateTest {
 
         currentAngle = Rotation2d.fromDegrees(253);
 
-        result = OnboardModuleState.optimize(desState, currentAngle);
+        result = SwerveModuleState.optimize(desState, currentAngle);
 
         assert (result.speedMetersPerSecond > 0);
         assert (testEquals(result, desAngle, tol));
@@ -220,7 +229,7 @@ public class OnboardModuleStateTest {
 
         currentAngle = Rotation2d.fromDegrees(350);
 
-        result = OnboardModuleState.optimize(desState, currentAngle);
+        result = SwerveModuleState.optimize(desState, currentAngle);
 
         assert (result.speedMetersPerSecond > 0);
         assert (testEquals(result, desAngle, tol));
@@ -244,7 +253,7 @@ public class OnboardModuleStateTest {
 
         Rotation2d currentAngle = Rotation2d.fromDegrees(56);
 
-        SwerveModuleState result = OnboardModuleState.optimize(desState, currentAngle);
+        SwerveModuleState result = SwerveModuleState.optimize(desState, currentAngle);
 
         assert (result.speedMetersPerSecond < 0);
         assert (testEquals(result, desAngle + 180, tol));
@@ -257,7 +266,7 @@ public class OnboardModuleStateTest {
 
         currentAngle = Rotation2d.fromDegrees(300);
 
-        result = OnboardModuleState.optimize(desState, currentAngle);
+        result = SwerveModuleState.optimize(desState, currentAngle);
 
         assert (result.speedMetersPerSecond < 0);
         assert (testEquals(result, desAngle + 180, tol));
