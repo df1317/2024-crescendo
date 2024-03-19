@@ -62,6 +62,9 @@ public class SwerveModule {
         angleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
         integratedAngleEncoder = angleMotor.getEncoder();
         angleController = angleMotor.getPIDController();
+        angleController.setPositionPIDWrappingMaxInput(180);
+        angleController.setPositionPIDWrappingMinInput(-180);
+        angleController.setPositionPIDWrappingEnabled(true);
 
         /* Drive Motor Config */
         driveMotor = new CANSparkMax(moduleConstants.driveMotorID, MotorType.kBrushless);
@@ -78,6 +81,13 @@ public class SwerveModule {
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(driveEncoder.getPosition(), getAngle());
     }
+    private double mod(double a, double b) {
+        double c = a%b;
+        if(c<0){
+            c+=b;
+        }
+        return c;
+    }
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
         // Custom optimize command, since default WPILib optimize assumes continuous
@@ -85,7 +95,10 @@ public class SwerveModule {
         // REV supports this now so dont have to worry with rev, but need some funky
         // configs i dont want to do
         // have to be sad with falcons but thats what you get for giving money to Tony
-        desiredState = OnboardModuleState.optimize(desiredState, getState().angle);
+        //desiredState.angle = Rotation2d.fromDegrees(mod(desiredState.angle.getDegrees(),360)-180);
+        //Rotation2d currentAngle = Rotation2d.fromDegrees(mod(getState().angle.getDegrees(),360)-180);
+        // desiredState = OnboardModuleState.optimize(desiredState, getState().angle);
+        resetToAbsolute();
 
         setAngle(desiredState);
         setSpeed(desiredState, isOpenLoop);
@@ -117,7 +130,7 @@ public class SwerveModule {
     }
 
     public void resetToAbsolute() {
-        double absolutePosition = getCanCoder().getRotations() - angleOffset.getRotations();
+        double absolutePosition = getCanCoder().getDegrees() - angleOffset.getDegrees();
         integratedAngleEncoder.setPosition(absolutePosition); // may need to change
 
     }

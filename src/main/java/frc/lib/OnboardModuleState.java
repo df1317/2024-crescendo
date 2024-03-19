@@ -22,15 +22,16 @@ public class OnboardModuleState {
     double targetSpeed = desiredState.speedMetersPerSecond;
     double delta = targetAngle - currentAngle.getDegrees(); // how far module needs to travel
 
-    // if needs to travel more than +/- 90 degrees, we can optimize
-    if (Math.abs(delta) > 90) {
-      targetSpeed = -targetSpeed; // reverse wheel direction
-      targetAngle = delta > 90 ? (targetAngle -= 180) : (targetAngle += 180);
-      // set target angle if the delta is +90 by subracting 180, if the delta is -90
-      // add 180 to target angle
-      // reversing the wheel meens the turn modules must travel less
+    double desAngle = desiredState.angle.getDegrees();
+
+    if(desAngle <= -90){
+      desiredState.speedMetersPerSecond = -desiredState.speedMetersPerSecond;
+      desiredState.angle = Rotation2d.fromDegrees(90);
     }
-    return new SwerveModuleState(targetSpeed, Rotation2d.fromDegrees(targetAngle));
+      
+
+    return SwerveModuleState.optimize(desiredState, currentAngle);
+
   }
 
   /**
