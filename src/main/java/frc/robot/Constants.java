@@ -55,9 +55,9 @@ public final class Constants {
       public static final class Intake {
         public static final int angle = 66; // get by taking the angle of the arm at rest and adding the interior
                                             // shooter angle difference between arm and shooter
-        public static final double Speed = -0.5; // must be between -1 and 1
+        public static final double Speed = -0.6; // must be between -1 and 1
         public static final double ShootSpeed = -1;
-        public static final int Timeout = 4;
+        public static final int Timeout = 3;
       }
 
       public static final int NoteSensorPort = 1;
