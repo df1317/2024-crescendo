@@ -57,7 +57,7 @@ public final class Constants {
                                             // shooter angle difference between arm and shooter
         public static final double Speed = -0.5; // must be between -1 and 1
         public static final double ShootSpeed = -1;
-        public static final int Timeout = 4;
+        public static final int Timeout = 8;
       }
 
       public static final int NoteSensorPort = 1;

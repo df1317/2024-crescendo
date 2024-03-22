@@ -12,6 +12,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
     public Pose3d botpose3d;
     private double[] botposeArray;
+    public boolean hasTargets;
 
     /**
      * Updates the values of the Limelight camera and posts them to the
@@ -24,11 +25,18 @@ public class LimelightSubsystem extends SubsystemBase {
         botpose3d = new Pose3d(botposeArray[0], botposeArray[1], botposeArray[2], new Rotation3d(
                 Math.toRadians(botposeArray[3]), Math.toRadians(botposeArray[4]), Math.toRadians(botposeArray[5])));
 
+        if (NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 1) {
+            hasTargets = true;
+        } else {
+            hasTargets = false;
+        }
+
         // post to smart dashboard periodically
         SmartDashboard.putNumber("LimelightX", botpose3d.getX());
         SmartDashboard.putNumber("LimelightY", botpose3d.getY());
         SmartDashboard.putNumber("LimelightRotation", botpose3d.getRotation().toRotation2d().getDegrees());
         SmartDashboard.putNumber("Limelight Speaker Distance", getSpeakerDistance());
+        SmartDashboard.putBoolean("Limelight hasTargets", hasTargets);
     }
 
     /** returning distance from speaker to robot */
@@ -41,7 +49,7 @@ public class LimelightSubsystem extends SubsystemBase {
         double distX = speakerX - botpose3d.getX();
         double distY = Constants.Field.speakerY - botpose3d.getY();
         // returning distance from speaker to robot
-        return Math.sqrt(distX * distX + distY * distY) + 0.9;
+        return Math.sqrt(distX * distX + distY * distY) + 1.;
     }
 
 }
