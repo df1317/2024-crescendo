@@ -15,7 +15,6 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.lib.OnboardModuleState;
 import frc.lib.SwerveModuleConstants;
 import frc.robot.Constants;
 
@@ -81,10 +80,11 @@ public class SwerveModule {
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(driveEncoder.getPosition(), getAngle());
     }
+
     private double mod(double a, double b) {
-        double c = a%b;
-        if(c<0){
-            c+=b;
+        double c = a % b;
+        if (c < 0) {
+            c += b;
         }
         return c;
     }
@@ -95,8 +95,10 @@ public class SwerveModule {
         // REV supports this now so dont have to worry with rev, but need some funky
         // configs i dont want to do
         // have to be sad with falcons but thats what you get for giving money to Tony
-        //desiredState.angle = Rotation2d.fromDegrees(mod(desiredState.angle.getDegrees(),360)-180);
-        //Rotation2d currentAngle = Rotation2d.fromDegrees(mod(getState().angle.getDegrees(),360)-180);
+        // desiredState.angle =
+        // Rotation2d.fromDegrees(mod(desiredState.angle.getDegrees(),360)-180);
+        // Rotation2d currentAngle =
+        // Rotation2d.fromDegrees(mod(getState().angle.getDegrees(),360)-180);
         // desiredState = OnboardModuleState.optimize(desiredState, getState().angle);
         resetToAbsolute();
 
