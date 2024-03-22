@@ -9,11 +9,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-import frc.robot.commands.AutoAlign;
 import frc.robot.commands.AutoAlignArm;
 import frc.robot.commands.AutoFireNote;
 import frc.robot.commands.Climb;
-import frc.robot.commands.FireNote;
+
 import frc.robot.commands.SetArmValue;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ArmSubsystem;
@@ -25,7 +24,6 @@ import frc.robot.subsystems.SwerveSubsystem;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -109,36 +107,23 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    AutoAlign autoAlign = new AutoAlign();
-    m_XboxController.button(Button.kA.value).onTrue(autoAlign);
 
-    // climb command should be able to work only if a button is pressed on the
-    // joystick and the trigger is pressed
     Climb climbCommand = new Climb(m_ClimbingSubsystem, m_JoystickL, m_JoystickR);
+    m_JoystickL.button(3).or(m_JoystickR.button(3)).onTrue(climbCommand);
+
     SetArmValue setArmValueCommand = new SetArmValue(m_ArmSubsystem, m_JoystickL);
-    // setup two firing speeds
-    FireNote fireNoteCommandIntake = new FireNote(m_FiringSubsystem, m_JoystickL.button(5), m_JoystickL, true, false);
-    FireNote fireNoteCommandFlywheel = new FireNote(m_FiringSubsystem, m_JoystickR.button(5), m_JoystickR, false, true);
-    FireNote fireNoteCommandAll = new FireNote(m_FiringSubsystem, m_JoystickL.button(4), m_JoystickL, true, true);
-    m_JoystickL.button(5).onTrue(fireNoteCommandIntake);
-    m_JoystickR.button(5).onTrue(fireNoteCommandFlywheel);
-    m_JoystickL.button(4).onTrue(fireNoteCommandAll);
+    m_JoystickL.button(2).or(m_JoystickR.button(2)).onTrue(setArmValueCommand);
 
-    (m_JoystickL.trigger().and(m_JoystickL.button(3))).or(m_JoystickR.trigger().and(m_JoystickR.button(3)))
-        .onTrue(climbCommand);
-    m_JoystickL.button(2).and(m_JoystickL.trigger()).onTrue(setArmValueCommand);
-
-    AutoFireNote autoFireNoteCommandIntake = new AutoFireNote(m_FiringSubsystem, m_JoystickL, m_JoystickR, true, false,
+    AutoFireNote autoFireNoteCommandIntake = new AutoFireNote(m_FiringSubsystem, true, false,
         m_XboxController);
-    AutoFireNote autoFireNoteCommandFlywheel = new AutoFireNote(m_FiringSubsystem, m_JoystickL, m_JoystickR, false,
+    m_JoystickR.trigger().onTrue(autoFireNoteCommandIntake);
+    AutoFireNote autoFireNoteCommandFlywheel = new AutoFireNote(m_FiringSubsystem, false,
         true, m_XboxController);
+    m_JoystickL.trigger().onTrue(autoFireNoteCommandFlywheel);
 
-    m_JoystickL.button(6).onTrue(autoFireNoteCommandIntake);
-    m_JoystickR.button(6).onTrue(autoFireNoteCommandFlywheel);
-
-    AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_JoystickL.button(7));
-
-    m_JoystickL.button(7).onTrue(autoAlignArm);
+    AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_JoystickL.button(4),
+        m_JoystickR.button(4));
+    m_JoystickL.button(4).or(m_JoystickR.button(4)).onTrue(autoAlignArm);
   }
 
   /**

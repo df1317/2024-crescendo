@@ -11,12 +11,14 @@ public class AutoAlignArm extends Command {
 
     private LimelightSubsystem m_LimelightSubsystem;
     private ArmSubsystem m_ArmSubsystem;
-    private Trigger button;
+    private Trigger button0;
+    private Trigger button1;
 
-    public AutoAlignArm(LimelightSubsystem LimelightSub, ArmSubsystem ArmSub, Trigger button) {
+    public AutoAlignArm(LimelightSubsystem LimelightSub, ArmSubsystem ArmSub, Trigger button0, Trigger button1) {
         m_LimelightSubsystem = LimelightSub;
         m_ArmSubsystem = ArmSub;
-        this.button = button;
+        this.button0 = button0;
+        this.button1 = button1;
         addRequirements(LimelightSub, ArmSub);
     }
 
@@ -56,7 +58,7 @@ public class AutoAlignArm extends Command {
     @Override
     public boolean isFinished() {
         // Check if the button is released or if the specified duration has passed
-        return (!button.getAsBoolean());
+        return (!button0.getAsBoolean()) && (!button1.getAsBoolean());
     }
 
     @Override

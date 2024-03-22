@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.subsystems.FiringSubsystem;
@@ -16,7 +15,7 @@ public class AutoFireNote extends Command {
 
     private double timer;
 
-    public AutoFireNote(FiringSubsystem FiringSub, CommandJoystick joystickL, CommandJoystick joystickR, boolean intake,
+    public AutoFireNote(FiringSubsystem FiringSub, boolean intake,
             boolean shoot, CommandXboxController xboxController) {
         m_FiringSubsystem = FiringSub;
         this.xboxController = xboxController;
