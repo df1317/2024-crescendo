@@ -44,21 +44,30 @@ public class AutoAlignArm extends Command {
     public void initialize() {
         SmartDashboard.putBoolean("Aut Moving Arm", true);
 
-        m_ArmSubsystem.setAngle(calculateShooterAngle());
-        m_ArmSubsystem.runPID();
+        if (m_LimelightSubsystem.hasTargets) {
+            m_ArmSubsystem.setAngle(calculateShooterAngle());
+            m_ArmSubsystem.runPID();
+        }
     }
 
     @Override
     public void execute() {
-
-        m_ArmSubsystem.setAngle(calculateShooterAngle());
-        m_ArmSubsystem.runPID();
+        if (m_LimelightSubsystem.hasTargets) {
+            m_ArmSubsystem.setAngle(calculateShooterAngle());
+            m_ArmSubsystem.runPID();
+        }
     }
 
     @Override
     public boolean isFinished() {
         // Check if the button is released or if the specified duration has passed
-        return (!button0.getAsBoolean()) && (!button1.getAsBoolean());
+        if (!button0.getAsBoolean() && !button1.getAsBoolean()) {
+            return true;
+        } else if (!m_LimelightSubsystem.hasTargets) {
+            return true;
+        }
+
+        return false;
     }
 
     @Override
