@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -14,12 +15,14 @@ public class AutoAlign extends Command {
 
     private Trigger endTrigger;
 
-    private PIDController pidController = new PIDController(0, 0, 0);
+    private PIDController pidController = new PIDController(0.2, 0, 0);
 
     public AutoAlign(LimelightSubsystem limelightSub, SwerveSubsystem swerveSub, Trigger endTrigger) {
         this.m_LimelightSubsystem = limelightSub;
         this.m_SwerveSubsystem = swerveSub;
         this.endTrigger = endTrigger;
+
+        addRequirements(swerveSub);
     }
 
     public double getAlignedRotation() {
@@ -42,7 +45,7 @@ public class AutoAlign extends Command {
                     m_LimelightSubsystem.botpose3d.getRotation().getAngle());
         }
 
-        m_SwerveSubsystem.drive(null, power, false, false);
+        m_SwerveSubsystem.drive(new Translation2d(), -power, true, false);
     }
 
     @Override
@@ -53,6 +56,6 @@ public class AutoAlign extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        m_SwerveSubsystem.drive(null, 0, false, false);
+        m_SwerveSubsystem.drive(new Translation2d(), 0, true, false);
     }
 }
