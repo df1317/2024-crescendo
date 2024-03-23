@@ -22,7 +22,7 @@ public class LimelightSubsystem extends SubsystemBase {
         botposeArray = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose")
                 .getDoubleArray(new double[6]);
 
-        if (botposeArray.length == 6) {
+        if (botposeArray.length >= 6) {
             botpose3d = new Pose3d(botposeArray[0], botposeArray[1], botposeArray[2], new Rotation3d(
                     Math.toRadians(botposeArray[3]), Math.toRadians(botposeArray[4]), Math.toRadians(botposeArray[5])));
         }
