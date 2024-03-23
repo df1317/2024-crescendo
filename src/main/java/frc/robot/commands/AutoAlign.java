@@ -35,8 +35,12 @@ public class AutoAlign extends Command {
 
     @Override
     public void execute() {
-        double power = pidController.calculate(getAlignedRotation(),
-                m_LimelightSubsystem.botpose3d.getRotation().getAngle());
+        double power = 0;
+
+        if (m_LimelightSubsystem.hasTargets) {
+            power = pidController.calculate(getAlignedRotation(),
+                    m_LimelightSubsystem.botpose3d.getRotation().getAngle());
+        }
 
         m_SwerveSubsystem.drive(null, power, false, false);
     }
