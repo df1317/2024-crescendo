@@ -114,8 +114,9 @@ public class RobotContainer {
     SetArmValue setArmValueCommand = new SetArmValue(m_ArmSubsystem, m_JoystickL);
     m_JoystickL.button(2).or(m_JoystickR.button(2)).onTrue(setArmValueCommand);
 
-    AutoAlign autoAlignFloor = new AutoAlign(m_LimelightSubsystem, m_SwerveSubsystem, m_XboxController.a());
-    m_XboxController.a().onTrue(autoAlignFloor);
+    // AutoAlign autoAlignFloor = new AutoAlign(m_LimelightSubsystem,
+    // m_SwerveSubsystem, m_XboxController.a());
+    // m_XboxController.a().onTrue(autoAlignFloor);
 
     AutoFireNote autoFireNoteCommandIntake = new AutoFireNote(m_FiringSubsystem, true, false,
         m_XboxController);
