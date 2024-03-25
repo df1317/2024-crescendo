@@ -34,7 +34,7 @@ public class AutoFireNote extends Command {
 
         if (intake && manualMode.getAsBoolean() ? true : m_FiringSubsystem.noteSensor.get()) {
             m_FiringSubsystem.spinUpIntake(Constants.ArmShooterConstants.ShooterCollectorConstants.Intake.Speed
-                    * (manualMode.getAsBoolean() ? -1 : 1));
+                    * (manualMode.getAsBoolean() ? -2 : 1));
 
             timer = System.currentTimeMillis();
         }
