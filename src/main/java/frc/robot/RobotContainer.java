@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.AmpAlign;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.AutoAlignArm;
 import frc.robot.commands.AutoFireNote;
@@ -128,6 +129,9 @@ public class RobotContainer {
     AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_JoystickL.button(4),
         m_JoystickR.button(4));
     m_JoystickL.button(4).or(m_JoystickR.button(4)).onTrue(autoAlignArm);
+
+    AmpAlign ampAlign = new AmpAlign(m_ArmSubsystem, m_JoystickL.button(5).or(m_JoystickR.button(5)));
+    m_JoystickL.button(5).or(m_JoystickR.button(5)).onTrue(ampAlign);
   }
 
   /**
