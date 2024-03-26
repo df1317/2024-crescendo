@@ -47,7 +47,7 @@ public final class Constants {
       public static final class Firing {
         public static final int MotorID0 = 01;
         public static final int MotorID1 = 02;
-        public static final double Speed = -0.75; // must be between -1 and 1
+        public static final double Speed = -3400; // must be between -1 and 1
         public static final double Duration = 1.25;
         public static final double ClearingDelay = 0.5;
       }

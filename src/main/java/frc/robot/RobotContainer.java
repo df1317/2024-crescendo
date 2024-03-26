@@ -146,6 +146,8 @@ public class RobotContainer {
 
   public void updateFiringSubsystem() {
     m_FiringSubsystem.logVals();
+    m_FiringSubsystem.periodic();
+
   }
 
   public void updateArmSubsystem() {
