@@ -12,10 +12,6 @@ public class Climb extends Command {
     private CommandJoystick m_JoystickL;
     private CommandJoystick m_JoystickR;
 
-    private boolean getTrigger() {
-        return !m_JoystickL.trigger().getAsBoolean() && !m_JoystickR.trigger().getAsBoolean();
-    };
-
     public Climb(ClimbingSubsystem climbingSub, CommandJoystick joystickL, CommandJoystick joystickR) {
         m_ClimbingSubsystem = climbingSub;
         m_JoystickL = joystickL;
@@ -44,7 +40,7 @@ public class Climb extends Command {
 
     @Override
     public boolean isFinished() {
-        if (getTrigger()) {
+        if (!m_JoystickL.button(3).getAsBoolean() && !m_JoystickR.button(3).getAsBoolean()) {
             return true;
         }
 

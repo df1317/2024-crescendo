@@ -37,10 +37,6 @@ public class SetArmValue extends Command {
         return armAngle;
     }
 
-    private boolean getButton() {
-        return m_Joystick.button(1).getAsBoolean();
-    }
-
     public SetArmValue(ArmSubsystem ArmSub, CommandJoystick joystick) {
         m_ArmSubsystem = ArmSub;
         m_Joystick = joystick;
@@ -61,7 +57,7 @@ public class SetArmValue extends Command {
 
     @Override
     public boolean isFinished() {
-        if (!getButton()) {
+        if (!m_Joystick.button(2).getAsBoolean()) {
             m_ArmSubsystem.spinDown();
             return true;
         }
