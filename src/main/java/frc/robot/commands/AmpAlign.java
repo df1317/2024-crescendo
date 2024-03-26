@@ -10,6 +10,7 @@ public class AmpAlign extends Command {
 
     private Trigger endButton;
     private double ampShootAngle = 25;
+    private boolean buttonReleased;
     private boolean end;
     private double timer;
 
@@ -25,21 +26,30 @@ public class AmpAlign extends Command {
         m_ArmSubsystem.setAngle(ampShootAngle);
     }
 
+    private double lerp(double a, double b, double t) {
+        return a + (b - a) * t;
+    }
+
     @Override
     public void execute() {
         if (!endButton.getAsBoolean()) {
-            end = true;
+            buttonReleased = true;
             timer = System.currentTimeMillis();
         }
 
-        if (end) {
+        if (buttonReleased) {
+            if (System.currentTimeMillis() - timer < 1000) {
+                m_ArmSubsystem.setAngle(lerp(ampShootAngle, 0, (System.currentTimeMillis() - timer) / 1000));
+            } else {
+                end = true;
+            }
         }
         m_ArmSubsystem.runPID();
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return end;
     }
 
     @Override
