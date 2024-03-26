@@ -32,7 +32,7 @@ public class FiringSubsystem extends SubsystemBase {
     public double intakeKd = 0;
     public double intakeFF = 0;
 
-    public double shooterKp = 0;
+    public double shooterKp = .00001 * 5;
     public double shooterKi = 0;
     public double shooterKd = 0;
     public double shooterFF = 0.0002;
