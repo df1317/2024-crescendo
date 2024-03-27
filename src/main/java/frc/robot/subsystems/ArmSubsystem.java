@@ -25,7 +25,7 @@ public class ArmSubsystem extends SubsystemBase {
     // TO-DO make constants
     private boolean editablePIDConstants = false;
     public double Kp = 2.35 / 360;
-    public double Ki = 0.23 / 360;
+    public double Ki = 0.4 / 360;
     public double Kd = 0.2 / 360;
 
     public double Ks = 0.07;
@@ -82,6 +82,10 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Current Arm Angle", getAngle());
         SmartDashboard.putNumber("Desired Arm Angle", armSetPoint);
 
+        if (!limitSwitch.get()) {
+            encoder.reset();
+        }
+
         // get and set PID constants from SmartDashboard
         if (editablePIDConstants) {
             Kp = SmartDashboard.getNumber("Arm Kp", Kp) / 360;
@@ -123,13 +127,22 @@ public class ArmSubsystem extends SubsystemBase {
         }
     }
 
+    /**
+     * returns arm angle relitive to horizantal
+     * means horizantal is zero deg
+     */
+    public double getArmAngle() {
+        // arm rest three deg below horizantal
+        return encoder.get() * -360 + 3;
+    }
+
     /** convert from encoder rotation to shooter angle */
     public double getAngle() {
         // convert encoder rotation to encoder degrees
         // encoder reads negative when arm goes up
-        double degreesEncoder = (encoder.get() - Constants.ArmShooterConstants.Arm.encoderZero) * -360;
+
         // convert encoder degrees to shooter angle
-        return Constants.ArmShooterConstants.Arm.shooterArmOffset - degreesEncoder;
+        return Constants.ArmShooterConstants.Arm.shooterArmOffset - getArmAngle();
     }
 
     /** Convert from shooter angle to angle with which gravity acts on arm */
