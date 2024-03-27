@@ -51,7 +51,7 @@ public class LimelightSubsystem extends SubsystemBase {
         double distX = speakerX - botpose3d.getX();
         double distY = Constants.Field.speakerY - botpose3d.getY();
         // returning distance from speaker to robot
-        return Math.sqrt(distX * distX + distY * distY);
+        return (Math.sqrt(distX * distX + distY * distY));
     }
 
 }
