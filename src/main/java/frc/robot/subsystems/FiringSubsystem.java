@@ -25,7 +25,6 @@ public class FiringSubsystem extends SubsystemBase {
     public SparkPIDController shooterTopPID;
     public SparkPIDController shooterBottomPID;
     public SparkPIDController intakePID;
-    private boolean editablePIDConstants = true;
 
     public double intakeKp = 1;
     public double intakeKi = 0;
@@ -79,29 +78,6 @@ public class FiringSubsystem extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Shooter Bottom RPM:", shooterBottomEndcoder.getVelocity());
         SmartDashboard.putNumber("Shooter Top RPM:", shooterTopEndcoder.getVelocity());
-
-        SmartDashboard.putNumber("shooterKp", shooterKp);
-        SmartDashboard.putNumber("shooterKi", shooterKi);
-        SmartDashboard.putNumber("shooterKd", shooterKd);
-        SmartDashboard.putNumber("shooterFF", shooterFF);
-
-        if (editablePIDConstants) {
-            shooterKp = SmartDashboard.getNumber("shooterKp", shooterKp);
-            shooterKi = SmartDashboard.getNumber("shooterKi", shooterKi);
-            shooterKd = SmartDashboard.getNumber("shooterKd", shooterKd);
-            shooterFF = SmartDashboard.getNumber("shooterFF", shooterFF);
-
-            shooterTopPID.setP(shooterKp);
-            shooterTopPID.setI(shooterKi);
-            shooterTopPID.setD(shooterKd);
-            shooterTopPID.setFF(shooterFF);
-
-            shooterBottomPID.setP(shooterKp);
-            shooterBottomPID.setI(shooterKi);
-            shooterBottomPID.setD(shooterKd);
-            shooterBottomPID.setFF(shooterFF);
-        }
-
     }
 
     public void spinUpShooter(double speed) {
