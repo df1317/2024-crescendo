@@ -161,8 +161,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void runPID() {
         armVelocity = -pidController.calculate(getAngle(), armSetPoint);
 
-        double motorPower = -armFeedforward.calculate(Math.toRadians(calculateArmAngle(armSetPoint)),
-                armVelocity);
+        double motorPower = -armFeedforward.calculate(Math.toRadians(calculateArmAngle(armSetPoint)), armVelocity);
 
         spinUp(motorPower);
     }
