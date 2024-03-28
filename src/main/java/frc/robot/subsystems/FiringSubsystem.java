@@ -26,7 +26,7 @@ public class FiringSubsystem extends SubsystemBase {
     public SparkPIDController shooterBottomPID;
     public SparkPIDController intakePID;
 
-    public double intakeKp = 1;
+    public double intakeKp = 1.2;
     public double intakeKi = 0;
     public double intakeKd = 0;
     public double intakeFF = 0;
