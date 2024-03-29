@@ -38,7 +38,7 @@ public class SetArmValue extends Command {
     }
 
     private boolean getButton() {
-        return m_Joystick.button(1).getAsBoolean();
+        return m_Joystick.button(2).getAsBoolean();
     }
 
     public SetArmValue(ArmSubsystem ArmSub, CommandJoystick joystick) {
