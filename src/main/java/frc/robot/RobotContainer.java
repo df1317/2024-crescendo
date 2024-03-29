@@ -127,9 +127,8 @@ public class RobotContainer {
         true, m_XboxController);
     m_JoystickL.trigger().onTrue(autoFireNoteCommandFlywheel);
 
-    AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_JoystickL.button(4),
-        m_JoystickR.button(4));
-    m_JoystickL.button(4).or(m_JoystickR.button(4)).onTrue(autoAlignArm);
+    AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_Controllers);
+    (m_Controllers.leftAutoAlignArmButton).or(m_Controllers.rightAutoAlignArmButton).onTrue(autoAlignArm);
   }
 
   /**
