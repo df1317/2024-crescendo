@@ -109,7 +109,7 @@ public class RobotContainer {
   private void configureBindings() {
 
     Climb climbCommand = new Climb(m_ClimbingSubsystem, m_JoystickL, m_JoystickR);
-    m_JoystickL.button(3).or(m_JoystickR.button(3)).onTrue(climbCommand);
+    m_JoystickL.button(3).onTrue(climbCommand).or(m_JoystickR.button(3)).onTrue(climbCommand);
 
     SetArmValue setArmValueCommand = new SetArmValue(m_ArmSubsystem, m_JoystickL);
     m_JoystickL.button(2).or(m_JoystickR.button(2)).onTrue(setArmValueCommand);
