@@ -113,8 +113,8 @@ public class RobotContainer {
     Climb climbCommand = new Climb(m_ClimbingSubsystem, m_JoystickL, m_JoystickR);
     m_JoystickL.button(3).onTrue(climbCommand).or(m_JoystickR.button(3)).onTrue(climbCommand);
 
-    SetArmValue setArmValueCommand = new SetArmValue(m_ArmSubsystem, m_JoystickR);
-    m_JoystickR.button(2).onTrue(setArmValueCommand);
+    SetArmValue setArmValueCommand = new SetArmValue(m_ArmSubsystem, m_Controllers);
+    m_Controllers.manualArmAimButton.onTrue(setArmValueCommand);
 
     // AutoAlign autoAlignFloor = new AutoAlign(m_LimelightSubsystem,
     // m_SwerveSubsystem, m_XboxController.a());
@@ -122,10 +122,10 @@ public class RobotContainer {
 
     AutoFireNote autoFireNoteCommandIntake = new AutoFireNote(m_FiringSubsystem, true, false,
         m_XboxController);
-    m_JoystickR.trigger().onTrue(autoFireNoteCommandIntake);
+    m_Controllers.intakeButton.onTrue(autoFireNoteCommandIntake);
     AutoFireNote autoFireNoteCommandFlywheel = new AutoFireNote(m_FiringSubsystem, false,
         true, m_XboxController);
-    m_JoystickL.trigger().onTrue(autoFireNoteCommandFlywheel);
+    m_Controllers.shooterButton.onTrue(autoFireNoteCommandFlywheel);
 
     AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_Controllers);
     (m_Controllers.leftAutoAlignArmButton).or(m_Controllers.rightAutoAlignArmButton).onTrue(autoAlignArm);

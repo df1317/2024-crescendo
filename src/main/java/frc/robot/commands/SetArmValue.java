@@ -10,7 +10,6 @@ import frc.robot.subsystems.ArmSubsystem;
 
 public class SetArmValue extends Command {
     private ArmSubsystem m_ArmSubsystem;
-    private CommandJoystick m_Joystick;
     private Controllers m_Controllers;
 
     private double joystickMax = 1;
@@ -18,8 +17,8 @@ public class SetArmValue extends Command {
     private double joystickRange = joystickMax - joystickMin;
 
     private double getAxis() {
-        SmartDashboard.putNumber("arm joystick", m_Joystick.getRawAxis(Joystick.AxisType.kY.value));
-        return -m_Joystick.getRawAxis(Joystick.AxisType.kY.value);
+        SmartDashboard.putNumber("arm joystick", m_Controllers.rightJoystickPosistion());
+        return -m_Controllers.rightJoystickPosistion();
     }
 
     private double getJoystickArm() {
@@ -39,13 +38,9 @@ public class SetArmValue extends Command {
         return armAngle;
     }
 
-    private boolean getButton() {
-        return m_Joystick.button(2).getAsBoolean();
-    }
-
-    public SetArmValue(ArmSubsystem ArmSub, CommandJoystick joystick) {
+    public SetArmValue(ArmSubsystem ArmSub, Controllers m_Controllers) {
         m_ArmSubsystem = ArmSub;
-        m_Joystick = joystick;
+        this.m_Controllers = m_Controllers;
         addRequirements(ArmSub);
     }
 
@@ -63,7 +58,7 @@ public class SetArmValue extends Command {
 
     @Override
     public boolean isFinished() {
-        if (!getButton()) {
+        if (!m_Controllers.manualArmAimButtonState()) {
             m_ArmSubsystem.spinDown();
             return true;
         }
