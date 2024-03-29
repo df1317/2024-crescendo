@@ -41,9 +41,9 @@ public class RobotContainer {
 
   // Replace with CommandPS4C,ontroller or CommandJoystick if needed
   public final CommandXboxController m_XboxController = new CommandXboxController(0);
-  private final CommandJoystick m_JoystickL = new CommandJoystick(1);
-  private final CommandJoystick m_JoystickR = new CommandJoystick(2);
-  // private final CommandJoystick m_JoystickR = new CommandJoystick(1);
+  // private final CommandJoystick m_JoystickL = new CommandJoystick(1);
+  // private final CommandJoystick m_JoystickR = new CommandJoystick(2);
+  // // private final CommandJoystick m_JoystickR = new CommandJoystick(1);
 
   /* Drive Controls */
   // private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -52,8 +52,8 @@ public class RobotContainer {
 
   // private final Trigger robotCentric = new
   // Trigger(m_XboxController.leftBumper());
-  public final Trigger xButton = new Trigger(m_XboxController.x());
-  public final Trigger yButton = new Trigger(m_XboxController.y());
+  // public final Trigger xButton = new Trigger(m_XboxController.x());
+  // public final Trigger yButton = new Trigger(m_XboxController.y());
 
   /*
    * private final int translationAxis = Joystick.AxisType.kY.value; //left flight
@@ -110,8 +110,8 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    Climb climbCommand = new Climb(m_ClimbingSubsystem, m_JoystickL, m_JoystickR);
-    m_JoystickL.button(3).onTrue(climbCommand).or(m_JoystickR.button(3)).onTrue(climbCommand);
+    Climb climbCommand = new Climb(m_ClimbingSubsystem, m_Controllers);
+    m_Controllers.leftClimberButton.or(m_Controllers.rightClimberButton).onTrue(climbCommand);
 
     SetArmValue setArmValueCommand = new SetArmValue(m_ArmSubsystem, m_Controllers);
     m_Controllers.manualArmAimButton.onTrue(setArmValueCommand);
@@ -120,11 +120,10 @@ public class RobotContainer {
     // m_SwerveSubsystem, m_XboxController.a());
     // m_XboxController.a().onTrue(autoAlignFloor);
 
-    AutoFireNote autoFireNoteCommandIntake = new AutoFireNote(m_FiringSubsystem, true, false,
-        m_XboxController);
+    AutoFireNote autoFireNoteCommandIntake = new AutoFireNote(m_FiringSubsystem, true, false);
     m_Controllers.intakeButton.onTrue(autoFireNoteCommandIntake);
     AutoFireNote autoFireNoteCommandFlywheel = new AutoFireNote(m_FiringSubsystem, false,
-        true, m_XboxController);
+        true);
     m_Controllers.shooterButton.onTrue(autoFireNoteCommandFlywheel);
 
     AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_Controllers);
