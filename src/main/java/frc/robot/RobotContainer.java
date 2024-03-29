@@ -69,6 +69,7 @@ public class RobotContainer {
   private final LimelightSubsystem m_LimelightSubsystem = new LimelightSubsystem();
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
   private final ClimbingSubsystem m_ClimbingSubsystem = new ClimbingSubsystem();
+  private final Controllers m_Controllers = new Controllers();
 
   private final SendableChooser<Command> autoChooser;
 

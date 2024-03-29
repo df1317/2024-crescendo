@@ -5,11 +5,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants;
+import frc.robot.Controllers;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class SetArmValue extends Command {
     private ArmSubsystem m_ArmSubsystem;
     private CommandJoystick m_Joystick;
+    private Controllers m_Controllers;
 
     private double joystickMax = 1;
     private double joystickMin = 0;
