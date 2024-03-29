@@ -46,11 +46,12 @@ public class RobotContainer {
   // private final CommandJoystick m_JoystickR = new CommandJoystick(1);
 
   /* Drive Controls */
-  private final int translationAxis = XboxController.Axis.kLeftY.value;
-  private final int strafeAxis = XboxController.Axis.kLeftX.value;
-  private final int rotationAxis = XboxController.Axis.kRightX.value;
+  // private final int translationAxis = XboxController.Axis.kLeftY.value;
+  // private final int strafeAxis = XboxController.Axis.kLeftX.value;
+  // private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-  private final Trigger robotCentric = new Trigger(m_XboxController.leftBumper());
+  // private final Trigger robotCentric = new
+  // Trigger(m_XboxController.leftBumper());
   public final Trigger xButton = new Trigger(m_XboxController.x());
   public final Trigger yButton = new Trigger(m_XboxController.y());
 
@@ -80,10 +81,10 @@ public class RobotContainer {
     m_SwerveSubsystem.setDefaultCommand(
         new TeleopSwerve(
             m_SwerveSubsystem,
-            () -> m_XboxController.getRawAxis(translationAxis),
-            () -> m_XboxController.getRawAxis(strafeAxis),
-            () -> -m_XboxController.getRawAxis(rotationAxis),
-            () -> robotCentric.getAsBoolean()));
+            () -> m_Controllers.translationAxis(),
+            () -> m_Controllers.strafeAxis(),
+            () -> -m_Controllers.rotationAxis(),
+            () -> m_Controllers.robotCentricButtonState()));
 
     // Configure the trigger bindings
     configureBindings();
