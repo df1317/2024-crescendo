@@ -23,10 +23,10 @@ public class ArmSubsystem extends SubsystemBase {
             - Constants.ArmShooterConstants.Arm.EncoderMin;
 
     // TO-DO make constants
-    private boolean editablePIDConstants = false;
-    public double Kp = 2.35 / 360;
-    public double Ki = 0.4 / 360;
-    public double Kd = 0.2 / 360;
+    private boolean editablePIDConstants = true;
+    public double Kp = 3.5 / 360;
+    public double Ki = 0.1 / 360;
+    public double Kd = 0.1 / 360;
 
     public double Ks = 0.07;
     public double Kg = 0.13;
@@ -41,6 +41,14 @@ public class ArmSubsystem extends SubsystemBase {
     public ArmSubsystem() {
         pidController = new PIDController(Kp, Ki, Kd);
         armFeedforward = new ArmFeedforward(Ks, Kg, Kv);
+
+        SmartDashboard.putNumber("Arm Kp", Kp * 360);
+        SmartDashboard.putNumber("Arm Ki", Ki * 360);
+        SmartDashboard.putNumber("Arm Kd", Kd * 360);
+
+        SmartDashboard.putNumber("Arm Ks", Ks);
+        SmartDashboard.putNumber("Arm Kg", Kg);
+        SmartDashboard.putNumber("Arm Kv", Kv);
     }
 
     public void spinUp(double speed) {
@@ -153,8 +161,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void runPID() {
         armVelocity = -pidController.calculate(getAngle(), armSetPoint);
 
-        double motorPower = -armFeedforward.calculate(Math.toRadians(calculateArmAngle(armSetPoint)),
-                armVelocity);
+        double motorPower = -armFeedforward.calculate(Math.toRadians(calculateArmAngle(armSetPoint)), armVelocity);
 
         spinUp(motorPower);
     }

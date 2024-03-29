@@ -32,12 +32,18 @@ public class AutoAlignArm extends Command {
                 + Constants.ArmShooterConstants.Arm.armLenght
                         * Math.sin(60 - Constants.ArmShooterConstants.Arm.optimizedAngle);
         // calculate adjacent
-        double adjacent = m_LimelightSubsystem.getSpeakerDistance()
+        double speakerDist = m_LimelightSubsystem.getSpeakerDistance();
+        double adjacent = speakerDist
                 + Constants.ArmShooterConstants.Arm.armLenght
                         * Math.cos(60 - Constants.ArmShooterConstants.Arm.optimizedAngle);
         // return arctan
+        double adujustmentAngle = 0;
+        if (speakerDist > 2.25) {
+            adujustmentAngle = (speakerDist - 3) * 6.5 / (4 - 2.25);
+        }
+        double desAngle = Math.toDegrees(Math.atan2(opposite, adjacent));
 
-        return Math.toDegrees(Math.atan2(opposite, adjacent));
+        return desAngle + adujustmentAngle;
     }
 
     @Override

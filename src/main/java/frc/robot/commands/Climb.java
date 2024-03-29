@@ -13,8 +13,8 @@ public class Climb extends Command {
     private CommandJoystick m_JoystickR;
 
     private boolean getTrigger() {
-        return !m_JoystickL.trigger().getAsBoolean() && !m_JoystickR.trigger().getAsBoolean();
-    };
+        return !m_JoystickL.button(3).getAsBoolean() && !m_JoystickR.button(3).getAsBoolean();
+    }
 
     public Climb(ClimbingSubsystem climbingSub, CommandJoystick joystickL, CommandJoystick joystickR) {
         m_ClimbingSubsystem = climbingSub;
@@ -30,6 +30,7 @@ public class Climb extends Command {
 
     @Override
     public void execute() {
+        SmartDashboard.putBoolean("Climbing", true);
         if (m_JoystickL.getRawAxis(Joystick.AxisType.kY.value) != 0) {
             m_ClimbingSubsystem
                     .setLeftArm(m_JoystickL.getRawAxis(Joystick.AxisType.kY.value) * Constants.ClimberConstants.Speed);
