@@ -114,7 +114,7 @@ public class SwerveSubsystem extends SubsystemBase {
       // Use field-relative control if fieldRelative is true
       swerveModuleStates = Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
           ChassisSpeeds.fromFieldRelativeSpeeds(
-              translation.getX(), translation.getY(), rotation, getYaw()));
+              translation.getX(), translation.getY(), -rotation, getYaw()));
     } else {
       // Use robot-centric control if fieldRelative is false
       swerveModuleStates = Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(

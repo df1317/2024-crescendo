@@ -1,23 +1,22 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants;
+import frc.robot.Controllers;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class SetArmValue extends Command {
     private ArmSubsystem m_ArmSubsystem;
-    private CommandJoystick m_Joystick;
+    private Controllers m_Controllers;
 
     private double joystickMax = 1;
     private double joystickMin = 0;
     private double joystickRange = joystickMax - joystickMin;
 
     private double getAxis() {
-        SmartDashboard.putNumber("arm joystick", m_Joystick.getRawAxis(Joystick.AxisType.kY.value));
-        return -m_Joystick.getRawAxis(Joystick.AxisType.kY.value);
+        SmartDashboard.putNumber("arm joystick", m_Controllers.rightJoystickPosistion());
+        return -m_Controllers.rightJoystickPosistion();
     }
 
     private double getJoystickArm() {
@@ -37,13 +36,9 @@ public class SetArmValue extends Command {
         return armAngle;
     }
 
-    private boolean getButton() {
-        return m_Joystick.button(1).getAsBoolean();
-    }
-
-    public SetArmValue(ArmSubsystem ArmSub, CommandJoystick joystick) {
+    public SetArmValue(ArmSubsystem ArmSub, Controllers m_Controllers) {
         m_ArmSubsystem = ArmSub;
-        m_Joystick = joystick;
+        this.m_Controllers = m_Controllers;
         addRequirements(ArmSub);
     }
 
@@ -57,13 +52,11 @@ public class SetArmValue extends Command {
         double armAngle = getJoystickArm();
         m_ArmSubsystem.setAngle(armAngle);
         m_ArmSubsystem.runPID();
-        SmartDashboard.putNumber("Current Arm Angle", m_ArmSubsystem.getAngle());
-        SmartDashboard.putNumber("Desired Arm Angle", armAngle);
     }
 
     @Override
     public boolean isFinished() {
-        if (!getButton()) {
+        if (!m_Controllers.manualArmAimButtonState()) {
             m_ArmSubsystem.spinDown();
             return true;
         }

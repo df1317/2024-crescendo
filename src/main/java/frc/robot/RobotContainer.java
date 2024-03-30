@@ -7,14 +7,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.AutoAlignArm;
 import frc.robot.commands.AutoFireNote;
 import frc.robot.commands.Climb;
-import frc.robot.commands.FireNote;
+
 import frc.robot.commands.SetArmValue;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ArmSubsystem;
@@ -27,7 +25,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -45,18 +42,19 @@ public class RobotContainer {
 
   // Replace with CommandPS4C,ontroller or CommandJoystick if needed
   public final CommandXboxController m_XboxController = new CommandXboxController(0);
-  private final CommandJoystick m_JoystickL = new CommandJoystick(1);
-  private final CommandJoystick m_JoystickR = new CommandJoystick(2);
-  // private final CommandJoystick m_JoystickR = new CommandJoystick(1);
+  // private final CommandJoystick m_JoystickL = new CommandJoystick(1);
+  // private final CommandJoystick m_JoystickR = new CommandJoystick(2);
+  // // private final CommandJoystick m_JoystickR = new CommandJoystick(1);
 
   /* Drive Controls */
-  private final int translationAxis = XboxController.Axis.kLeftY.value;
-  private final int strafeAxis = XboxController.Axis.kLeftX.value;
-  private final int rotationAxis = XboxController.Axis.kRightX.value;
+  // private final int translationAxis = XboxController.Axis.kLeftY.value;
+  // private final int strafeAxis = XboxController.Axis.kLeftX.value;
+  // private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-  private final Trigger robotCentric = new Trigger(m_XboxController.leftBumper());
-  public final Trigger xButton = new Trigger(m_XboxController.x());
-  public final Trigger yButton = new Trigger(m_XboxController.y());
+  // private final Trigger robotCentric = new
+  // Trigger(m_XboxController.leftBumper());
+  // public final Trigger xButton = new Trigger(m_XboxController.x());
+  // public final Trigger yButton = new Trigger(m_XboxController.y());
 
   /*
    * private final int translationAxis = Joystick.AxisType.kY.value; //left flight
@@ -73,10 +71,9 @@ public class RobotContainer {
   private final LimelightSubsystem m_LimelightSubsystem = new LimelightSubsystem();
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
   private final ClimbingSubsystem m_ClimbingSubsystem = new ClimbingSubsystem();
+  private final Controllers m_Controllers = new Controllers();
 
   private final SendableChooser<Command> autoChooser;
-
-  AutoAlignArm autoAlignArm;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -85,10 +82,10 @@ public class RobotContainer {
     m_SwerveSubsystem.setDefaultCommand(
         new TeleopSwerve(
             m_SwerveSubsystem,
-            () -> m_XboxController.getRawAxis(translationAxis),
-            () -> m_XboxController.getRawAxis(strafeAxis),
-            () -> -m_XboxController.getRawAxis(rotationAxis),
-            () -> robotCentric.getAsBoolean()));
+            () -> m_Controllers.translationAxis(),
+            () -> m_Controllers.strafeAxis(),
+            () -> -m_Controllers.rotationAxis(),
+            () -> m_Controllers.robotCentricButtonState()));
 
     // Configure the trigger bindings
     configureBindings();
@@ -113,34 +110,12 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // reenabe once we finish tuning
-    // AutoAlign autoAlign = new AutoAlign(m_LimelightSubsystem, m_SwerveSubsystem, m_ArmSubsystem, m_XboxController);
-    // m_XboxController.button(Button.kA.value).onTrue(autoAlign);
 
-    // climb command should be able to work only if a button is pressed on the
-    // joystick and the trigger is pressed
-    Climb climbCommand = new Climb(m_ClimbingSubsystem, m_JoystickL, m_JoystickR);
-    SetArmValue setArmValueCommand = new SetArmValue(m_ArmSubsystem, m_JoystickL);
-    // setup two firing speeds
-    FireNote fireNoteCommandIntake = new FireNote(m_FiringSubsystem, m_JoystickL.button(5), m_JoystickL, true, false);
-    FireNote fireNoteCommandFlywheel = new FireNote(m_FiringSubsystem, m_JoystickR.button(5), m_JoystickR, false, true);
-    FireNote fireNoteCommandAll = new FireNote(m_FiringSubsystem, m_JoystickL.button(4), m_JoystickL, true, true);
-    m_JoystickL.button(5).onTrue(fireNoteCommandIntake);
-    m_JoystickR.button(5).onTrue(fireNoteCommandFlywheel);
-    m_JoystickL.button(4).onTrue(fireNoteCommandAll);
+    Climb climbCommand = new Climb(m_ClimbingSubsystem, m_Controllers);
+    m_Controllers.leftClimberButton.or(m_Controllers.rightClimberButton).onTrue(climbCommand);
 
-    (m_JoystickL.trigger().and(m_JoystickL.button(3))).or(m_JoystickR.trigger().and(m_JoystickR.button(3)))
-        .onTrue(climbCommand);
-    m_JoystickL.button(2).and(m_JoystickL.trigger()).onTrue(setArmValueCommand);
-
-    AutoFireNote autoFireNoteCommandIntake = new AutoFireNote(m_FiringSubsystem, m_JoystickL, m_JoystickR, true, false);
-    AutoFireNote autoFireNoteCommandFlywheel = new AutoFireNote(m_FiringSubsystem, m_JoystickL, m_JoystickR, false,
-        true);
-
-    m_JoystickL.button(6).onTrue(autoFireNoteCommandIntake);
-    m_JoystickR.button(6).onTrue(autoFireNoteCommandFlywheel);
-
-    autoAlignArm = new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_JoystickL.button(7));
+    SetArmValue setArmValueCommand = new SetArmValue(m_ArmSubsystem, m_Controllers);
+    m_Controllers.manualArmAimButton.onTrue(setArmValueCommand);
 
     m_JoystickL.button(7).onTrue(autoAlignArm);
 
@@ -148,6 +123,19 @@ public class RobotContainer {
     m_XboxController.b().onTrue(m_SwerveSubsystem.sysIdQuasistatic(Direction.kReverse));
     m_XboxController.x().onTrue(m_SwerveSubsystem.sysIdDynamic(Direction.kForward));
     m_XboxController.y().onTrue(m_SwerveSubsystem.sysIdDynamic(Direction.kReverse));
+
+    // AutoAlign autoAlignFloor = new AutoAlign(m_LimelightSubsystem,
+    // m_SwerveSubsystem, m_XboxController.a());
+    // m_XboxController.a().onTrue(autoAlignFloor);
+
+    AutoFireNote autoFireNoteCommandIntake = new AutoFireNote(m_FiringSubsystem, true, false);
+    m_Controllers.intakeButton.onTrue(autoFireNoteCommandIntake);
+    AutoFireNote autoFireNoteCommandFlywheel = new AutoFireNote(m_FiringSubsystem, false,
+        true);
+    m_Controllers.shooterButton.onTrue(autoFireNoteCommandFlywheel);
+
+    AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_Controllers);
+    (m_Controllers.leftAutoAlignArmButton).or(m_Controllers.rightAutoAlignArmButton).onTrue(autoAlignArm);
   }
 
   /**
@@ -166,10 +154,11 @@ public class RobotContainer {
 
   public void updateFiringSubsystem() {
     m_FiringSubsystem.logVals();
+    m_FiringSubsystem.periodic();
+
   }
 
   public void updateArmSubsystem() {
     m_ArmSubsystem.periodic();
-    SmartDashboard.putNumber("Desired Arm Angle", autoAlignArm.calculateShooterAngle());
   }
 }

@@ -2,8 +2,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import frc.robot.Controllers;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
@@ -11,12 +11,12 @@ public class AutoAlignArm extends Command {
 
     private LimelightSubsystem m_LimelightSubsystem;
     private ArmSubsystem m_ArmSubsystem;
-    private Trigger button;
+    private Controllers m_Controllers;
 
-    public AutoAlignArm(LimelightSubsystem LimelightSub, ArmSubsystem ArmSub, Trigger button) {
+    public AutoAlignArm(LimelightSubsystem LimelightSub, ArmSubsystem ArmSub, Controllers m_Controllers) {
         m_LimelightSubsystem = LimelightSub;
         m_ArmSubsystem = ArmSub;
-        this.button = button;
+        this.m_Controllers = m_Controllers;
         addRequirements(LimelightSub, ArmSub);
     }
 
@@ -30,35 +30,48 @@ public class AutoAlignArm extends Command {
                 + Constants.ArmShooterConstants.Arm.armLenght
                         * Math.sin(60 - Constants.ArmShooterConstants.Arm.optimizedAngle);
         // calculate adjacent
-        double adjacent = m_LimelightSubsystem.getSpeakerDistance()
+        double speakerDist = m_LimelightSubsystem.getSpeakerDistance();
+        double adjacent = speakerDist
                 + Constants.ArmShooterConstants.Arm.armLenght
                         * Math.cos(60 - Constants.ArmShooterConstants.Arm.optimizedAngle);
         // return arctan
+        double adujustmentAngle = 0;
+        if (speakerDist > 2.25) {
+            adujustmentAngle = (speakerDist - 3) * 6.5 / (4 - 2.25);
+        }
+        double desAngle = Math.toDegrees(Math.atan2(opposite, adjacent));
 
-        return Math.toDegrees(Math.atan2(opposite, adjacent));
+        return desAngle + adujustmentAngle;
     }
 
     @Override
     public void initialize() {
         SmartDashboard.putBoolean("Aut Moving Arm", true);
 
-        m_ArmSubsystem.setAngle(calculateShooterAngle());
-        m_ArmSubsystem.runPID();
+        if (m_LimelightSubsystem.hasTargets) {
+            m_ArmSubsystem.setAngle(calculateShooterAngle());
+            m_ArmSubsystem.runPID();
+        }
     }
 
     @Override
     public void execute() {
-
-        m_ArmSubsystem.setAngle(calculateShooterAngle());
-        m_ArmSubsystem.runPID();
-
-        SmartDashboard.putNumber("Current Arm Angle", m_ArmSubsystem.getAngle());
+        if (m_LimelightSubsystem.hasTargets) {
+            m_ArmSubsystem.setAngle(calculateShooterAngle());
+            m_ArmSubsystem.runPID();
+        }
     }
 
     @Override
     public boolean isFinished() {
         // Check if the button is released or if the specified duration has passed
-        return (!button.getAsBoolean());
+        if (!m_Controllers.rightAutoAlignArmButtonState() && !m_Controllers.leftAutoAlignArmButtonState()) {
+            return true;
+        } else if (!m_LimelightSubsystem.hasTargets) {
+            return true;
+        }
+
+        return false;
     }
 
     @Override
