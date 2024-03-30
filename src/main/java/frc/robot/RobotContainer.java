@@ -24,7 +24,6 @@ import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import com.pathplanner.lib.auto.AutoBuilder;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -41,7 +40,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   // Replace with CommandPS4C,ontroller or CommandJoystick if needed
-  public final CommandXboxController m_XboxController = new CommandXboxController(0);
+  // public final CommandXboxController m_XboxController = new
+  // CommandXboxController(0);
   // private final CommandJoystick m_JoystickL = new CommandJoystick(1);
   // private final CommandJoystick m_JoystickR = new CommandJoystick(2);
   // // private final CommandJoystick m_JoystickR = new CommandJoystick(1);
@@ -71,7 +71,7 @@ public class RobotContainer {
   private final LimelightSubsystem m_LimelightSubsystem = new LimelightSubsystem();
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
   private final ClimbingSubsystem m_ClimbingSubsystem = new ClimbingSubsystem();
-  private final Controllers m_Controllers = new Controllers();
+  public final Controllers m_Controllers = new Controllers();
 
   private final SendableChooser<Command> autoChooser;
 
@@ -117,12 +117,10 @@ public class RobotContainer {
     SetArmValue setArmValueCommand = new SetArmValue(m_ArmSubsystem, m_Controllers);
     m_Controllers.manualArmAimButton.onTrue(setArmValueCommand);
 
-    m_JoystickL.button(7).onTrue(autoAlignArm);
-
-    m_XboxController.a().onTrue(m_SwerveSubsystem.sysIdQuasistatic(Direction.kForward));
-    m_XboxController.b().onTrue(m_SwerveSubsystem.sysIdQuasistatic(Direction.kReverse));
-    m_XboxController.x().onTrue(m_SwerveSubsystem.sysIdDynamic(Direction.kForward));
-    m_XboxController.y().onTrue(m_SwerveSubsystem.sysIdDynamic(Direction.kReverse));
+    m_Controllers.m_XboxController.a().onTrue(m_SwerveSubsystem.sysIdQuasistatic(Direction.kForward));
+    m_Controllers.m_XboxController.b().onTrue(m_SwerveSubsystem.sysIdQuasistatic(Direction.kReverse));
+    m_Controllers.m_XboxController.x().onTrue(m_SwerveSubsystem.sysIdDynamic(Direction.kForward));
+    m_Controllers.m_XboxController.y().onTrue(m_SwerveSubsystem.sysIdDynamic(Direction.kReverse));
 
     // AutoAlign autoAlignFloor = new AutoAlign(m_LimelightSubsystem,
     // m_SwerveSubsystem, m_XboxController.a());
