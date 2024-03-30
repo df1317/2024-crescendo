@@ -2,8 +2,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import frc.robot.Controllers;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
@@ -11,14 +11,12 @@ public class AutoAlignArm extends Command {
 
     private LimelightSubsystem m_LimelightSubsystem;
     private ArmSubsystem m_ArmSubsystem;
-    private Trigger button0;
-    private Trigger button1;
+    private Controllers m_Controllers;
 
-    public AutoAlignArm(LimelightSubsystem LimelightSub, ArmSubsystem ArmSub, Trigger button0, Trigger button1) {
+    public AutoAlignArm(LimelightSubsystem LimelightSub, ArmSubsystem ArmSub, Controllers m_Controllers) {
         m_LimelightSubsystem = LimelightSub;
         m_ArmSubsystem = ArmSub;
-        this.button0 = button0;
-        this.button1 = button1;
+        this.m_Controllers = m_Controllers;
         addRequirements(LimelightSub, ArmSub);
     }
 
@@ -67,7 +65,7 @@ public class AutoAlignArm extends Command {
     @Override
     public boolean isFinished() {
         // Check if the button is released or if the specified duration has passed
-        if (!button0.getAsBoolean() && !button1.getAsBoolean()) {
+        if (!m_Controllers.rightAutoAlignArmButtonState() && !m_Controllers.leftAutoAlignArmButtonState()) {
             return true;
         } else if (!m_LimelightSubsystem.hasTargets) {
             return true;
