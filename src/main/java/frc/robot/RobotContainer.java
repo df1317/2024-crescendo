@@ -126,8 +126,10 @@ public class RobotContainer {
         true);
     m_Controllers.shooterButton.onTrue(autoFireNoteCommandFlywheel);
 
-    AmpAlign ampAlign = new AmpAlign(m_ArmSubsystem, m_JoystickL.button(5).or(m_JoystickR.button(5)));
-    m_JoystickL.button(5).or(m_JoystickR.button(5)).onTrue(ampAlign);
+    AmpAlign ampAlign = new AmpAlign(m_ArmSubsystem,
+        m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight));
+    m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight).onTrue(ampAlign);
+
     AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_Controllers);
     (m_Controllers.leftAutoAlignArmButton).or(m_Controllers.rightAutoAlignArmButton).onTrue(autoAlignArm);
   }
