@@ -16,9 +16,8 @@ public class AutoFireNote extends Command {
     private double timer;
 
     public AutoFireNote(FiringSubsystem FiringSub, boolean intake,
-            boolean shoot, CommandXboxController xboxController) {
+            boolean shoot) {
         m_FiringSubsystem = FiringSub;
-        this.xboxController = xboxController;
         this.intake = intake;
         this.shoot = shoot;
         addRequirements(FiringSub);

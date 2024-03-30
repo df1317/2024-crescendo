@@ -28,7 +28,7 @@ import frc.lib.SwerveModuleConstants;
 public final class Constants {
   public static final class Field {
     public static final double speakerY = 1.442593; // Field width posistion
-    public static final double speakerZ = 2; // Speaker height
+    public static final double speakerZ = 1.3; // Speaker height
 
     public static final double speakerXBlue = -8.308467; // Field length posistion
     public static final double speakerXRed = 8.308467; // Field lenght posistion
@@ -47,7 +47,7 @@ public final class Constants {
       public static final class Firing {
         public static final int MotorID0 = 01;
         public static final int MotorID1 = 02;
-        public static final double Speed = -0.75; // must be between -1 and 1
+        public static final double Speed = -3000; // must be between -1 and 1
         public static final double Duration = 1.25;
         public static final double ClearingDelay = 0.5;
       }
@@ -55,8 +55,9 @@ public final class Constants {
       public static final class Intake {
         public static final int angle = 66; // get by taking the angle of the arm at rest and adding the interior
                                             // shooter angle difference between arm and shooter
-        public static final double Speed = -0.5; // must be between -1 and 1
-        public static final double ShootSpeed = -1;
+        public static final double Speed = -0.6; // must be between -1 and 1
+        public static final double ShootSpeed = -1;// speed feeds into shooter affter shooter spins up durring shooter
+                                                   // command
         public static final int Timeout = 8;
       }
 
