@@ -26,8 +26,15 @@ public class AmpAlign extends Command {
         m_ArmSubsystem.setAngle(ampShootAngle);
     }
 
-    private double lerp(double a, double b, double t) {
-        return a + (b - a) * t;
+    private double lerp(double floor, double ceiling, double lerp) {
+        // clamp lerp from 0-1
+        if (lerp > 1) {
+            lerp = 1;
+        } else if (lerp < 0) {
+            lerp = 0;
+        }
+
+        return floor + (ceiling - floor) * lerp;
     }
 
     @Override
