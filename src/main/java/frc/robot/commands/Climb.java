@@ -1,25 +1,22 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.Constants;
+import frc.robot.Controllers;
 
 public class Climb extends Command {
     private ClimbingSubsystem m_ClimbingSubsystem;
-    private CommandJoystick m_JoystickL;
-    private CommandJoystick m_JoystickR;
+    private Controllers m_Controllers;
 
     private boolean getTrigger() {
-        return !m_JoystickL.trigger().getAsBoolean() && !m_JoystickR.trigger().getAsBoolean();
-    };
+        return !m_Controllers.rightClimberButtonState() && !m_Controllers.leftClimberButtonState();
+    }
 
-    public Climb(ClimbingSubsystem climbingSub, CommandJoystick joystickL, CommandJoystick joystickR) {
+    public Climb(ClimbingSubsystem climbingSub, Controllers m_Controllers) {
         m_ClimbingSubsystem = climbingSub;
-        m_JoystickL = joystickL;
-        m_JoystickR = joystickR;
+        this.m_Controllers = m_Controllers;
         addRequirements(climbingSub);
     }
 
@@ -30,15 +27,16 @@ public class Climb extends Command {
 
     @Override
     public void execute() {
-        if (m_JoystickL.getRawAxis(Joystick.AxisType.kY.value) != 0) {
+        SmartDashboard.putBoolean("Climbing", true);
+        if (m_Controllers.leftJoystickPosistion() != 0) {
             m_ClimbingSubsystem
-                    .setLeftArm(m_JoystickL.getRawAxis(Joystick.AxisType.kY.value) * Constants.ClimberConstants.Speed);
-            SmartDashboard.putNumber("Climbing Joystick Left", m_JoystickL.getRawAxis(Joystick.AxisType.kY.value));
+                    .setLeftArm(m_Controllers.leftJoystickPosistion() * Constants.ClimberConstants.Speed);
+            SmartDashboard.putNumber("Climbing Joystick Left", m_Controllers.leftJoystickPosistion());
         }
-        if (m_JoystickR.getRawAxis(Joystick.AxisType.kY.value) != 0) {
+        if (m_Controllers.rightJoystickPosistion() != 0) {
             m_ClimbingSubsystem
-                    .setRightArm(m_JoystickR.getRawAxis(Joystick.AxisType.kY.value) * Constants.ClimberConstants.Speed);
-            SmartDashboard.putNumber("Climbing Joystick Right", m_JoystickR.getRawAxis(Joystick.AxisType.kY.value));
+                    .setRightArm(m_Controllers.rightJoystickPosistion() * Constants.ClimberConstants.Speed);
+            SmartDashboard.putNumber("Climbing Joystick Right", m_Controllers.rightJoystickPosistion());
         }
     }
 
