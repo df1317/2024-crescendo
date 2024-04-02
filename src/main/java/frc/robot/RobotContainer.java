@@ -102,7 +102,7 @@ public class RobotContainer {
     // m_SwerveSubsystem, m_XboxController.a());
     // m_XboxController.a().onTrue(autoAlignFloor);
 
-    AutoFireNote autoFireNoteCommand = new AutoFireNote(m_FiringSubsystem, m_Controllers);
+    AutoFireNote autoFireNoteCommand = new AutoFireNote(m_FiringSubsystem, m_LimelightSubsystem, m_Controllers);
     m_Controllers.intakeButton.onTrue(autoFireNoteCommand);
     m_Controllers.shooterButton.onTrue(autoFireNoteCommand);
 
