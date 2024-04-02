@@ -36,21 +36,20 @@ public class AutoFireNote extends Command {
         this.m_Controllers = controllers;
         auto = DriverStation.isAutonomous();
 
-        if (auto) {
-            switch (state) {
-                case INTAKE:
-                    intake = true;
-                    break;
-                case SHOOT:
-                    shoot = true;
-                    break;
-            }
-        } else {
-            intake = m_Controllers.intakeButton.getAsBoolean();
-            shoot = m_Controllers.shooterButton.getAsBoolean();
-            autoAmp = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight).getAsBoolean();
-            manualAmp = m_Controllers.manualArmAimButton.getAsBoolean();
-            autoAmpTrigger = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight);
+        switch (state) {
+            case INTAKE:
+                intake = true;
+                break;
+            case SHOOT:
+                shoot = true;
+                break;
+            case TELEOP:
+                intake = m_Controllers.intakeButton.getAsBoolean();
+                shoot = m_Controllers.shooterButton.getAsBoolean();
+                autoAmp = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight).getAsBoolean();
+                manualAmp = m_Controllers.manualArmAimButton.getAsBoolean();
+                autoAmpTrigger = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight);
+                break;
         }
 
         addRequirements(FiringSub);
