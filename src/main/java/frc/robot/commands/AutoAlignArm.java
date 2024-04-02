@@ -13,6 +13,10 @@ public class AutoAlignArm extends Command {
     private ArmSubsystem m_ArmSubsystem;
     private Controllers m_Controllers;
 
+    private double slope = 2.5;
+    private double startDist = 2;
+    private double endDist = 3.6;
+
     public AutoAlignArm(LimelightSubsystem LimelightSub, ArmSubsystem ArmSub, Controllers m_Controllers) {
         m_LimelightSubsystem = LimelightSub;
         m_ArmSubsystem = ArmSub;
@@ -36,8 +40,8 @@ public class AutoAlignArm extends Command {
                         * Math.cos(60 - Constants.ArmShooterConstants.Arm.optimizedAngle);
         // return arctan
         double adujustmentAngle = 0;
-        if (speakerDist > 2.25) {
-            adujustmentAngle = (speakerDist - 3) * 6.5 / (4 - 2.25);
+        if (speakerDist > 2) {
+            adujustmentAngle = (speakerDist - startDist) * slope / (endDist - startDist);
         }
         double desAngle = Math.toDegrees(Math.atan2(opposite, adjacent));
 

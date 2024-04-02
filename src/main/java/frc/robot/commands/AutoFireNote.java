@@ -6,9 +6,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Controllers;
 import frc.robot.subsystems.FiringSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 
 public class AutoFireNote extends Command {
     private FiringSubsystem m_FiringSubsystem;
+    private LimelightSubsystem m_LimelightSubsystem;
     private CommandXboxController xboxController;
 
     private Controllers m_Controllers;
@@ -20,16 +22,21 @@ public class AutoFireNote extends Command {
     private boolean manualAmp;
 
     private double timer;
-    private double intakeSpeed = -0.6;
-    private double intakeAutoAmpSpeed = 1;
-    private double shooterSpeed = -3000;
+    private double intakeSpeed = -600;
+    private double intakeAutoAmpSpeed = 1000;
+    private double shooterSpeed = -3400;
     private double shooterManualAmp = -2000;
+
+    private double slope = -500;
+    private double startDist = 2;
+    private double endDist = 3.6;
 
     private double waitTime = 2000;
     private double shootTime = 1000;
 
-    public AutoFireNote(FiringSubsystem FiringSub, Controllers controllers) {
+    public AutoFireNote(FiringSubsystem FiringSub, LimelightSubsystem LimeLightSub, Controllers controllers) {
         m_FiringSubsystem = FiringSub;
+        m_LimelightSubsystem = LimeLightSub;
         this.m_Controllers = controllers;
 
         addRequirements(FiringSub);
@@ -52,7 +59,12 @@ public class AutoFireNote extends Command {
         } else if (autoAmp) {
             m_FiringSubsystem.spinUpIntake(intakeAutoAmpSpeed);
         } else if (shoot) {
-            m_FiringSubsystem.spinUpShooter(shooterSpeed);
+            double speakerDist = m_LimelightSubsystem.getSpeakerDistance();
+            double adujustmentSpeed = 0;
+            if (speakerDist > 2) {
+                adujustmentSpeed = (speakerDist - startDist) * slope / (endDist - startDist);
+            }
+            m_FiringSubsystem.spinUpShooter(shooterSpeed + adujustmentSpeed);
         } else if (intake) {
             m_FiringSubsystem.spinUpIntake(intakeSpeed);
         }
