@@ -36,8 +36,8 @@ public class AutoAlignArm extends Command {
                         * Math.cos(60 - Constants.ArmShooterConstants.Arm.optimizedAngle);
         // return arctan
         double adujustmentAngle = 0;
-        if (speakerDist > 2.25) {
-            adujustmentAngle = (speakerDist - 3) * 6.5 / (4 - 2.25);
+        if (speakerDist > 2) {
+            adujustmentAngle = (speakerDist - 3) * 6.5 / (4 - 2);
         }
         double desAngle = Math.toDegrees(Math.atan2(opposite, adjacent));
 
