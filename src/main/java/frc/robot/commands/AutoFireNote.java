@@ -16,12 +16,12 @@ public class AutoFireNote extends Command {
     private boolean intake;
     private boolean shoot;
     private boolean autoAmp;
-    private Trigger autoAmpTrigger = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight);
+    private Trigger autoAmpTrigger;
     private boolean manualAmp;
 
     private double timer;
     private double intakeSpeed = -0.6;
-    private double intakeAutoAmpSpeed = -1;
+    private double intakeAutoAmpSpeed = 1;
     private double shooterSpeed = -3000;
     private double shooterManualAmp = -2000;
 
@@ -32,17 +32,26 @@ public class AutoFireNote extends Command {
         m_FiringSubsystem = FiringSub;
         this.m_Controllers = controllers;
 
-        intake = m_Controllers.intakeButton.getAsBoolean();
-        shoot = m_Controllers.shooterButton.getAsBoolean();
-        autoAmp = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight).getAsBoolean();
-        manualAmp = m_Controllers.manualArmAimButton.getAsBoolean();
-
         addRequirements(FiringSub);
     }
 
     @Override
     public void initialize() {
-        SmartDashboard.putString("Auto Firing Status", "");
+        SmartDashboard.putString("Auto Firing Status", "Initializing");
+
+        intake = m_Controllers.intakeButton.getAsBoolean();
+        shoot = m_Controllers.shooterButton.getAsBoolean();
+        autoAmp = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight).getAsBoolean();
+        manualAmp = m_Controllers.manualArmAimButton.getAsBoolean();
+        autoAmpTrigger = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight);
+
+        xboxController = m_Controllers.m_XboxController;
+
+        System.out.println("intake: " + intake);
+        System.out.println("shoot: " + shoot);
+        System.out.println("autoAmp: " + autoAmp);
+        System.out.println("manualAmp: " + manualAmp);
+        System.out.println("autoAmpTrigger: " + autoAmpTrigger);
 
         if (manualAmp) {
             m_FiringSubsystem.spinUpShooter(shooterManualAmp);
@@ -68,19 +77,17 @@ public class AutoFireNote extends Command {
 
     @Override
     public boolean isFinished() {
-        if (manualAmp || shoot) {
+        if (manualAmp || (shoot && !autoAmp)) {
             if (System.currentTimeMillis() - timer > waitTime + shootTime) {
                 return true;
             }
-        } else if (intake) {
+        } else if (intake && !autoAmp) {
             if (!m_FiringSubsystem.noteSensor.get()) {
                 new Rumble(xboxController, 0.5, 1).schedule();
                 return true;
             }
-        } else if (autoAmp) {
-            if (!autoAmpTrigger.getAsBoolean()) {
-                return true;
-            }
+        } else if (autoAmp && !autoAmpTrigger.getAsBoolean()) {
+            return true;
         }
 
         return false;
