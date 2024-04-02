@@ -18,71 +18,76 @@ public class OnboardModuleState {
    * @param currentAngle The current module angle.
    */
   public static SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d currentAngle) {
-    double targetAngle = placeInAppropriate0To360Scope(currentAngle.getDegrees(), desiredState.angle.getDegrees());
-    double targetSpeed = desiredState.speedMetersPerSecond;
-    double delta = targetAngle - currentAngle.getDegrees(); // how far module needs to travel
+    // double targetAngle = placeInAppropriate0To360Scope(currentAngle.getDegrees(),
+    // desiredState.angle.getDegrees());
+    // double targetSpeed = desiredState.speedMetersPerSecond;
+    // double delta = targetAngle - currentAngle.getDegrees(); // how far module
+    // needs to travel
 
     double desAngle = desiredState.angle.getDegrees();
 
-    if(desAngle <= -90){
+    if (desAngle <= -90) {
       desiredState.speedMetersPerSecond = -desiredState.speedMetersPerSecond;
       desiredState.angle = Rotation2d.fromDegrees(90);
     }
-      
 
     return SwerveModuleState.optimize(desiredState, currentAngle);
 
   }
 
-  /**
-   * @param scopeReference Current Angle
-   * @param newAngle       Target Angle
-   * @return Closest angle within scope
-   */
-  private static double placeInAppropriate0To360Scope(double scopeReference, double newAngle) {
-    double lowerBound;
-    double upperBound;
-    double lowerOffset = scopeReference % 360; // what is the degrees in 0 to 360
-    // modulo (%) finds the remainder. for example, 450%360 is 90, 450˚ is the same
-    // as 90˚
+  // /**
+  // * @param scopeReference Current Angle
+  // * @param newAngle Target Angle
+  // * @return Closest angle within scope
+  // */
+  // private static double placeInAppropriate0To360Scope(double scopeReference,
+  // double newAngle) {
+  // double lowerBound;
+  // double upperBound;
+  // double lowerOffset = scopeReference % 360; // what is the degrees in 0 to 360
+  // // modulo (%) finds the remainder. for example, 450%360 is 90, 450˚ is the
+  // same
+  // // as 90˚
 
-    // modulos are funky and output differently between coding languages.
-    // the tldr of this https://en.wikipedia.org/wiki/Modulo wikipedia page is that
-    // i think loweroffset
-    // will be negative when scopeReference is negative.
-    // this varies by coding languages though and is dumb and annoying
-    if (lowerOffset >= 0) {
-      // lowerbound is now where the module is minus the offset. This creates the
-      // nearest "bound" of 360 degree ranges
-      lowerBound = scopeReference - lowerOffset;
-      upperBound = scopeReference + (360 - lowerOffset);
-      // upperbound is 360 higher than that
-    } else {
-      // if the angle is currently negative, we have to reverse the signs! yay!
-      // this is very painful to wrap my head around
-      upperBound = scopeReference - lowerOffset;
-      lowerBound = scopeReference - (360 + lowerOffset);
-    }
+  // // modulos are funky and output differently between coding languages.
+  // // the tldr of this https://en.wikipedia.org/wiki/Modulo wikipedia page is
+  // that
+  // // i think loweroffset
+  // // will be negative when scopeReference is negative.
+  // // this varies by coding languages though and is dumb and annoying
+  // if (lowerOffset >= 0) {
+  // // lowerbound is now where the module is minus the offset. This creates the
+  // // nearest "bound" of 360 degree ranges
+  // lowerBound = scopeReference - lowerOffset;
+  // upperBound = scopeReference + (360 - lowerOffset);
+  // // upperbound is 360 higher than that
+  // } else {
+  // // if the angle is currently negative, we have to reverse the signs! yay!
+  // // this is very painful to wrap my head around
+  // upperBound = scopeReference - lowerOffset;
+  // lowerBound = scopeReference - (360 + lowerOffset);
+  // }
 
-    // makes sure new angle calculated is between -360 and 360
-    while (newAngle < lowerBound) {
-      // keep addin 360 if not in bounds
-      newAngle += 360;
-    }
-    while (newAngle > upperBound) {
-      // keep subtractin it if its too high
-      newAngle -= 360;
-    }
+  // // makes sure new angle calculated is between -360 and 360
+  // while (newAngle < lowerBound) {
+  // // keep addin 360 if not in bounds
+  // newAngle += 360;
+  // }
+  // while (newAngle > upperBound) {
+  // // keep subtractin it if its too high
+  // newAngle -= 360;
+  // }
 
-    // but wait, there's more! remember, we can always just reverse a modules
-    // direction
-    // thus, if its greater than 180, we can subtract or add 180 to make it a lower
-    // angle to turn to
-    if (newAngle - scopeReference > 180) {
-      newAngle -= 360;
-    } else if (newAngle - scopeReference < -180) {
-      newAngle += 360;
-    }
-    return newAngle;
-  }
+  // // but wait, there's more! remember, we can always just reverse a modules
+  // // direction
+  // // thus, if its greater than 180, we can subtract or add 180 to make it a
+  // lower
+  // // angle to turn to
+  // if (newAngle - scopeReference > 180) {
+  // newAngle -= 360;
+  // } else if (newAngle - scopeReference < -180) {
+  // newAngle += 360;
+  // }
+  // return newAngle;
+  // }
 }

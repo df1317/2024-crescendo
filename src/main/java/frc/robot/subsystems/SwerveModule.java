@@ -81,13 +81,13 @@ public class SwerveModule {
         return new SwerveModulePosition(driveEncoder.getPosition(), getAngle());
     }
 
-    private double mod(double a, double b) {
-        double c = a % b;
-        if (c < 0) {
-            c += b;
-        }
-        return c;
-    }
+    // private double mod(double a, double b) {
+    // double c = a % b;
+    // if (c < 0) {
+    // c += b;
+    // }
+    // return c;
+    // }
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
         // Custom optimize command, since default WPILib optimize assumes continuous
