@@ -12,6 +12,18 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Aim Arm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Note"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "B_Leave"
