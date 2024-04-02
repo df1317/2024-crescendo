@@ -236,4 +236,10 @@ public final class Constants {
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
 
+  public static enum AutoShooterStates {
+    INTAKE,
+    SHOOT,
+    TELEOP
+  }
+
 }
