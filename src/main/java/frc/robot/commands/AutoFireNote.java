@@ -47,12 +47,6 @@ public class AutoFireNote extends Command {
 
         xboxController = m_Controllers.m_XboxController;
 
-        System.out.println("intake: " + intake);
-        System.out.println("shoot: " + shoot);
-        System.out.println("autoAmp: " + autoAmp);
-        System.out.println("manualAmp: " + manualAmp);
-        System.out.println("autoAmpTrigger: " + autoAmpTrigger);
-
         if (manualAmp) {
             m_FiringSubsystem.spinUpShooter(shooterManualAmp);
         } else if (autoAmp) {
