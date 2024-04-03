@@ -72,15 +72,15 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    autoChooser = AutoBuilder.buildAutoChooser();
-
-    SmartDashboard.putData("Auto Chooser", autoChooser);
-
     NamedCommands.registerCommand("Fire Note",
         new AutoFireNote(m_FiringSubsystem, m_Controllers, Constants.AutoShooterStates.SHOOT));
     NamedCommands.registerCommand("Intake",
         new AutoFireNote(m_FiringSubsystem, m_Controllers, Constants.AutoShooterStates.INTAKE));
     NamedCommands.registerCommand("Aim Arm", new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_Controllers));
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   /**

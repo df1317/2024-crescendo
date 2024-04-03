@@ -5,46 +5,93 @@
       "x": 1.28,
       "y": 5.57
     },
-    "rotation": 0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Aim Arm"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Aim Arm"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Fire Note"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Fire Note"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "B_MultiNotes1"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "B_MultiNotes1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Aim Arm"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Fire Note"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Aim Arm"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Fire Note"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {

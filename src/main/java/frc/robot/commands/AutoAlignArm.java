@@ -19,7 +19,7 @@ public class AutoAlignArm extends Command {
 
     private Timer timer = new Timer();
 
-    private double autoTime = 4;
+    private double autoTime = 5;
 
     public AutoAlignArm(LimelightSubsystem LimelightSub, ArmSubsystem ArmSub, Controllers m_Controllers) {
         m_LimelightSubsystem = LimelightSub;
