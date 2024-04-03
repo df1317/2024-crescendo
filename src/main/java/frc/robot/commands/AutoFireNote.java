@@ -1,11 +1,13 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Controllers;
 import frc.robot.subsystems.FiringSubsystem;
+import frc.robot.Constants;
 import frc.robot.subsystems.LimelightSubsystem;
 
 public class AutoFireNote extends Command {
@@ -20,6 +22,7 @@ public class AutoFireNote extends Command {
     private boolean autoAmp;
     private Trigger autoAmpTrigger;
     private boolean manualAmp;
+    private boolean auto;
 
     private double timer;
     private double intakeSpeed = -600;
@@ -34,10 +37,27 @@ public class AutoFireNote extends Command {
     private double waitTime = 2000;
     private double shootTime = 1000;
 
-    public AutoFireNote(FiringSubsystem FiringSub, LimelightSubsystem LimeLightSub, Controllers controllers) {
+    public AutoFireNote(FiringSubsystem FiringSub, LimelightSubsystem LimeLightSub, Controllers controllers, Constants.AutoShooterStates state) {
         m_FiringSubsystem = FiringSub;
         m_LimelightSubsystem = LimeLightSub;
         this.m_Controllers = controllers;
+        auto = DriverStation.isAutonomous();
+
+        switch (state) {
+            case INTAKE:
+                intake = true;
+                break;
+            case SHOOT:
+                shoot = true;
+                break;
+            case TELEOP:
+                intake = m_Controllers.intakeButton.getAsBoolean();
+                shoot = m_Controllers.shooterButton.getAsBoolean();
+                autoAmp = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight).getAsBoolean();
+                manualAmp = m_Controllers.manualArmAimButton.getAsBoolean();
+                autoAmpTrigger = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight);
+                break;
+        }
 
         addRequirements(FiringSub);
     }
@@ -89,7 +109,13 @@ public class AutoFireNote extends Command {
             }
         } else if (intake && !autoAmp) {
             if (!m_FiringSubsystem.noteSensor.get()) {
-                new Rumble(xboxController, 0.5, 1).schedule();
+                if (!auto) {
+                    new Rumble(xboxController, 0.5, 1).schedule();
+                }
+                return true;
+            }
+        } else if (!auto && autoAmp) {
+            if (!autoAmpTrigger.getAsBoolean()) {
                 return true;
             }
         } else if (autoAmp && !autoAmpTrigger.getAsBoolean()) {

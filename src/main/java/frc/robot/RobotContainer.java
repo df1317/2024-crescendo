@@ -21,6 +21,7 @@ import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -71,6 +72,12 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
+    NamedCommands.registerCommand("Fire Note",
+        new AutoFireNote(m_FiringSubsystem, m_Controllers, Constants.AutoShooterStates.SHOOT));
+    NamedCommands.registerCommand("Intake",
+        new AutoFireNote(m_FiringSubsystem, m_Controllers, Constants.AutoShooterStates.INTAKE));
+    NamedCommands.registerCommand("Aim Arm", new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_Controllers));
+
     autoChooser = AutoBuilder.buildAutoChooser();
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -102,7 +109,7 @@ public class RobotContainer {
     // m_SwerveSubsystem, m_XboxController.a());
     // m_XboxController.a().onTrue(autoAlignFloor);
 
-    AutoFireNote autoFireNoteCommand = new AutoFireNote(m_FiringSubsystem, m_LimelightSubsystem, m_Controllers);
+    AutoFireNote autoFireNoteCommand = new AutoFireNote(m_FiringSubsystem, m_LimelightSubsystem, m_Controllers, Constants.AutoShooterStates.TELEOP);
     m_Controllers.intakeButton.onTrue(autoFireNoteCommand);
     m_Controllers.shooterButton.onTrue(autoFireNoteCommand);
 
