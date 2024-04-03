@@ -8,9 +8,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Controllers;
 import frc.robot.subsystems.FiringSubsystem;
 import frc.robot.Constants;
+import frc.robot.subsystems.LimelightSubsystem;
 
 public class AutoFireNote extends Command {
     private FiringSubsystem m_FiringSubsystem;
+    private LimelightSubsystem m_LimelightSubsystem;
     private CommandXboxController xboxController;
 
     private Controllers m_Controllers;
@@ -23,16 +25,21 @@ public class AutoFireNote extends Command {
     private boolean auto;
 
     private double timer;
-    private double intakeSpeed = -0.6;
-    private double intakeAutoAmpSpeed = -1;
-    private double shooterSpeed = -3000;
+    private double intakeSpeed = -600;
+    private double intakeAutoAmpSpeed = 1000;
+    private double shooterSpeed = -3400;
     private double shooterManualAmp = -2000;
+
+    private double slope = -500;
+    private double startDist = 2;
+    private double endDist = 3.6;
 
     private double waitTime = 2000;
     private double shootTime = 1000;
 
-    public AutoFireNote(FiringSubsystem FiringSub, Controllers controllers, Constants.AutoShooterStates state) {
+    public AutoFireNote(FiringSubsystem FiringSub, LimelightSubsystem LimeLightSub, Controllers controllers, Constants.AutoShooterStates state) {
         m_FiringSubsystem = FiringSub;
+        m_LimelightSubsystem = LimeLightSub;
         this.m_Controllers = controllers;
         auto = DriverStation.isAutonomous();
 
@@ -57,14 +64,27 @@ public class AutoFireNote extends Command {
 
     @Override
     public void initialize() {
-        SmartDashboard.putString("Auto Firing Status", "");
+        SmartDashboard.putString("Auto Firing Status", "Initializing");
+
+        intake = m_Controllers.intakeButton.getAsBoolean();
+        shoot = m_Controllers.shooterButton.getAsBoolean();
+        autoAmp = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight).getAsBoolean();
+        manualAmp = m_Controllers.manualArmAimButton.getAsBoolean();
+        autoAmpTrigger = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight);
+
+        xboxController = m_Controllers.m_XboxController;
 
         if (manualAmp) {
             m_FiringSubsystem.spinUpShooter(shooterManualAmp);
         } else if (autoAmp) {
             m_FiringSubsystem.spinUpIntake(intakeAutoAmpSpeed);
         } else if (shoot) {
-            m_FiringSubsystem.spinUpShooter(shooterSpeed);
+            double speakerDist = m_LimelightSubsystem.getSpeakerDistance();
+            double adujustmentSpeed = 0;
+            if (speakerDist > 2) {
+                adujustmentSpeed = (speakerDist - startDist) * slope / (endDist - startDist);
+            }
+            m_FiringSubsystem.spinUpShooter(shooterSpeed + adujustmentSpeed);
         } else if (intake) {
             m_FiringSubsystem.spinUpIntake(intakeSpeed);
         }
@@ -83,11 +103,11 @@ public class AutoFireNote extends Command {
 
     @Override
     public boolean isFinished() {
-        if (manualAmp || shoot) {
+        if (manualAmp || (shoot && !autoAmp)) {
             if (System.currentTimeMillis() - timer > waitTime + shootTime) {
                 return true;
             }
-        } else if (intake) {
+        } else if (intake && !autoAmp) {
             if (!m_FiringSubsystem.noteSensor.get()) {
                 if (!auto) {
                     new Rumble(xboxController, 0.5, 1).schedule();
@@ -98,6 +118,8 @@ public class AutoFireNote extends Command {
             if (!autoAmpTrigger.getAsBoolean()) {
                 return true;
             }
+        } else if (autoAmp && !autoAmpTrigger.getAsBoolean()) {
+            return true;
         }
 
         return false;
