@@ -37,7 +37,8 @@ public class AutoFireNote extends Command {
     private double waitTime = 2000;
     private double shootTime = 1000;
 
-    public AutoFireNote(FiringSubsystem FiringSub, LimelightSubsystem LimeLightSub, Controllers controllers, Constants.AutoShooterStates state) {
+    public AutoFireNote(FiringSubsystem FiringSub, LimelightSubsystem LimeLightSub, Controllers controllers,
+            Constants.AutoShooterStates state) {
         m_FiringSubsystem = FiringSub;
         m_LimelightSubsystem = LimeLightSub;
         this.m_Controllers = controllers;
@@ -51,11 +52,6 @@ public class AutoFireNote extends Command {
                 shoot = true;
                 break;
             case TELEOP:
-                intake = m_Controllers.intakeButton.getAsBoolean();
-                shoot = m_Controllers.shooterButton.getAsBoolean();
-                autoAmp = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight).getAsBoolean();
-                manualAmp = m_Controllers.manualArmAimButton.getAsBoolean();
-                autoAmpTrigger = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight);
                 break;
         }
 
@@ -66,11 +62,13 @@ public class AutoFireNote extends Command {
     public void initialize() {
         SmartDashboard.putString("Auto Firing Status", "Initializing");
 
-        intake = m_Controllers.intakeButton.getAsBoolean();
-        shoot = m_Controllers.shooterButton.getAsBoolean();
-        autoAmp = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight).getAsBoolean();
-        manualAmp = m_Controllers.manualArmAimButton.getAsBoolean();
-        autoAmpTrigger = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight);
+        if (!auto) {
+            intake = m_Controllers.intakeButton.getAsBoolean();
+            shoot = m_Controllers.shooterButton.getAsBoolean();
+            autoAmp = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight).getAsBoolean();
+            manualAmp = m_Controllers.manualArmAimButton.getAsBoolean();
+            autoAmpTrigger = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight);
+        }
 
         xboxController = m_Controllers.m_XboxController;
 

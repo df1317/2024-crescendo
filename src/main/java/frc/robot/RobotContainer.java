@@ -73,9 +73,9 @@ public class RobotContainer {
     configureBindings();
 
     NamedCommands.registerCommand("Fire Note",
-        new AutoFireNote(m_FiringSubsystem, m_Controllers, Constants.AutoShooterStates.SHOOT));
+        new AutoFireNote(m_FiringSubsystem, m_LimelightSubsystem, m_Controllers, Constants.AutoShooterStates.SHOOT));
     NamedCommands.registerCommand("Intake",
-        new AutoFireNote(m_FiringSubsystem, m_Controllers, Constants.AutoShooterStates.INTAKE));
+        new AutoFireNote(m_FiringSubsystem, m_LimelightSubsystem, m_Controllers, Constants.AutoShooterStates.INTAKE));
     NamedCommands.registerCommand("Aim Arm", new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_Controllers));
 
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -109,7 +109,8 @@ public class RobotContainer {
     // m_SwerveSubsystem, m_XboxController.a());
     // m_XboxController.a().onTrue(autoAlignFloor);
 
-    AutoFireNote autoFireNoteCommand = new AutoFireNote(m_FiringSubsystem, m_LimelightSubsystem, m_Controllers, Constants.AutoShooterStates.TELEOP);
+    AutoFireNote autoFireNoteCommand = new AutoFireNote(m_FiringSubsystem, m_LimelightSubsystem, m_Controllers,
+        Constants.AutoShooterStates.TELEOP);
     m_Controllers.intakeButton.onTrue(autoFireNoteCommand);
     m_Controllers.shooterButton.onTrue(autoFireNoteCommand);
 
