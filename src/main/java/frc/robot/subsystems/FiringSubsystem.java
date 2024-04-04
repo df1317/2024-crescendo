@@ -95,8 +95,8 @@ public class FiringSubsystem extends SubsystemBase {
 
     public void spinUpIntake(double speed) {
         SmartDashboard.putString("Firing Status", "Spin up Intake");
-        // intake.set(speed);
-        intakePID.setReference(speed, ControlType.kVelocity);
+        intake.set(speed);
+        // intakePID.setReference(speed, ControlType.kVelocity);
     }
 
     public void spinDownIntake() {
