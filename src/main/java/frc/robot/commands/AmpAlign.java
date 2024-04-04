@@ -10,7 +10,7 @@ public class AmpAlign extends Command {
     private ArmSubsystem m_ArmSubsystem;
 
     private Trigger endButton;
-    private double ampShootAngle = 5;
+    private double ampShootAngle = -7;
     // private boolean buttonReleased = false;
     // private boolean end = false;
     // private double timer;
@@ -65,7 +65,7 @@ public class AmpAlign extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        m_ArmSubsystem.setAngle(65);
+        m_ArmSubsystem.setAngle(78);
         m_ArmSubsystem.spinDown();
     }
 }

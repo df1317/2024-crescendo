@@ -64,8 +64,8 @@ public final class Constants {
       public static final double Speed = 1; // must be between -1 and 1
       public static final int EncoderPort = 0;
       public static final double encoderZero = 0.928;
-      public static final double EncoderMin = 64; // toward the bumper in shooter degrees
-      public static final double EncoderMax = -25; // toward the top in shooter degrees
+      public static final double EncoderMin = 78; // toward the bumper in shooter degrees
+      public static final double EncoderMax = -13; // toward the top in shooter degrees
       public static final int LimitSwitchPort = 3;
       public static final double shooterArmOffset = 66; // degrees between ground and shooter
       public static final double jointHeight = 0.34; // in meters
