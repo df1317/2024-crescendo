@@ -103,7 +103,6 @@ public class FiringSubsystem extends SubsystemBase {
     public void logVals() {
         SmartDashboard.putNumber("shooter0 value", shooterTop.get());
         SmartDashboard.putNumber("shooter1 value", shooterBottom.get());
-        SmartDashboard.putNumber("intake value", intakeTop.getIntegralAccumulator());
         SmartDashboard.putBoolean("Note Sensor", noteSensor.get());
     }
 }
