@@ -10,7 +10,7 @@ public class AmpAlign extends Command {
     private ArmSubsystem m_ArmSubsystem;
 
     private Trigger endButton;
-    private double ampShootAngle = -3;
+    private double ampShootAngle = 18;
     // private boolean buttonReleased = false;
     // private boolean end = false;
     // private double timer;

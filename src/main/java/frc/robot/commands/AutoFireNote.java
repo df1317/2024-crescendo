@@ -30,7 +30,7 @@ public class AutoFireNote extends Command {
     private double shooterSpeed = -3400;
     private double shooterManualAmp = -2000;
 
-    private double slope = -500;
+    private double slope = -1000;
     private double startDist = 2;
     private double endDist = 3.6;
 
