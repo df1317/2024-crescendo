@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -18,7 +20,8 @@ public class FiringSubsystem extends SubsystemBase {
     public RelativeEncoder shooterBottomEndcoder;
     public RelativeEncoder intakeEncoder;
 
-    private CANSparkMax intake;
+    private TalonSRX intakeTop;
+    private TalonSRX intakeBottom;
 
     public DigitalInput noteSensor;
 
@@ -40,7 +43,8 @@ public class FiringSubsystem extends SubsystemBase {
         shooterTop = new CANSparkMax(3, MotorType.kBrushless);
         shooterBottom = new CANSparkMax(4, MotorType.kBrushless);
 
-        intake = new CANSparkMax(5, MotorType.kBrushless);
+        intakeTop = new TalonSRX(5);
+        intakeBottom = new TalonSRX(8);
 
         noteSensor = new DigitalInput(
                 Constants.ArmShooterConstants.ShooterCollectorConstants.NoteSensorPort);
@@ -49,14 +53,6 @@ public class FiringSubsystem extends SubsystemBase {
 
         shooterBottomEndcoder = shooterBottom.getEncoder();
         shooterTopEndcoder = shooterTop.getEncoder();
-
-        intakePID = intake.getPIDController();
-        intakeEncoder = intake.getEncoder();
-
-        intakePID.setP(intakeKp);
-        intakePID.setI(intakeKi);
-        intakePID.setD(intakeKd);
-        intakePID.setFF(intakeFF);
 
         shooterTopPID.setP(shooterKp);
         shooterTopPID.setI(shooterKi);
@@ -78,7 +74,6 @@ public class FiringSubsystem extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Shooter Bottom RPM:", shooterBottomEndcoder.getVelocity());
         SmartDashboard.putNumber("Shooter Top RPM:", shooterTopEndcoder.getVelocity());
-        SmartDashboard.putNumber("Intake RPM", intakeEncoder.getVelocity());
     }
 
     public void spinUpShooter(double speed) {
@@ -95,20 +90,20 @@ public class FiringSubsystem extends SubsystemBase {
 
     public void spinUpIntake(double speed) {
         SmartDashboard.putString("Firing Status", "Spin up Intake");
-        intake.set(speed);
-        // intakePID.setReference(speed, ControlType.kVelocity);
+        intakeTop.set(TalonSRXControlMode.PercentOutput, speed);
+        intakeBottom.set(TalonSRXControlMode.PercentOutput, speed);
     }
 
     public void spinDownIntake() {
         SmartDashboard.putString("Firing Status", "Spin down Intake");
-        // intake.stopMotor();
-        intakePID.setReference(0, ControlType.kVelocity);
+        intakeTop.set(TalonSRXControlMode.PercentOutput, 0);
+        intakeBottom.set(TalonSRXControlMode.PercentOutput, 0);
     }
 
     public void logVals() {
         SmartDashboard.putNumber("shooter0 value", shooterTop.get());
         SmartDashboard.putNumber("shooter1 value", shooterBottom.get());
-        SmartDashboard.putNumber("intake value", intake.get());
+        SmartDashboard.putNumber("intake value", intakeTop.getIntegralAccumulator());
         SmartDashboard.putBoolean("Note Sensor", noteSensor.get());
     }
 }

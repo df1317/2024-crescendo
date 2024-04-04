@@ -25,8 +25,8 @@ public class AutoFireNote extends Command {
     private boolean auto;
 
     private double timer;
-    private double intakeSpeed = -0.8;
-    private double intakeAutoAmpSpeed = 1;
+    private double intakeSpeed = -0.6;
+    private double intakeAutoAmpSpeed = 0.8;
     private double shooterSpeed = -3400;
     private double shooterManualAmp = -2000;
 
