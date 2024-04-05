@@ -21,6 +21,8 @@ public class Controllers {
     public final Trigger manualArmAimButton = new Trigger(m_JoystickR.button(2));
     public final Trigger ampAutoAlignLeft = new Trigger(m_JoystickL.button(5));
     public final Trigger ampAutoAlignRight = new Trigger(m_JoystickR.button(5));
+    public final Trigger shuttleLeft = new Trigger(m_JoystickL.button(6));
+    public final Trigger shuttleRight = new Trigger(m_JoystickR.button(6));
 
     public boolean shooterButtonState() {
         boolean shooterButtonState = shooterButton.getAsBoolean();
@@ -87,4 +89,7 @@ public class Controllers {
         return rotationAxis;
     }
 
+    public boolean shuttle() {
+        return shuttleLeft.or(shuttleRight).getAsBoolean();
+    }
 }
