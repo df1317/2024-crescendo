@@ -42,7 +42,6 @@ public class AutoFireNote extends Command {
         m_FiringSubsystem = FiringSub;
         m_LimelightSubsystem = LimeLightSub;
         this.m_Controllers = controllers;
-        auto = DriverStation.isAutonomous();
 
         switch (state) {
             case INTAKE:
@@ -61,6 +60,10 @@ public class AutoFireNote extends Command {
     @Override
     public void initialize() {
         SmartDashboard.putString("Auto Firing Status", "Initializing");
+        System.out.println("Initializing");
+
+        auto = DriverStation.isAutonomous();
+        System.out.println("AUTO:" + auto);
 
         if (!auto) {
             intake = m_Controllers.intakeButton.getAsBoolean();
@@ -69,6 +72,12 @@ public class AutoFireNote extends Command {
             manualAmp = m_Controllers.manualArmAimButton.getAsBoolean();
             autoAmpTrigger = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight);
         }
+
+        System.out.println("intake:" + intake);
+        System.out.println("shoot:" + shoot);
+        System.out.println("autoAmp:" + autoAmp);
+        System.out.println("manualAmp:" + manualAmp);
+        System.out.println("autoAmpTrigger:" + autoAmpTrigger);
 
         xboxController = m_Controllers.m_XboxController;
 
@@ -126,6 +135,7 @@ public class AutoFireNote extends Command {
     @Override
     public void end(boolean interrupted) {
         SmartDashboard.putString("Auto Firing Status", "Spinning Down");
+        System.out.println("Spinning Down");
 
         // Spin down motors
         m_FiringSubsystem.spinDownIntake();
