@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Robot Unblock"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "C_Leave"

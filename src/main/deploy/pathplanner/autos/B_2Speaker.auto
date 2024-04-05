@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Robot Unblock"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -92,12 +98,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "B_2Notes2"
           }
         }
       ]
