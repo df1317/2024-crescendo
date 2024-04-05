@@ -14,6 +14,7 @@ public class Shuttle extends Command {
     private double joystickMax = 1;
     private double joystickMin = 0;
     private double joystickRange = joystickMax - joystickMin;
+    private boolean left;
 
     public Shuttle(ArmSubsystem ArmSub, Controllers Controllers) {
         m_ArmSubsystem = ArmSub;
@@ -22,8 +23,10 @@ public class Shuttle extends Command {
     }
 
     private double getAxis() {
-        SmartDashboard.putNumber("arm joystick", m_Controllers.rightJoystickPosistion());
-        return -m_Controllers.rightJoystickPosistion();
+        SmartDashboard.putNumber("arm joystick",
+                left ? -m_Controllers.leftJoystickPosistion() : -m_Controllers.rightJoystickPosistion());
+        return left ? -m_Controllers.leftJoystickPosistion() : -m_Controllers.rightJoystickPosistion();
+
     }
 
     private double getJoystickArm() {
@@ -46,6 +49,7 @@ public class Shuttle extends Command {
     @Override
     public void initialize() {
         SmartDashboard.putBoolean("Aut Moving Arm", true);
+        left = m_Controllers.shuttleL();
     }
 
     @Override
@@ -57,7 +61,7 @@ public class Shuttle extends Command {
 
     @Override
     public boolean isFinished() {
-        return !m_Controllers.shuttle();
+        return !m_Controllers.shuttleR() || !m_Controllers.shuttleL();
     }
 
     @Override

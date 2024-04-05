@@ -89,7 +89,11 @@ public class Controllers {
         return rotationAxis;
     }
 
-    public boolean shuttle() {
-        return shuttleLeft.or(shuttleRight).getAsBoolean();
+    public boolean shuttleL() {
+        return shuttleLeft.getAsBoolean();
+    }
+
+    public boolean shuttleR() {
+        return shuttleRight.getAsBoolean();
     }
 }
