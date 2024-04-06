@@ -11,8 +11,9 @@ import frc.robot.commands.AmpAlign;
 import frc.robot.commands.AutoAlignArm;
 import frc.robot.commands.AutoFireNote;
 import frc.robot.commands.Climb;
-
+import frc.robot.commands.RobotUnblock;
 import frc.robot.commands.SetArmValue;
+import frc.robot.commands.Shuttle;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbingSubsystem;
@@ -77,6 +78,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Intake",
         new AutoFireNote(m_FiringSubsystem, m_LimelightSubsystem, m_Controllers, Constants.AutoShooterStates.INTAKE));
     NamedCommands.registerCommand("Aim Arm", new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_Controllers));
+    NamedCommands.registerCommand("Robot Unblock", new RobotUnblock(m_ClimbingSubsystem));
 
     autoChooser = AutoBuilder.buildAutoChooser();
 
@@ -104,6 +106,9 @@ public class RobotContainer {
 
     SetArmValue setArmValueCommand = new SetArmValue(m_ArmSubsystem, m_Controllers);
     m_Controllers.manualArmAimButton.onTrue(setArmValueCommand);
+
+    Shuttle shuttle = new Shuttle(m_ArmSubsystem, m_Controllers);
+    m_Controllers.shuttleLeft.or(m_Controllers.shuttleRight).onTrue(shuttle);
 
     // AutoAlign autoAlignFloor = new AutoAlign(m_LimelightSubsystem,
     // m_SwerveSubsystem, m_XboxController.a());

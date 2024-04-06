@@ -108,7 +108,7 @@ public class SwerveSubsystem extends SubsystemBase {
     } else {
       // Use robot-centric control if fieldRelative is false
       swerveModuleStates = Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
-          new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
+          new ChassisSpeeds(translation.getX(), translation.getY(), -rotation));
     }
 
     // Set to top speed if above top speed
