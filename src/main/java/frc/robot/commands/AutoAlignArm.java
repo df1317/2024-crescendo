@@ -35,24 +35,30 @@ public class AutoAlignArm extends Command {
      * calculate shooter angle from limelight
      * taking into account arm offset
      */
-    public double calculateShooterAngle() {
-        // calculate opposite
-        double opposite = Constants.Field.speakerZ - Constants.ArmShooterConstants.Arm.jointHeight
-                + Constants.ArmShooterConstants.Arm.armLenght
-                        * Math.sin(60 - Constants.ArmShooterConstants.Arm.optimizedAngle);
-        // calculate adjacent
-        double speakerDist = m_LimelightSubsystem.getSpeakerDistance();
-        double adjacent = speakerDist
-                + Constants.ArmShooterConstants.Arm.armLenght
-                        * Math.cos(60 - Constants.ArmShooterConstants.Arm.optimizedAngle);
-        // return arctan
-        double adujustmentAngle = 0;
-        if (speakerDist > 2) {
-            adujustmentAngle = (speakerDist - startDist) * slope / (endDist - startDist);
-        }
-        double desAngle = Math.toDegrees(Math.atan2(opposite, adjacent));
+    public double calculateShooterAngle(double robotDist) {
 
-        return desAngle + adujustmentAngle;
+        double returnAngle = 66;
+        int rise = 0;
+        int yintercept = 0;
+
+        if (m_LimelightSubsystem.hasTargets) {
+            if (robotDist > 1 && robotDist <= 1.5) {
+                double slope = rise / .5 * robotDist;
+                return slope * robotDist + yintercept;
+            } else if (robotDist > 1.5 && robotDist <= 2) {
+
+            } else if (robotDist > 2 && robotDist <= 2.5) {
+
+            } else if (robotDist > 2.5 && robotDist <= 3) {
+
+            }
+
+            else {
+                return 66;
+            }
+        }
+
+        return 0;
     }
 
     @Override
@@ -60,7 +66,7 @@ public class AutoAlignArm extends Command {
         SmartDashboard.putBoolean("Aut Moving Arm", true);
 
         if (m_LimelightSubsystem.hasTargets) {
-            m_ArmSubsystem.setAngle(calculateShooterAngle());
+            m_ArmSubsystem.setAngle(calculateShooterAngle(m_LimelightSubsystem.getSpeakerDistance()));
             timer.start();
             m_ArmSubsystem.runPID();
         }
@@ -69,7 +75,7 @@ public class AutoAlignArm extends Command {
     @Override
     public void execute() {
         if (m_LimelightSubsystem.hasTargets) {
-            m_ArmSubsystem.setAngle(calculateShooterAngle());
+            m_ArmSubsystem.setAngle(calculateShooterAngle(m_LimelightSubsystem.getSpeakerDistance()));
             m_ArmSubsystem.runPID();
         }
     }
