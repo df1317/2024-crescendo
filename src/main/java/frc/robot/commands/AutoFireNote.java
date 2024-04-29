@@ -12,7 +12,7 @@ import frc.robot.subsystems.LimelightSubsystem;
 
 public class AutoFireNote extends Command {
     private FiringSubsystem m_FiringSubsystem;
-    private LimelightSubsystem m_LimelightSubsystem;
+    // private LimelightSubsystem m_LimelightSubsystem;
     private CommandXboxController xboxController;
 
     private Controllers m_Controllers;
@@ -40,7 +40,7 @@ public class AutoFireNote extends Command {
     public AutoFireNote(FiringSubsystem FiringSub, LimelightSubsystem LimeLightSub, Controllers controllers,
             Constants.AutoShooterStates state) {
         m_FiringSubsystem = FiringSub;
-        m_LimelightSubsystem = LimeLightSub;
+        // m_LimelightSubsystem = LimeLightSub;
         this.m_Controllers = controllers;
 
         switch (state) {
@@ -86,11 +86,11 @@ public class AutoFireNote extends Command {
         } else if (autoAmp) {
             m_FiringSubsystem.spinUpIntake(intakeAutoAmpSpeed);
         } else if (shoot) {
-            double speakerDist = m_LimelightSubsystem.getSpeakerDistance();
+            // double speakerDist = m_LimelightSubsystem.getSpeakerDistance();
             double adujustmentSpeed = 0;
-            if (speakerDist > 2) {
-                adujustmentSpeed = (speakerDist - startDist) * slope / (endDist - startDist);
-            }
+            // if (speakerDist > 2) {
+            // adujustmentSpeed = (speakerDist - startDist) * slope / (endDist - startDist);
+            // }
             m_FiringSubsystem.spinUpShooter(shooterSpeed + adujustmentSpeed);
         } else if (intake) {
             m_FiringSubsystem.spinUpIntake(intakeSpeed);
