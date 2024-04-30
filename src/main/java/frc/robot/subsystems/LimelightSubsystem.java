@@ -4,14 +4,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.lib.LimelightHelpers;
+import frc.lib.LimelightHelpers.LimelightResults;
 import frc.robot.Constants;
 
 public class LimelightSubsystem extends SubsystemBase {
 
     public Pose3d botpose3d = new Pose3d();
-    private double[] botposeArray;
     public boolean hasTargets;
 
     /**
@@ -19,19 +18,10 @@ public class LimelightSubsystem extends SubsystemBase {
      * SmartDashboard.
      */
     public void updateLimelight() {
-        botposeArray = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose")
-                .getDoubleArray(new double[6]);
+        LimelightResults llresults = LimelightHelpers.getLatestResults("");
 
-        if (botposeArray.length >= 6) {
-            botpose3d = new Pose3d(botposeArray[0], botposeArray[1], botposeArray[2], new Rotation3d(
-                    Math.toRadians(botposeArray[3]), Math.toRadians(botposeArray[4]), Math.toRadians(botposeArray[5])));
-        }
-
-        if (NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 1) {
-            hasTargets = true;
-        } else {
-            hasTargets = false;
-        }
+        botpose3d = llresults.targetingResults.getBotPose3d();
+        hasTargets = llresults.targetingResults.targets_Fiducials.length > 0;
 
         // post to smart dashboard periodically
         SmartDashboard.putNumber("LimelightX", botpose3d.getX());
