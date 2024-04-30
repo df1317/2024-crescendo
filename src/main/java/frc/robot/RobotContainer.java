@@ -11,6 +11,7 @@ import frc.robot.commands.AmpAlign;
 import frc.robot.commands.AutoAlignArm;
 import frc.robot.commands.AutoFireNote;
 import frc.robot.commands.Climb;
+import frc.robot.commands.FixedAim;
 import frc.robot.commands.RobotUnblock;
 import frc.robot.commands.SetArmValue;
 import frc.robot.commands.Shuttle;
@@ -77,7 +78,7 @@ public class RobotContainer {
         new AutoFireNote(m_FiringSubsystem, m_LimelightSubsystem, m_Controllers, Constants.AutoShooterStates.SHOOT));
     NamedCommands.registerCommand("Intake",
         new AutoFireNote(m_FiringSubsystem, m_LimelightSubsystem, m_Controllers, Constants.AutoShooterStates.INTAKE));
-    NamedCommands.registerCommand("Aim Arm", new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_Controllers));
+    NamedCommands.registerCommand("Aim Arm", new FixedAim(m_ArmSubsystem, m_Controllers));
     NamedCommands.registerCommand("Robot Unblock", new RobotUnblock(m_ClimbingSubsystem));
 
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -123,7 +124,9 @@ public class RobotContainer {
         m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight));
     m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight).onTrue(ampAlign);
 
-    AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_Controllers);
+    AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem,
+        m_ArmSubsystem, m_Controllers);
+    FixedAim fixedAim = new FixedAim(m_ArmSubsystem, m_Controllers);
     (m_Controllers.leftAutoAlignArmButton).or(m_Controllers.rightAutoAlignArmButton).onTrue(autoAlignArm);
   }
 
