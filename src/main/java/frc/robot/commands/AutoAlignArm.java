@@ -18,10 +18,8 @@ public class AutoAlignArm extends Command {
     private boolean auto;
     private Timer timer = new Timer();
     private double autoTime = 5;
-
-    private double slope = 2.5;
-    private double startDist = 2;
-    private double endDist = 3.6;
+    private double dist[] = { 1, 1.5, 2, 2.5, 3, 3.5, 4 };
+    private double angles[] = { 65, 65, 65, 65, 65, 65, 65, 65 };
 
     public AutoAlignArm(LimelightSubsystem LimelightSub, ArmSubsystem ArmSub, Controllers m_Controllers) {
         m_LimelightSubsystem = LimelightSub;
@@ -36,29 +34,24 @@ public class AutoAlignArm extends Command {
      * taking into account arm offset
      */
     public double calculateShooterAngle(double robotDist) {
-
         double returnAngle = 66;
-        int rise = 0;
-        int yintercept = 0;
-
-        if (m_LimelightSubsystem.hasTargets) {
-            if (robotDist > 1 && robotDist <= 1.5) {
-                double slope = rise / .5 * robotDist;
-                return slope * robotDist + yintercept;
-            } else if (robotDist > 1.5 && robotDist <= 2) {
-
-            } else if (robotDist > 2 && robotDist <= 2.5) {
-
-            } else if (robotDist > 2.5 && robotDist <= 3) {
-
-            }
-
-            else {
-                return 66;
-            }
+        int rangeindex = 0;
+        if (!m_LimelightSubsystem.hasTargets) {// return a default angle if limelight can't find targets
+            return returnAngle;
         }
 
-        return 0;
+        for (int i = 0; i < dist.length - 1; i++) {// identify range your in
+            if (robotDist > dist[i] && robotDist <= dist[i + 1]) {// dido
+                rangeindex = i;
+                break;
+            }
+        }
+        // calculate slope
+        double slope = (angles[rangeindex + 1] - angles[rangeindex]) / (dist[rangeindex + 1] - dist[rangeindex]);
+        // finding the angle from distance
+        returnAngle = slope * (robotDist - dist[rangeindex]) + angles[rangeindex];
+
+        return returnAngle;
     }
 
     @Override
