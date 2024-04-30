@@ -126,8 +126,13 @@ public class RobotContainer {
 
     AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem,
         m_ArmSubsystem, m_Controllers);
+    ((m_Controllers.leftAutoAlignArmButton).or(m_Controllers.rightAutoAlignArmButton)).and(new Trigger(() -> {
+      return m_LimelightSubsystem.hasTargets;
+    })).onTrue(autoAlignArm);
     FixedAim fixedAim = new FixedAim(m_ArmSubsystem, m_Controllers);
-    (m_Controllers.leftAutoAlignArmButton).or(m_Controllers.rightAutoAlignArmButton).onTrue(autoAlignArm);
+    ((m_Controllers.leftAutoAlignArmButton).or(m_Controllers.rightAutoAlignArmButton)).and(new Trigger(() -> {
+      return !m_LimelightSubsystem.hasTargets;
+    })).onTrue(fixedAim);
   }
 
   /**
