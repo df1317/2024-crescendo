@@ -53,13 +53,13 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     // Runs the Scheduler. This is responsible for polling buttons, adding
     // newly-scheduled
-    // commands, running already-scheduled commands, removing finished or
+    // commands, running already-scheduled commands, removinpg finished or
     // interrupted commands,
     // and running subsystem periodic() methods. This must be called from the
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    // m_robotContainer.updateLimelight();
+    m_robotContainer.updateLimelight();
     m_robotContainer.updateFiringSubsystem();
     m_robotContainer.updateArmSubsystem();
   }

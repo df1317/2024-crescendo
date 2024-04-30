@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AmpAlign;
+import frc.robot.commands.AutoAlignArm;
 import frc.robot.commands.AutoFireNote;
 import frc.robot.commands.Climb;
 import frc.robot.commands.FixedAim;
@@ -123,10 +124,10 @@ public class RobotContainer {
         m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight));
     m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight).onTrue(ampAlign);
 
-    // AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem,
-    // m_ArmSubsystem, m_Controllers);
+    AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem,
+        m_ArmSubsystem, m_Controllers);
     FixedAim fixedAim = new FixedAim(m_ArmSubsystem, m_Controllers);
-    (m_Controllers.leftAutoAlignArmButton).or(m_Controllers.rightAutoAlignArmButton).onTrue(fixedAim);
+    (m_Controllers.leftAutoAlignArmButton).or(m_Controllers.rightAutoAlignArmButton).onTrue(autoAlignArm);
   }
 
   /**
