@@ -11,7 +11,7 @@ import frc.robot.Constants;
 public class LimelightSubsystem extends SubsystemBase {
 
     public Pose3d botpose3d = new Pose3d();
-    public boolean hasTargets;
+    public boolean hasTargets = false;
 
     /**
      * Updates the values of the Limelight camera and posts them to the
@@ -21,7 +21,7 @@ public class LimelightSubsystem extends SubsystemBase {
         LimelightResults llresults = LimelightHelpers.getLatestResults("");
 
         botpose3d = llresults.targetingResults.getBotPose3d();
-        hasTargets = llresults.targetingResults.targets_Fiducials.length > 0;
+        hasTargets = llresults.targetingResults.valid;
 
         // post to smart dashboard periodically
         SmartDashboard.putNumber("LimelightX", botpose3d.getX());
