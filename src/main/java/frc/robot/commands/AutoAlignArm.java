@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.Controllers;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -18,8 +17,10 @@ public class AutoAlignArm extends Command {
     private boolean auto;
     private Timer timer = new Timer();
     private double autoTime = 5;
-    private double dist[] = { 1, 1.5, 2, 2.5, 3, 3.5, 4 };
-    private double angles[] = { 65, 65, 65, 65, 65, 65, 65, 65 };
+    private double[] anglesObject[] = { { 1.3, 57.9845687018046 }, { 1.8, 45.12728090106311 },
+            { 2.3, 36.67748230546999 }, { 2.8, 31.190489836459587 }, { 3.3, 27.425550553393087 },
+            { 3.8, 24.798261095205206 }, { 4.3, 22.946273956000447 }, { 4.8, 21.64023629971671 },
+            { 5.3, 20.730476163818032 }, { 5.8, 20.11619166748816 } };
 
     public AutoAlignArm(LimelightSubsystem LimelightSub, ArmSubsystem ArmSub, Controllers m_Controllers) {
         m_LimelightSubsystem = LimelightSub;
@@ -34,24 +35,22 @@ public class AutoAlignArm extends Command {
      * taking into account arm offset
      */
     public double calculateShooterAngle(double robotDist) {
-        double returnAngle = 66;
-        int rangeindex = 0;
+        double defaultAngle = 66;
         if (!m_LimelightSubsystem.hasTargets) {// return a default angle if limelight can't find targets
-            return returnAngle;
+            return defaultAngle;
         }
 
-        for (int i = 0; i < dist.length - 1; i++) {// identify range your in
-            if (robotDist > dist[i] && robotDist <= dist[i + 1]) {// dido
-                rangeindex = i;
-                break;
+        for (int i = 0; i < anglesObject.length - 1; i++) {// identify range your in
+            if (robotDist > anglesObject[i][0] && robotDist <= anglesObject[i + 1][0]) {// dido
+                // calculate slope
+                double slope = (anglesObject[i][1] - anglesObject[i][1])
+                        / (anglesObject[i + 1][1] - anglesObject[i][1]);
+                // finding the angle from distance
+                return slope * (robotDist - anglesObject[i][1]) + anglesObject[i][1];
             }
         }
-        // calculate slope
-        double slope = (angles[rangeindex + 1] - angles[rangeindex]) / (dist[rangeindex + 1] - dist[rangeindex]);
-        // finding the angle from distance
-        returnAngle = slope * (robotDist - dist[rangeindex]) + angles[rangeindex];
 
-        return returnAngle;
+        return defaultAngle;
     }
 
     @Override
