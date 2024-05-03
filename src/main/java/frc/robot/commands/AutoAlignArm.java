@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.Controllers;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -18,8 +17,10 @@ public class AutoAlignArm extends Command {
     private boolean auto;
     private Timer timer = new Timer();
     private double autoTime = 5;
-    private double dist[] = { 1, 1.5, 2, 2.5, 3, 3.5, 4 };
-    private double angles[] = { 65, 65, 65, 65, 65, 65, 65, 65 };
+    private double dist[] = { 1.3, 1.8, 2.3, 2.8, 3.3, 3.8, 4.3, 4.8, 5.3, 5.8 };
+    private double angles[] = { 57.9845687018046, 45.12728090106311, 36.67748230546999, 31.190489836459587,
+            27.425550553393087, 24.798261095205206, 22.946273956000447, 21.64023629971671, 20.730476163818032,
+            20.11619166748816 };
 
     public AutoAlignArm(LimelightSubsystem LimelightSub, ArmSubsystem ArmSub, Controllers m_Controllers) {
         m_LimelightSubsystem = LimelightSub;
