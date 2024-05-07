@@ -8,12 +8,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.AutoAlign;
+import frc.robot.commands.AmpAlign;
 import frc.robot.commands.AutoAlignArm;
 import frc.robot.commands.AutoFireNote;
 import frc.robot.commands.Climb;
-
+import frc.robot.commands.FixedAim;
+import frc.robot.commands.RobotUnblock;
 import frc.robot.commands.SetArmValue;
+import frc.robot.commands.Shuttle;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimbingSubsystem;
@@ -23,6 +25,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -38,23 +41,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-
-  // Replace with CommandPS4C,ontroller or CommandJoystick if needed
-  // public final CommandXboxController m_XboxController = new
-  // CommandXboxController(0);
-  // private final CommandJoystick m_JoystickL = new CommandJoystick(1);
-  // private final CommandJoystick m_JoystickR = new CommandJoystick(2);
-  // // private final CommandJoystick m_JoystickR = new CommandJoystick(1);
-
-  /* Drive Controls */
-  // private final int translationAxis = XboxController.Axis.kLeftY.value;
-  // private final int strafeAxis = XboxController.Axis.kLeftX.value;
-  // private final int rotationAxis = XboxController.Axis.kRightX.value;
-
-  // private final Trigger robotCentric = new
-  // Trigger(m_XboxController.leftBumper());
-  // public final Trigger xButton = new Trigger(m_XboxController.x());
-  // public final Trigger yButton = new Trigger(m_XboxController.y());
 
   /*
    * private final int translationAxis = Joystick.AxisType.kY.value; //left flight
@@ -90,6 +76,13 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
+    NamedCommands.registerCommand("Fire Note",
+        new AutoFireNote(m_FiringSubsystem, m_LimelightSubsystem, m_Controllers, Constants.AutoShooterStates.SHOOT));
+    NamedCommands.registerCommand("Intake",
+        new AutoFireNote(m_FiringSubsystem, m_LimelightSubsystem, m_Controllers, Constants.AutoShooterStates.INTAKE));
+    NamedCommands.registerCommand("Aim Arm", new FixedAim(m_ArmSubsystem, m_Controllers));
+    NamedCommands.registerCommand("Robot Unblock", new RobotUnblock(m_ClimbingSubsystem));
+
     autoChooser = AutoBuilder.buildAutoChooser();
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -117,22 +110,25 @@ public class RobotContainer {
     SetArmValue setArmValueCommand = new SetArmValue(m_ArmSubsystem, m_Controllers);
     m_Controllers.manualArmAimButton.onTrue(setArmValueCommand);
 
-    m_Controllers.m_XboxController.a().onTrue(m_SwerveSubsystem.sysIdQuasistatic(Direction.kForward));
-    m_Controllers.m_XboxController.b().onTrue(m_SwerveSubsystem.sysIdQuasistatic(Direction.kReverse));
-    m_Controllers.m_XboxController.x().onTrue(m_SwerveSubsystem.sysIdDynamic(Direction.kForward));
-    m_Controllers.m_XboxController.y().onTrue(m_SwerveSubsystem.sysIdDynamic(Direction.kReverse));
+    Shuttle shuttle = new Shuttle(m_ArmSubsystem, m_Controllers);
+    m_Controllers.shuttleLeft.or(m_Controllers.shuttleRight).onTrue(shuttle);
 
     // AutoAlign autoAlignFloor = new AutoAlign(m_LimelightSubsystem,
     // m_SwerveSubsystem, m_XboxController.a());
     // m_XboxController.a().onTrue(autoAlignFloor);
 
-    AutoFireNote autoFireNoteCommandIntake = new AutoFireNote(m_FiringSubsystem, true, false);
-    m_Controllers.intakeButton.onTrue(autoFireNoteCommandIntake);
-    AutoFireNote autoFireNoteCommandFlywheel = new AutoFireNote(m_FiringSubsystem, false,
-        true);
-    m_Controllers.shooterButton.onTrue(autoFireNoteCommandFlywheel);
+    AutoFireNote autoFireNoteCommand = new AutoFireNote(m_FiringSubsystem, m_LimelightSubsystem, m_Controllers,
+        Constants.AutoShooterStates.TELEOP);
+    m_Controllers.intakeButton.onTrue(autoFireNoteCommand);
+    m_Controllers.shooterButton.onTrue(autoFireNoteCommand);
 
-    AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem, m_ArmSubsystem, m_Controllers);
+    AmpAlign ampAlign = new AmpAlign(m_ArmSubsystem,
+        m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight));
+    m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight).onTrue(ampAlign);
+
+    AutoAlignArm autoAlignArm = new AutoAlignArm(m_LimelightSubsystem,
+        m_ArmSubsystem, m_Controllers);
+    FixedAim fixedAim = new FixedAim(m_ArmSubsystem, m_Controllers);
     (m_Controllers.leftAutoAlignArmButton).or(m_Controllers.rightAutoAlignArmButton).onTrue(autoAlignArm);
   }
 

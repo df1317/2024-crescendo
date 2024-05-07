@@ -47,17 +47,11 @@ public final class Constants {
       public static final class Firing {
         public static final int MotorID0 = 01;
         public static final int MotorID1 = 02;
-        public static final double Speed = -3000; // must be between -1 and 1
-        public static final double Duration = 1.25;
-        public static final double ClearingDelay = 0.5;
       }
 
       public static final class Intake {
         public static final int angle = 66; // get by taking the angle of the arm at rest and adding the interior
                                             // shooter angle difference between arm and shooter
-        public static final double Speed = -0.6; // must be between -1 and 1
-        public static final double ShootSpeed = -1;// speed feeds into shooter affter shooter spins up durring shooter
-                                                   // command
         public static final int Timeout = 8;
       }
 
@@ -70,8 +64,8 @@ public final class Constants {
       public static final double Speed = 1; // must be between -1 and 1
       public static final int EncoderPort = 0;
       public static final double encoderZero = 0.928;
-      public static final double EncoderMin = 64; // toward the bumper in shooter degrees
-      public static final double EncoderMax = -25; // toward the top in shooter degrees
+      public static final double EncoderMin = 74; // toward the bumper in shooter degrees
+      public static final double EncoderMax = -17; // toward the top in shooter degrees
       public static final int LimitSwitchPort = 3;
       public static final double shooterArmOffset = 66; // degrees between ground and shooter
       public static final double jointHeight = 0.34; // in meters
@@ -240,6 +234,12 @@ public final class Constants {
     // Constraint for the motion profilied robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+  }
+
+  public static enum AutoShooterStates {
+    INTAKE,
+    SHOOT,
+    TELEOP
   }
 
 }

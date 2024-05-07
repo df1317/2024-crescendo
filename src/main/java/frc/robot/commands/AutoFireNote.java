@@ -1,72 +1,131 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Controllers;
 import frc.robot.subsystems.FiringSubsystem;
+import frc.robot.Constants;
+import frc.robot.subsystems.LimelightSubsystem;
 
 public class AutoFireNote extends Command {
     private FiringSubsystem m_FiringSubsystem;
+    private LimelightSubsystem m_LimelightSubsystem;
     private CommandXboxController xboxController;
+
+    private Controllers m_Controllers;
 
     private boolean intake;
     private boolean shoot;
+    private boolean autoAmp;
+    private Trigger autoAmpTrigger;
+    private boolean manualAmp;
+    private boolean auto;
 
     private double timer;
+    private double intakeSpeed = -0.6;
+    private double intakeAutoAmpSpeed = 0.8;
+    private double shooterSpeed = -3400;
+    private double shooterManualAmp = -2000;
 
-    public AutoFireNote(FiringSubsystem FiringSub, boolean intake,
-            boolean shoot) {
+    private double slope = -1000;
+    private double startDist = 2;
+    private double endDist = 3.6;
+
+    private double waitTime = 2000;
+    private double shootTime = 1000;
+
+    public AutoFireNote(FiringSubsystem FiringSub, LimelightSubsystem LimeLightSub, Controllers controllers,
+            Constants.AutoShooterStates state) {
         m_FiringSubsystem = FiringSub;
-        this.intake = intake;
-        this.shoot = shoot;
+        m_LimelightSubsystem = LimeLightSub;
+        this.m_Controllers = controllers;
+
+        switch (state) {
+            case INTAKE:
+                intake = true;
+                break;
+            case SHOOT:
+                shoot = true;
+                break;
+            case TELEOP:
+                break;
+        }
+
         addRequirements(FiringSub);
     }
 
     @Override
     public void initialize() {
-        SmartDashboard.putBoolean("Auto Firing Intake Status", intake);
-        SmartDashboard.putBoolean("Auto Firing Shooter Status", shoot);
+        SmartDashboard.putString("Auto Firing Status", "Initializing");
+        System.out.println("Initializing");
 
-        if (intake && m_FiringSubsystem.noteSensor.get()) {
-            m_FiringSubsystem.spinUpIntake(Constants.ArmShooterConstants.ShooterCollectorConstants.Intake.Speed);
+        auto = DriverStation.isAutonomous();
+        System.out.println("AUTO:" + auto);
 
-            timer = System.currentTimeMillis();
+        if (!auto) {
+            intake = m_Controllers.intakeButton.getAsBoolean();
+            shoot = m_Controllers.shooterButton.getAsBoolean();
+            autoAmp = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight).getAsBoolean();
+            manualAmp = m_Controllers.manualArmAimButton.getAsBoolean();
+            autoAmpTrigger = m_Controllers.ampAutoAlignLeft.or(m_Controllers.ampAutoAlignRight);
         }
-        if (shoot) {
-            m_FiringSubsystem.spinUpShooter(Constants.ArmShooterConstants.ShooterCollectorConstants.Firing.Speed);
 
-            timer = System.currentTimeMillis();
+        System.out.println("intake:" + intake);
+        System.out.println("shoot:" + shoot);
+        System.out.println("autoAmp:" + autoAmp);
+        System.out.println("manualAmp:" + manualAmp);
+        System.out.println("autoAmpTrigger:" + autoAmpTrigger);
+
+        xboxController = m_Controllers.m_XboxController;
+
+        if (manualAmp) {
+            m_FiringSubsystem.spinUpShooter(shooterManualAmp);
+        } else if (autoAmp) {
+            m_FiringSubsystem.spinUpIntake(intakeAutoAmpSpeed);
+        } else if (shoot) {
+            double speakerDist = m_LimelightSubsystem.getSpeakerDistance();
+            double adujustmentSpeed = 0;
+            if (speakerDist > 2) {
+                adujustmentSpeed = (speakerDist - startDist) * slope / (endDist - startDist);
+            }
+            m_FiringSubsystem.spinUpShooter(shooterSpeed + adujustmentSpeed);
+        } else if (intake) {
+            m_FiringSubsystem.spinUpIntake(intakeSpeed);
         }
+
+        timer = System.currentTimeMillis();
     }
 
     @Override
     public void execute() {
-        if (intake && !m_FiringSubsystem.noteSensor.get()) {
-            new Rumble(xboxController, 0.5, 1).schedule();
-        }
-
-        if (shoot && System.currentTimeMillis()
-                - timer > Constants.ArmShooterConstants.ShooterCollectorConstants.Firing.Duration
-                        * 1000) {
-            m_FiringSubsystem
-                    .spinUpIntake(Constants.ArmShooterConstants.ShooterCollectorConstants.Intake.ShootSpeed);
+        if (manualAmp || shoot) {
+            if (System.currentTimeMillis() - timer > waitTime) {
+                m_FiringSubsystem.spinUpIntake(intakeSpeed);
+            }
         }
     }
 
     @Override
     public boolean isFinished() {
-        // check for the beam break sensor to be tripped and the clearing delay to have
-        // been met
-
-        if (shoot && m_FiringSubsystem.noteSensor.get() && System.currentTimeMillis()
-                - timer > (Constants.ArmShooterConstants.ShooterCollectorConstants.Firing.ClearingDelay
-                        + Constants.ArmShooterConstants.ShooterCollectorConstants.Firing.Duration) * 1000) {
-            return true;
-        }
-
-        if (intake && !m_FiringSubsystem.noteSensor.get() || System.currentTimeMillis()
-                - timer > Constants.ArmShooterConstants.ShooterCollectorConstants.Intake.Timeout * 1000) {
+        if (manualAmp || (shoot && !autoAmp)) {
+            if (System.currentTimeMillis() - timer > waitTime + shootTime) {
+                return true;
+            }
+        } else if (intake && !autoAmp) {
+            if (!m_FiringSubsystem.noteSensor.get()) {
+                if (!auto) {
+                    new Rumble(xboxController, 0.5, 1).schedule();
+                }
+                return true;
+            }
+        } else if (!auto && autoAmp) {
+            if (!autoAmpTrigger.getAsBoolean()) {
+                return true;
+            }
+        } else if (autoAmp && !autoAmpTrigger.getAsBoolean()) {
             return true;
         }
 
@@ -75,8 +134,8 @@ public class AutoFireNote extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        SmartDashboard.putBoolean("Auto Firing Intake Status", false);
-        SmartDashboard.putBoolean("Auto Firing Shooter Status", false);
+        SmartDashboard.putString("Auto Firing Status", "Spinning Down");
+        System.out.println("Spinning Down");
 
         // Spin down motors
         m_FiringSubsystem.spinDownIntake();

@@ -5,12 +5,30 @@
       "x": 1.28,
       "y": 5.57
     },
-    "rotation": 0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Robot Unblock"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aim Arm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire Note"
+          }
+        },
         {
           "type": "path",
           "data": {

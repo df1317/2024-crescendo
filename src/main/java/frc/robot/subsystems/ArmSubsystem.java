@@ -141,7 +141,7 @@ public class ArmSubsystem extends SubsystemBase {
      */
     public double getArmAngle() {
         // arm rest three deg below horizantal
-        return encoder.get() * -360 + 3;
+        return encoder.get() * -360 - 8;
     }
 
     /** convert from encoder rotation to shooter angle */
