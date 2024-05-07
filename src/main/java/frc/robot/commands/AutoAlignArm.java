@@ -17,10 +17,9 @@ public class AutoAlignArm extends Command {
     private boolean auto;
     private Timer timer = new Timer();
     private double autoTime = 5;
-    private double dist[] = { 1.3, 1.8, 2.3, 2.8, 3.3, 3.8, 4.3, 4.8, 5.3, 5.8 };
-    private double angles[] = { 57.9845687018046, 45.12728090106311, 36.67748230546999, 31.190489836459587,
-            27.425550553393087, 24.798261095205206, 22.946273956000447, 21.64023629971671, 20.730476163818032,
-            20.11619166748816 };
+    private double dist[] = { 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5 };
+    private double angles[] = { 51, 43, 36, 33.5, 27.76, 24.15, 22.3681022328328,
+            21.235281363087378, 20.453772063328003 };
 
     public AutoAlignArm(LimelightSubsystem LimelightSub, ArmSubsystem ArmSub, Controllers m_Controllers) {
         m_LimelightSubsystem = LimelightSub;
@@ -35,7 +34,7 @@ public class AutoAlignArm extends Command {
      * taking into account arm offset
      */
     public double calculateShooterAngle(double robotDist) {
-        double returnAngle = 66;
+        double returnAngle = angles[0];
         int rangeindex = 0;
         if (!m_LimelightSubsystem.hasTargets) {// return a default angle if limelight can't find targets
             return returnAngle;
@@ -59,27 +58,23 @@ public class AutoAlignArm extends Command {
     public void initialize() {
         SmartDashboard.putBoolean("Aut Moving Arm", true);
 
-        if (m_LimelightSubsystem.hasTargets) {
-            m_ArmSubsystem.setAngle(calculateShooterAngle(m_LimelightSubsystem.getSpeakerDistance()));
-            timer.start();
-            m_ArmSubsystem.runPID();
-        }
+        m_ArmSubsystem.setAngle(calculateShooterAngle(m_LimelightSubsystem.getSpeakerDistance()));
+        timer.start();
+        m_ArmSubsystem.runPID();
+
     }
 
     @Override
     public void execute() {
-        if (m_LimelightSubsystem.hasTargets) {
-            m_ArmSubsystem.setAngle(calculateShooterAngle(m_LimelightSubsystem.getSpeakerDistance()));
-            m_ArmSubsystem.runPID();
-        }
+        m_ArmSubsystem.setAngle(calculateShooterAngle(m_LimelightSubsystem.getSpeakerDistance()));
+        m_ArmSubsystem.runPID();
+
     }
 
     @Override
     public boolean isFinished() {
         // Check if the button is released or if the specified duration has passed
-        if (!m_LimelightSubsystem.hasTargets) {
-            return true;
-        } else if (auto) {
+        if (auto) {
             return timer.hasElapsed(autoTime);
         } else if (!m_Controllers.rightAutoAlignArmButtonState() && !m_Controllers.leftAutoAlignArmButtonState()) {
             return true;
