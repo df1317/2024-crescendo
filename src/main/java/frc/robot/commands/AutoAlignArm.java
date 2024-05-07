@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.Controllers;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -18,10 +17,10 @@ public class AutoAlignArm extends Command {
     private boolean auto;
     private Timer timer = new Timer();
     private double autoTime = 5;
-
-    private double slope = 2.5;
-    private double startDist = 2;
-    private double endDist = 3.6;
+    private double dist[] = { 1.3, 1.8, 2.3, 2.8, 3.3, 3.8, 4.3, 4.8, 5.3, 5.8 };
+    private double angles[] = { 57.9845687018046, 45.12728090106311, 36.67748230546999, 31.190489836459587,
+            27.425550553393087, 24.798261095205206, 22.946273956000447, 21.64023629971671, 20.730476163818032,
+            20.11619166748816 };
 
     public AutoAlignArm(LimelightSubsystem LimelightSub, ArmSubsystem ArmSub, Controllers m_Controllers) {
         m_LimelightSubsystem = LimelightSub;
@@ -35,24 +34,25 @@ public class AutoAlignArm extends Command {
      * calculate shooter angle from limelight
      * taking into account arm offset
      */
-    public double calculateShooterAngle() {
-        // calculate opposite
-        double opposite = Constants.Field.speakerZ - Constants.ArmShooterConstants.Arm.jointHeight
-                + Constants.ArmShooterConstants.Arm.armLenght
-                        * Math.sin(60 - Constants.ArmShooterConstants.Arm.optimizedAngle);
-        // calculate adjacent
-        double speakerDist = m_LimelightSubsystem.getSpeakerDistance();
-        double adjacent = speakerDist
-                + Constants.ArmShooterConstants.Arm.armLenght
-                        * Math.cos(60 - Constants.ArmShooterConstants.Arm.optimizedAngle);
-        // return arctan
-        double adujustmentAngle = 0;
-        if (speakerDist > 2) {
-            adujustmentAngle = (speakerDist - startDist) * slope / (endDist - startDist);
+    public double calculateShooterAngle(double robotDist) {
+        double returnAngle = 66;
+        int rangeindex = 0;
+        if (!m_LimelightSubsystem.hasTargets) {// return a default angle if limelight can't find targets
+            return returnAngle;
         }
-        double desAngle = Math.toDegrees(Math.atan2(opposite, adjacent));
 
-        return desAngle + adujustmentAngle;
+        for (int i = 0; i < dist.length - 1; i++) {// identify range your in
+            if (robotDist > dist[i] && robotDist <= dist[i + 1]) {// dido
+                rangeindex = i;
+                break;
+            }
+        }
+        // calculate slope
+        double slope = (angles[rangeindex + 1] - angles[rangeindex]) / (dist[rangeindex + 1] - dist[rangeindex]);
+        // finding the angle from distance
+        returnAngle = slope * (robotDist - dist[rangeindex]) + angles[rangeindex];
+
+        return returnAngle;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class AutoAlignArm extends Command {
         SmartDashboard.putBoolean("Aut Moving Arm", true);
 
         if (m_LimelightSubsystem.hasTargets) {
-            m_ArmSubsystem.setAngle(calculateShooterAngle());
+            m_ArmSubsystem.setAngle(calculateShooterAngle(m_LimelightSubsystem.getSpeakerDistance()));
             timer.start();
             m_ArmSubsystem.runPID();
         }
@@ -69,7 +69,7 @@ public class AutoAlignArm extends Command {
     @Override
     public void execute() {
         if (m_LimelightSubsystem.hasTargets) {
-            m_ArmSubsystem.setAngle(calculateShooterAngle());
+            m_ArmSubsystem.setAngle(calculateShooterAngle(m_LimelightSubsystem.getSpeakerDistance()));
             m_ArmSubsystem.runPID();
         }
     }
