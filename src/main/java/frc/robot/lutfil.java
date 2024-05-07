@@ -28,7 +28,7 @@ public class lutfil {
     }
 
     public static void lutfils() {
-        double startDist = 1.3;
+        double startDist = 1.5;
         double offset = 0.5;
         double stopDist = 6;
 
@@ -40,9 +40,9 @@ public class lutfil {
             returableDist.add(startDist + i * offset);
 
         }
-        
 
         System.out.println(returableDist.toString().replace("[", "{").replace("]", "}"));
+        System.out.println(returableAngles.toString().replace("[", "{").replace("]", "}"));
 
     }
 
