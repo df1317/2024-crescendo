@@ -27,15 +27,35 @@ public class AutoFireNote extends Command {
     private double timer;
     private double intakeSpeed = -0.6;
     private double intakeAutoAmpSpeed = 0.8;
-    private double shooterSpeed = -3400;
     private double shooterManualAmp = -2000;
 
-    private double slope = -1000;
-    private double startDist = 2;
-    private double endDist = 3.6;
+    private double dist[] = { 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5 };
+    private double speeds[] = { -3000, -3200, -3400, -3500, -3500, -3500, -3500,
+            -3500, -3500 };
 
     private double waitTime = 2000;
     private double shootTime = 1000;
+
+    private double calculateShooterSpeed(double robotDist) {
+        double returnAngle = -3400;
+        int rangeindex = 0;
+        if (!m_LimelightSubsystem.hasTargets) {// return a default angle if limelight can't find targets
+            return returnAngle;
+        }
+
+        for (int i = 0; i < dist.length - 1; i++) {// identify range your in
+            if (robotDist > dist[i] && robotDist <= dist[i + 1]) {// dido
+                rangeindex = i;
+                break;
+            }
+        }
+        // calculate slope
+        double slope = (speeds[rangeindex + 1] - speeds[rangeindex]) / (dist[rangeindex + 1] - dist[rangeindex]);
+        // finding the angle from distance
+        returnAngle = slope * (robotDist - dist[rangeindex]) + speeds[rangeindex];
+
+        return returnAngle;
+    }
 
     public AutoFireNote(FiringSubsystem FiringSub, LimelightSubsystem LimeLightSub, Controllers controllers,
             Constants.AutoShooterStates state) {
@@ -87,11 +107,7 @@ public class AutoFireNote extends Command {
             m_FiringSubsystem.spinUpIntake(intakeAutoAmpSpeed);
         } else if (shoot) {
             double speakerDist = m_LimelightSubsystem.getSpeakerDistance();
-            double adujustmentSpeed = 0;
-            if (speakerDist > 2) {
-                adujustmentSpeed = (speakerDist - startDist) * slope / (endDist - startDist);
-            }
-            m_FiringSubsystem.spinUpShooter(shooterSpeed + adujustmentSpeed);
+            m_FiringSubsystem.spinUpShooter(calculateShooterSpeed(speakerDist));
         } else if (intake) {
             m_FiringSubsystem.spinUpIntake(intakeSpeed);
         }
