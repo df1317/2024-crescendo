@@ -21,7 +21,7 @@ public class LimelightSubsystem extends SubsystemBase {
         LimelightResults llresults = LimelightHelpers.getLatestResults("");
 
         botpose3d = llresults.targetingResults.getBotPose3d();
-        hasTargets = llresults.targetingResults.valid;
+        hasTargets = llresults.targetingResults.targets_Fiducials.length > 0;
 
         // post to smart dashboard periodically
         SmartDashboard.putNumber("LimelightX", botpose3d.getX());
