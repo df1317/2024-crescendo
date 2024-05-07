@@ -34,7 +34,7 @@ public class AutoAlignArm extends Command {
      * taking into account arm offset
      */
     public double calculateShooterAngle(double robotDist) {
-        double returnAngle = 66;
+        double returnAngle = angles[0];
         int rangeindex = 0;
         if (!m_LimelightSubsystem.hasTargets) {// return a default angle if limelight can't find targets
             return returnAngle;
@@ -58,27 +58,23 @@ public class AutoAlignArm extends Command {
     public void initialize() {
         SmartDashboard.putBoolean("Aut Moving Arm", true);
 
-        if (m_LimelightSubsystem.hasTargets) {
-            m_ArmSubsystem.setAngle(calculateShooterAngle(m_LimelightSubsystem.getSpeakerDistance()));
-            timer.start();
-            m_ArmSubsystem.runPID();
-        }
+        m_ArmSubsystem.setAngle(calculateShooterAngle(m_LimelightSubsystem.getSpeakerDistance()));
+        timer.start();
+        m_ArmSubsystem.runPID();
+
     }
 
     @Override
     public void execute() {
-        if (m_LimelightSubsystem.hasTargets) {
-            m_ArmSubsystem.setAngle(calculateShooterAngle(m_LimelightSubsystem.getSpeakerDistance()));
-            m_ArmSubsystem.runPID();
-        }
+        m_ArmSubsystem.setAngle(calculateShooterAngle(m_LimelightSubsystem.getSpeakerDistance()));
+        m_ArmSubsystem.runPID();
+
     }
 
     @Override
     public boolean isFinished() {
         // Check if the button is released or if the specified duration has passed
-        if (!m_LimelightSubsystem.hasTargets) {
-            return true;
-        } else if (auto) {
+        if (auto) {
             return timer.hasElapsed(autoTime);
         } else if (!m_Controllers.rightAutoAlignArmButtonState() && !m_Controllers.leftAutoAlignArmButtonState()) {
             return true;

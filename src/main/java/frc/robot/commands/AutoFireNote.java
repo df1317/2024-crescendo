@@ -37,7 +37,7 @@ public class AutoFireNote extends Command {
     private double shootTime = 1000;
 
     private double calculateShooterSpeed(double robotDist) {
-        double returnAngle = -3400;
+        double returnAngle = speeds[0];
         int rangeindex = 0;
         if (!m_LimelightSubsystem.hasTargets) {// return a default angle if limelight can't find targets
             return returnAngle;
