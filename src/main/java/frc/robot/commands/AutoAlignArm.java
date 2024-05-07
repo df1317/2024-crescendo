@@ -26,7 +26,6 @@ public class AutoAlignArm extends Command {
         m_ArmSubsystem = ArmSub;
         this.m_Controllers = m_Controllers;
         addRequirements(LimelightSub, ArmSub);
-        auto = DriverStation.isAutonomous();
     }
 
     /**
@@ -56,6 +55,7 @@ public class AutoAlignArm extends Command {
 
     @Override
     public void initialize() {
+        auto = DriverStation.isAutonomous();
         SmartDashboard.putBoolean("Aut Moving Arm", true);
 
         m_ArmSubsystem.setAngle(calculateShooterAngle(m_LimelightSubsystem.getSpeakerDistance()));
