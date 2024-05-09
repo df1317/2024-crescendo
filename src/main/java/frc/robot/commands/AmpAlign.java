@@ -65,7 +65,7 @@ public class AmpAlign extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        m_ArmSubsystem.setAngle(78);
+        m_ArmSubsystem.setAngle(76);
         m_ArmSubsystem.spinDown();
     }
 }
