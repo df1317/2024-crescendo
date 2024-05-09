@@ -28,8 +28,8 @@ public class SwerveModule {
     private Rotation2d lastAngle;
     private Rotation2d angleOffset;
 
-    private CANSparkMax angleMotor;
-    private CANSparkMax driveMotor;
+    public CANSparkMax angleMotor;
+    public CANSparkMax driveMotor;
 
     private RelativeEncoder driveEncoder;
     private RelativeEncoder integratedAngleEncoder;
@@ -55,6 +55,7 @@ public class SwerveModule {
         // this.?
         /* Angle Encoder Config */
         angleEncoder = new CANcoder(moduleConstants.cancoderID);
+
         // configAngleEncoder();
 
         /* Angle Motor Config */
@@ -68,6 +69,8 @@ public class SwerveModule {
         /* Drive Motor Config */
         driveMotor = new CANSparkMax(moduleConstants.driveMotorID, MotorType.kBrushless);
         driveEncoder = driveMotor.getEncoder();
+        driveEncoder.setMeasurementPeriod(8);
+        driveEncoder.setAverageDepth(2);
         driveController = driveMotor.getPIDController();
 
         lastAngle = getState().angle;
@@ -120,7 +123,7 @@ public class SwerveModule {
         }
     }
 
-    private void setAngle(SwerveModuleState desiredState) {
+    public void setAngle(SwerveModuleState desiredState) {
         // Prevent rotating module if speed is less then 1%. Prevents Jittering.
         // the ? and : are a shorthand for an if-else loop
         Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.SwerveConstants.maxSpeed * 0.01))
@@ -146,5 +149,4 @@ public class SwerveModule {
         // documentation says it should be
         // rotations
     }
-
 }

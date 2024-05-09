@@ -20,9 +20,15 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -32,6 +38,8 @@ public class SwerveSubsystem extends SubsystemBase {
   private SwerveModule[] mSwerveMods;
 
   private Field2d field;
+
+  SysIdRoutine routine;
 
   /** Creates a new SwerveSubsystem. */
   public SwerveSubsystem() {
@@ -47,6 +55,8 @@ public class SwerveSubsystem extends SubsystemBase {
         new SwerveModule(3, Constants.SwerveConstants.Mod3.constants)
     };
 
+    routine = new SysIdRoutine(new SysIdRoutine.Config(),
+        new SysIdRoutine.Mechanism(this::voltageDrive, this::logMotors, this));
     // creates new swerve odometry (odometry is where the robot is on the field)
     swerveOdometry = new SwerveDriveOdometry(Constants.SwerveConstants.swerveKinematics, getYaw(), getPositions());
 
@@ -62,10 +72,10 @@ public class SwerveSubsystem extends SubsystemBase {
         this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(1.0, 0.0, 0.0), // Translation PID constants
-            new PIDConstants(1.0, 0.0, 0.0), // Rotation PID constants
-            4.5, // Max module speed, in m/s
-            0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+            new PIDConstants(0.0, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(0.1, 0.0, 0.0), // Rotation PID constants
+            1.5, // Max module speed, in m/s
+            0.41, // Drive base radius in meters. Distance from robot center to furthest module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
         ),
         () -> {
@@ -211,4 +221,30 @@ public class SwerveSubsystem extends SubsystemBase {
     return Constants.SwerveConstants.swerveKinematics.toChassisSpeeds(states);
   }
 
+  private void voltageDrive(Measure<Voltage> voltage) {
+    System.out.println("Voltage: " + voltage.magnitude());
+
+    for (SwerveModule mod : mSwerveMods) {
+      mod.driveMotor.setVoltage(voltage.magnitude());
+      mod.setAngle(new SwerveModuleState(0.2, Rotation2d.fromDegrees(0)));
+    }
+  }
+
+  private void logMotors(SysIdRoutineLog log) {
+    int i = 0;
+    for (SwerveModule mod : mSwerveMods) {
+      log.motor("motor" + i).voltage(Units.Volts.of(mod.driveMotor.getBusVoltage()))
+          .angularPosition(Units.Rotations.of(mod.driveMotor.getEncoder().getPosition()))
+          .angularVelocity(Units.RPM.of(mod.driveMotor.getEncoder().getVelocity()));
+      i++;
+    }
+  }
+
+  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return routine.quasistatic(direction);
+  }
+
+  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    return routine.dynamic(direction);
+  }
 }
