@@ -22,7 +22,6 @@ public class ArmSubsystem extends SubsystemBase {
     public static final double armRange = Constants.ArmShooterConstants.Arm.EncoderMax
             - Constants.ArmShooterConstants.Arm.EncoderMin;
 
-    // TO-DO make constants
     private boolean editablePIDConstants = true;
     public double Kp = 3.6 / 360;
     public double Ki = 0.1 / 360;

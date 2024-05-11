@@ -70,7 +70,7 @@ public class TeleopSwerve extends Command {
         // whether or not in field centric mode
         !m_robotCentricSupplier.getAsBoolean(),
         // open loop control
-        true);
+        false);
 
   }
 
