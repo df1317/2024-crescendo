@@ -9,7 +9,7 @@ public class Shuttle extends Command {
 
     private ArmSubsystem m_ArmSubsystem;
     private Controllers m_Controllers;
-    private double armAngle = 42;
+    private double armAngle = 55;
 
     public Shuttle(ArmSubsystem ArmSub, Controllers Controllers) {
         m_ArmSubsystem = ArmSub;
